@@ -1,0 +1,19 @@
+/* Define global colors */
+
+:root {
+  --primary: #00BFB4;
+  --secondary: #D0FFFC;
+  --light: #F2F2F2;
+  --black: #494949;
+  --grey: #CBCBCB;
+  --text:#515151;
+  --hover:#008B83;
+}
+
+p, span, label, input, sup, sub, textarea, select, a, ul, ol, li, small, strong, th, td, tr, u{
+  font-family: 'Poppins', sans-serif!important;
+}
+
+h1, h2, h3, h4, h5, h6, button{
+  font-family: 'Montserrat', sans-serif!important;
+}
