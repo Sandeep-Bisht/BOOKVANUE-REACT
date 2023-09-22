@@ -1,0 +1,57 @@
+/* Login modal css */
+
+.login-modal-container .modal-wrapper-login .login-modal-heading{
+    font-weight: 400;
+    color: #000;
+    font-size: 2.5rem;
+}
+
+.login-modal-container .modal-wrapper-login .login-modal-info{
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 400;
+}
+
+.login-modal-container .modal-wrapper-login .login-modal-button{
+    color: #FFF;
+    background-color: var(--primary);
+    padding: 8px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    border: 0;
+    box-shadow: none;
+    border-radius:5px ;
+}
+
+.login-modal-container .modal-wrapper-login .login-modal-button:is(:hover,:focus,:active){
+    background-color: var(--hover);
+}
+
+.login-modal-container .modal-dialog{
+    max-width: max-content;
+}
+
+.login-modal-container .modal-wrapper-login .login-modal-inputGroup input{
+    box-shadow: none!important;
+    border-color: var(--grey)!important;
+    border-radius: 4px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px;
+    color: var(--text);
+}
+
+.login-modal-container .modal-wrapper-login .login-modal-inputGroup .input-group-text{
+    background: none;
+    border-color: var(--grey);
+    border-radius: 4px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.login-modal-container .modal-wrapper-login .login-modal-inputGroup input::placeholder{
+    color: var(--grey);
+    font-weight: normal;
+  }

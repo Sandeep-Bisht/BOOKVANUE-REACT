@@ -28,7 +28,7 @@ export const Footer = () => {
                   <a className='footer-link-text' href=''>Contact us</a>
                 </li>
                 <li className='footer-link'>
-                  <a className='footer-link-text' href=''>Login</a>
+                  <button  className='btn footer-link-text p-0 border-0' type='button' data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
                 </li>
                 <li className='footer-link'>
                   <a className='footer-link-text' href=''>Signup</a>

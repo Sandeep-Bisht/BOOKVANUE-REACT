@@ -1,0 +1,282 @@
+header{
+    box-shadow: none;
+}
+
+section.single-page-container .title-heading-si{
+    color: var(--black);
+    font-weight: 400;
+    margin-bottom: 1rem;
+}
+
+/* Customize images carousel */
+
+
+section.single-page-container .img-carousel-container-si .carousel-root{
+    display: flex;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel.carousel-slider{
+    flex: 0 0 80%;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel.carousel-slider .slider-wrapper .carousel-img-wrapper-si .carousel-img-si{
+    height: 69vh;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel .carousel-img-wrapper-si{
+    position: relative;
+    cursor: pointer;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel .carousel-img-wrapper-si .img-overlay-si{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background-color: #00000080;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    opacity: 0;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel .thumbs-wrapper .carousel-img-wrapper-si .img-overlay-si .overlay-title-si{
+    font-size: 14px;   
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel .carousel-img-wrapper-si:hover  .img-overlay-si, section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper .thumb.selected .img-overlay-si{
+    opacity: 1;
+    transition: opacity 300ms;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel.carousel-slider .slider-wrapper, section.single-page-container .img-carousel-container-si .carousel-root .carousel.carousel-slider .slider-wrapper .slider{
+    height: 69vh!important;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper{
+    flex: 0 0 20%;
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 69vh!important;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper::-webkit-scrollbar, section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper .control-arrow{
+    display: none;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper{
+    margin: 0;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper ul.thumbs{
+    transition-duration: 350ms;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    transform: none!important;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper ul.thumbs li.thumb{
+    width: 100%!important;
+    margin: 0;
+    border: 0!important;
+}
+
+section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper ul.thumbs li.thumb:first-child{
+    padding-top: 0px;
+}
+
+/* end customization of carousel */
+
+/* Configuration container */
+
+section.single-page-container .configure-container-si .card{
+    border-radius: 4px;
+}
+
+section.single-page-container .configure-container-si .heading-si{
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: underline;
+    color: black;
+    margin-bottom: 15px;
+}
+
+
+section.single-page-container .configure-container-si .desc-si{
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+}
+
+/* common calendor */
+
+.common-calendor-si{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.common-calendor-si .react-calendar__navigation{
+    width: 100%;
+    display: flex;
+    margin-bottom: 15px;
+    color: var(--text);
+}
+
+.common-calendor-si button{
+    background: none;
+    border: 0;
+}
+
+.common-calendor-si .react-calendar__navigation .react-calendar__navigation__label {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.common-calendor-si .react-calendar__navigation .react-calendar__navigation__arrow{
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.react-calendar__month-view__weekdays__weekday{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr{
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text);
+}
+
+.react-calendar__month-view__days__day{
+    font-size: 14px;
+    font-weight: 500;
+    padding:  5px 10px;
+    margin: 5px 0px;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text);
+}
+
+.react-calendar__month-view__days__day--neighboringMonth{
+    font-weight: 400;
+    color: var(--grey);
+}
+
+.react-calendar__tile--active{
+    background: var(--primary)!important;
+    color: white;
+    font-weight: 700;
+    border-radius: 10px;
+}
+
+.react-calendar__navigation__prev-button, .react-calendar__navigation__next-button{
+    color: var(--black-low);
+}
+
+.react-calendar__navigation__prev2-button, .react-calendar__navigation__next2-button{
+    color: var(--text);
+}
+
+.react-calendar__year-view__months__month, .react-calendar__decade-view__years__year, .react-calendar__century-view__decades__decade{
+    padding: 10px;
+}
+
+.react-calendar__year-view__months__month.react-calendar__tile--hasActive, .react-calendar__decade-view__years__year.react-calendar__tile--hasActive, .react-calendar__century-view__decades__decade.react-calendar__tile--hasActive{
+    color: var(--primary);
+    font-weight: 500;
+}
+
+
+/* End customize calendor */
+
+section.single-page-container  .configure-container-si .book-now-btn-si{
+    color: white;
+    background-color: var(--primary);
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+}
+
+section.single-page-container  .configure-container-si .book-now-btn-si:hover{
+    background-color: var(--hover);
+}
+
+.described-si .location-name-si{
+    font-size: 16px;
+    color: var(--text);
+    font-weight: 400;
+}
+.described-si .rating-icon-si{
+    padding: 10px;
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-radius: 4px;
+    font-size: 16px;
+    margin: 0;
+    font-weight: 700;
+}
+.described-si .rating-text-si{
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--black-low);
+}
+
+.rate-venue-si{
+    font-weight: 16px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* nav tab cutomize */
+.nav-tabs-si .nav-tabs .nav-item:not(:first-child){
+    padding: 0px 10px;
+}
+
+.nav-tabs-si .nav-tabs .nav-item .nav-link{
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--black-low);   
+    box-shadow: none;
+    outline: 0;
+}
+
+.nav-tabs-si .nav-tabs .nav-item .nav-link.active, .nav-tabs-si .nav-tabs .nav-item .nav-link:is(:hover,:active,:focus){
+    border: 0;
+    border-bottom:1.6px solid var(--primary);
+}
+
+.nav-tabs-si .nav-tabs .nav-item .nav-link.active{
+    font-weight: 700;
+    color: black;
+}
+
+.tab-container-si{
+    padding: 15px 0px;
+}
+
+.tab-container-si .heading-si{
+    font-weight: 700;
+    color: black;
+    padding: 15px 0px;
+}
+
+.tab-container-si .desc-si{
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 400;
+}

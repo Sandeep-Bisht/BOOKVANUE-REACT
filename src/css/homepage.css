@@ -87,6 +87,7 @@ section.search-wrapper-h .custom-dropdown-h .dropdown-menu{
     transform: none!important;
     bottom: calc(2px + 100%)!important;
     top: unset!important;
+    z-index: 1;
 }
 section.search-wrapper-h .custom-dropdown-h .dropdown-menu .dropdown-item:active{
     background-color: var(--primary);

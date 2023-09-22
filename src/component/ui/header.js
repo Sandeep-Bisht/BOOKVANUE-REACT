@@ -1,16 +1,29 @@
 import React, { lazy } from 'react'
 import '../../css/header.css'
 import Logo from '../../assets/logo.png'
+import { BiSearchAlt2 } from "react-icons/bi"
+import { GiHamburgerMenu } from 'react-icons/gi'
 
 export const Header = () => {
   return (
     <header>
-      <nav className="navbar">
+      <nav className="navbar navbar-expand-lg ">
       <div className="container-fluid mx-auto mx-sm-2 mx-md-4 mx-lg-5 border-bottom">
         <a className="navbar-brand">
           <img src={Logo} alt="Book Venue" loading={lazy} height='50'/>
         </a>
-        <div className="d-flex">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon">
+      </span>
+    </button>
+    <div className='search-container-head'>
+      <div class="input-group search-bar-wrapper">
+        <span class="input-group-text" id="global-search"><BiSearchAlt2/></span>
+        <input type='search' className='form-control' id="globalSearch" placeholder='Search for Sports venues, Wedding venues & Party halls' aria-label='Search for Sports venues, Wedding venues & Party halls' aria-describedby="global-search"/>
+      </div>
+    </div>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div className="d-flex justify-content-between my-2 my-lg-0">
           <div className='action-container'>
           {/* Calender foor booking svg */}
           <svg  className='action-icon' width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,10 +31,12 @@ export const Header = () => {
           </svg>
           {/* Calender foor booking svg end */}
           <p className='action-text'>Book</p>
-          <div class="vr mx-3"></div>
+          <div class="vr mx-2 mx-xl-3"></div>
           </div>
 
           <div className='action-container'>
+
+          <div className='action' data-bs-toggle="modal" data-bs-target="#loginModal">
           {/* login svg */}
           <svg className='action-icon' width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M20.6693 14.1497L16.1084 9.34812C15.6675 8.88396 14.9378 8.88396 14.4969 9.34812C14.056 9.81227 14.056 10.5805 14.4969 11.0447L17.1118 13.7976H3.14023C2.5169 13.7976 2 14.3418 2 14.998C2 15.6542 2.5169 16.1984 3.14023 16.1984H17.1118L14.4969 18.9513C14.056 19.4155 14.056 20.1837 14.4969 20.6479C14.7249 20.888 15.0138 21 15.3027 21C15.5915 21 15.8804 20.888 16.1084 20.6479L20.6693 15.8463C21.1102 15.3821 21.1102 14.6139 20.6693 14.1497Z" fill="#00BFB4"/>
@@ -29,7 +44,9 @@ export const Header = () => {
           </svg>
           {/* login svg end */}
           <p className='action-text'>Login</p>
-          <div class="vr mx-3"></div>
+          </div>
+
+          <div class="vr mx-2 mx-xl-3"></div>
           </div>
 
           <div className='action-container'>
@@ -51,6 +68,7 @@ export const Header = () => {
           <p  className='action-text'>Signup</p>
           </div>
         </div>
+      </div>
       </div>
       </nav>
     </header>

@@ -52,7 +52,7 @@ const LocationAwareMap = () => {
       >
         {location && (
           <MarkerF
-            title="Hello word"
+            title="Your Location"
             position={{ lat: location.coords.latitude, lng: location.coords.longitude }}
             icon={{
                 url:"/Location.svg"

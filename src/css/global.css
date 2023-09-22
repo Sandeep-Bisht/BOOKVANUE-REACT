@@ -2,12 +2,16 @@
 
 :root {
   --primary: #00BFB4;
-  --secondary: #D0FFFC;
+  --secondary:#001716;
   --light: #F2F2F2;
   --black: #494949;
   --grey: #CBCBCB;
   --text:#515151;
   --hover:#008B83;
+  --seperator: #00312E;
+  --black-high:#000000;
+  --black-low:#929292;
+  --primary-light:#D0FFFC;
 }
 
 p, span, label, input, sup, sub, textarea, select, a, ul, ol, li, small, strong, th, td, tr, u{
