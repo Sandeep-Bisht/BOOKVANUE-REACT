@@ -1,8 +1,11 @@
 /* Customize header shadow */
 
-header{
+.customize-map-box-shadow-h{
     box-shadow: 0px 0px 50px 20px white;
-    z-index: 999;
+    position: relative;
+    z-index: 1;
+    height: 1px;
+    width: 100%;
 }
 
 /* End Customize header shadow */
@@ -106,6 +109,12 @@ section.featured-venue-h .venue-cart-container .venue-card .venue-card-header{
     position: relative;
 }
 
+section.featured-venue-h .venue-cart-container .venue-card .venue-card-header img.card-img-top{
+    height: 250px;
+    object-fit: cover;
+    object-position:left ;
+}
+
 section.featured-venue-h .venue-cart-container .venue-card .venue-card-header .venue-rating{
     position: absolute;
     top: 0;
@@ -137,12 +146,6 @@ section.featured-venue-h .venue-cart-container .venue-card .venue-card-header .v
 section.featured-venue-h .venue-cart-container .venue-card .venue-card-body .venue-icons{
     padding: 20px;
     padding-bottom: 15px;
-}
-
-section.featured-venue-h .venue-cart-container .venue-card .venue-card-body .venue-icons .venue-icon{
-    font-size: 24px;
-    margin-right: 10px;
-    color: var(--primary);
 }
 
 section.featured-venue-h .venue-cart-container .venue-card .venue-card-body .venue-description{
@@ -241,7 +244,7 @@ section.add-facility-h .add-facility-icon-wrapper-f .add-facility-icon-f{
 
 /* recent section */
 section.recent-add-h{
-    padding-bottom: 100px;
+    padding-bottom: 150px;
 }
 
 section.recent-add-h .main-heading{
@@ -252,23 +255,46 @@ section.recent-add-h .main-heading{
     padding-bottom: 100px;
 }
 
-section.recent-add-h .recent-add-card-wrapper-h .recent-add-card-h .recent-add-care-heading-h{
+section.recent-add-h .recent-add-sport-card-wrapper-h .recent-add-sport-card-h{
+    padding: 40px 30px 30px 30px;
+    display: flex;
+    background: var(--light);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+section.recent-add-h .recent-add-sport-card-wrapper-h .recent-add-sport-card-h .recent-add-sport-card-heading-h,
+section.recent-add-h.recent-venue-h .recent-add-card-wrapper-h .recent-add-card-h .recent-add-card-heading-h{
+    font-size: 18px;
     font-weight: 700;
+    margin: 15px 0px;
     color: var(--black);
-    text-align: center;
-    font-size: 14px;
 }
 
-section.recent-add-h .recent-add-card-wrapper-h .recent-add-card-h .recent-add-img-h{
-    height: 150px;
-    object-fit: cover;
-}
-
-section.recent-add-h .recent-add-card-wrapper-h .recent-add-card-h .recent-add-desc-h{
+section.recent-add-h .recent-add-sport-card-wrapper-h .recent-add-sport-card-h .recent-add-sport-desc-h,
+section.recent-add-h.recent-venue-h .recent-add-card-wrapper-h .recent-add-card-h .recent-add-desc-h{
     font-size: 12px;
     font-weight: 400;
-    text-align: center;
     color: var(--text);
-    padding-top: 10px;
 }
+
+section.recent-add-h.recent-venue-h{
+    background-color: var(--light);
+}
+
+section.recent-add-h.recent-venue-h .recent-add-card-wrapper-h .recent-add-card-h{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+section.recent-add-h.recent-venue-h .recent-add-card-wrapper-h .recent-add-card-h .recent-add-img-h{
+    height: 200px;
+    object-fit: cover;
+    object-position: bottom;
+}
+
 /* end recent section */

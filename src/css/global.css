@@ -21,3 +21,56 @@ p, span, label, input, sup, sub, textarea, select, a, ul, ol, li, small, strong,
 h1, h2, h3, h4, h5, h6, button{
   font-family: 'Montserrat', sans-serif!important;
 }
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.w-fit{
+  width: fit-content;
+}
+
+.primary-text{
+  color: var(--primary);
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.desc-text{
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.primary-hover-text{
+  color: var(--primary);
+  font-weight: 400;
+  font-size: 14px;
+  transition: all ease-in-out 300ms;
+}
+
+.primary-hover-text:hover{
+  color: var(--hover);
+}
+
+
+/* custom */
+
+.p-multiselect{
+  width: 100%;
+}
+
+.primary-btn{
+  color: white!important;
+  background-color: var(--primary);
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 50px;
+}
+
+.primary-btn:hover{
+  background-color: var(--hover);
+}

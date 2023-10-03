@@ -1,7 +1,3 @@
-header{
-    box-shadow: none;
-}
-
 section.single-page-container .title-heading-si{
     color: var(--black);
     font-weight: 400;
@@ -10,25 +6,55 @@ section.single-page-container .title-heading-si{
 
 /* Customize images carousel */
 
-
-section.single-page-container .img-carousel-container-si .carousel-root{
-    display: flex;
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content{
+    flex-wrap: wrap;
 }
 
-section.single-page-container .img-carousel-container-si .carousel-root .carousel.carousel-slider{
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-item-wrapper{
     flex: 0 0 80%;
 }
 
-section.single-page-container .img-carousel-container-si .carousel-root .carousel.carousel-slider .slider-wrapper .carousel-img-wrapper-si .carousel-img-si{
-    height: 69vh;
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper{
+    flex: 0 0 20%;
 }
 
-section.single-page-container .img-carousel-container-si .carousel-root .carousel .carousel-img-wrapper-si{
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-prev.p-link,
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-next.p-link{
+    z-index: 1;
+    padding: 8px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-prev.p-link svg path,
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-next.p-link svg path{
+    fill: white;
+}
+
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-prev.p-link{
+    top: 15px;
+}
+
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-next.p-link{
+    bottom: 15px;
+}
+
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-item-wrapper .p-galleria-item-container .p-galleria-item .carousel-img-wrapper-si .carousel-img-si,
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-items-container{
+    height: 69vh!important;
+}
+
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-item-wrapper .p-galleria-item-container .p-galleria-item .carousel-img-wrapper-si,
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-items-container .p-galleria-thumbnail-items .p-galleria-thumbnail-item .p-galleria-thumbnail-item-content  .carousel-img-wrapper-si{
     position: relative;
     cursor: pointer;
 }
 
-section.single-page-container .img-carousel-container-si .carousel-root .carousel .carousel-img-wrapper-si .img-overlay-si{
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-item-wrapper .p-galleria-item-container .p-galleria-item .carousel-img-wrapper-si .img-overlay-si,
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-items-container .p-galleria-thumbnail-items .p-galleria-thumbnail-item .p-galleria-thumbnail-item-content  .carousel-img-wrapper-si .img-overlay-si{
     position: absolute;
     top: 0;
     left: 0;
@@ -42,51 +68,32 @@ section.single-page-container .img-carousel-container-si .carousel-root .carouse
     opacity: 0;
 }
 
-section.single-page-container .img-carousel-container-si .carousel-root .carousel .thumbs-wrapper .carousel-img-wrapper-si .img-overlay-si .overlay-title-si{
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-items-container .p-galleria-thumbnail-items .p-galleria-thumbnail-item .p-galleria-thumbnail-item-content  .carousel-img-wrapper-si .img-overlay-si .overlay-title-si{
     font-size: 14px;   
 }
 
-section.single-page-container .img-carousel-container-si .carousel-root .carousel .carousel-img-wrapper-si:hover  .img-overlay-si, section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper .thumb.selected .img-overlay-si{
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-item-wrapper .p-galleria-item-container .p-galleria-item .carousel-img-wrapper-si:hover  .img-overlay-si,
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-items-container .p-galleria-thumbnail-items .p-galleria-thumbnail-item .p-galleria-thumbnail-item-content  .carousel-img-wrapper-si:hover .img-overlay-si,
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-items-container .p-galleria-thumbnail-items .p-galleria-thumbnail-item.p-galleria-thumbnail-item-current .p-galleria-thumbnail-item-content  .carousel-img-wrapper-si .img-overlay-si{
     opacity: 1;
     transition: opacity 300ms;
 }
 
-section.single-page-container .img-carousel-container-si .carousel-root .carousel.carousel-slider .slider-wrapper, section.single-page-container .img-carousel-container-si .carousel-root .carousel.carousel-slider .slider-wrapper .slider{
-    height: 69vh!important;
-}
-
-section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper{
-    flex: 0 0 20%;
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-items-container .p-galleria-thumbnail-items .p-galleria-thumbnail-item{
     overflow: hidden;
-    overflow-y: scroll;
-    height: 69vh!important;
 }
 
-section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper::-webkit-scrollbar, section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper .control-arrow{
-    display: none;
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-items-container .p-galleria-thumbnail-items .p-galleria-thumbnail-item .p-galleria-thumbnail-item-content{
+    padding-bottom: 8px;
 }
 
-section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper{
-    margin: 0;
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container .p-galleria-thumbnail-items-container .p-galleria-thumbnail-items .p-galleria-thumbnail-item-end .p-galleria-thumbnail-item-content{
+    padding-bottom: 0px;
 }
 
-section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper ul.thumbs{
-    transition-duration: 350ms;
-    padding: 0px;
-    margin: 0px;
-    display: flex;
-    flex-direction: column;
-    transform: none!important;
-}
-
-section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper ul.thumbs li.thumb{
-    width: 100%!important;
-    margin: 0;
-    border: 0!important;
-}
-
-section.single-page-container .img-carousel-container-si .carousel-root .carousel:last-child .thumbs-wrapper ul.thumbs li.thumb:first-child{
-    padding-top: 0px;
+section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content .p-galleria-thumbnail-wrapper .p-galleria-thumbnail-container{
+    position: relative;
+    background-color: transparent;
 }
 
 /* end customization of carousel */
@@ -97,7 +104,7 @@ section.single-page-container .configure-container-si .card{
     border-radius: 4px;
 }
 
-section.single-page-container .configure-container-si .heading-si{
+section.single-page-container .configure-container-si .card .heading-si{
     font-size: 14px;
     font-weight: 700;
     text-decoration: underline;
@@ -106,7 +113,7 @@ section.single-page-container .configure-container-si .heading-si{
 }
 
 
-section.single-page-container .configure-container-si .desc-si{
+section.single-page-container .configure-container-si .card .desc-si{
     font-size: 14px;
     font-weight: 400;
     color: var(--text);
@@ -116,42 +123,42 @@ section.single-page-container .configure-container-si .desc-si{
 
 /* common calendor */
 
-.common-calendor-si{
+section.single-page-container .configure-container-si .card .common-calendor-si{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.common-calendor-si .react-calendar__navigation{
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__navigation{
     width: 100%;
     display: flex;
     margin-bottom: 15px;
     color: var(--text);
 }
 
-.common-calendor-si button{
+section.single-page-container .configure-container-si .card .common-calendor-si button{
     background: none;
     border: 0;
 }
 
-.common-calendor-si .react-calendar__navigation .react-calendar__navigation__label {
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__navigation .react-calendar__navigation__label {
     font-size: 16px;
     font-weight: 500;
     color: var(--text);
 }
 
-.common-calendor-si .react-calendar__navigation .react-calendar__navigation__arrow{
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__navigation .react-calendar__navigation__arrow{
     font-size: 16px;
     font-weight: 600;
 }
 
-.react-calendar__month-view__weekdays__weekday{
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__month-view .react-calendar__month-view__weekdays .react-calendar__month-view__weekdays__weekday{
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
 }
 
-.react-calendar__month-view__weekdays__weekday abbr{
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__month-view .react-calendar__month-view__weekdays .react-calendar__month-view__weekdays__weekday abbr{
     text-decoration: none;
     font-size: 14px;
     font-weight: 700;
@@ -159,7 +166,7 @@ section.single-page-container .configure-container-si .desc-si{
     color: var(--text);
 }
 
-.react-calendar__month-view__days__day{
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__month-view .react-calendar__month-view__days .react-calendar__month-view__days__day{
     font-size: 14px;
     font-weight: 500;
     padding:  5px 10px;
@@ -168,31 +175,37 @@ section.single-page-container .configure-container-si .desc-si{
     color: var(--text);
 }
 
-.react-calendar__month-view__days__day--neighboringMonth{
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__month-view .react-calendar__month-view__days .react-calendar__month-view__days__day--neighboringMonth{
     font-weight: 400;
     color: var(--grey);
 }
 
-.react-calendar__tile--active{
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__month-view .react-calendar__month-view__days .react-calendar__tile--active{
     background: var(--primary)!important;
     color: white;
     font-weight: 700;
     border-radius: 10px;
 }
 
-.react-calendar__navigation__prev-button, .react-calendar__navigation__next-button{
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__navigation .react-calendar__navigation__prev-button, 
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__navigation .react-calendar__navigation__next-button{
     color: var(--black-low);
 }
 
-.react-calendar__navigation__prev2-button, .react-calendar__navigation__next2-button{
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__navigation .react-calendar__navigation__prev2-button, 
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__navigation .react-calendar__navigation__next2-button{
     color: var(--text);
 }
 
-.react-calendar__year-view__months__month, .react-calendar__decade-view__years__year, .react-calendar__century-view__decades__decade{
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__year-view .react-calendar__year-view__months .react-calendar__year-view__months__month, 
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__decade-view .react-calendar__decade-view__years .react-calendar__decade-view__years__year, 
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__century-view .react-calendar__century-view__decades .react-calendar__century-view__decades__decade{
     padding: 10px;
 }
 
-.react-calendar__year-view__months__month.react-calendar__tile--hasActive, .react-calendar__decade-view__years__year.react-calendar__tile--hasActive, .react-calendar__century-view__decades__decade.react-calendar__tile--hasActive{
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__year-view .react-calendar__year-view__months .react-calendar__year-view__months__month.react-calendar__tile--hasActive, 
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__decade-view .react-calendar__decade-view__years .react-calendar__decade-view__years__year.react-calendar__tile--hasActive, 
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__century-view .react-calendar__century-view__decades .react-calendar__century-view__decades__decade.react-calendar__tile--hasActive{
     color: var(--primary);
     font-weight: 500;
 }
@@ -216,12 +229,13 @@ section.single-page-container  .configure-container-si .book-now-btn-si:hover{
     background-color: var(--hover);
 }
 
-.described-si .location-name-si{
+section.single-page-container .img-carousel-container-si .card .described-si .location-name-si{
     font-size: 16px;
     color: var(--text);
     font-weight: 400;
 }
-.described-si .rating-icon-si{
+
+section.single-page-container .img-carousel-container-si .card .described-si .rating-icon-si{
     padding: 10px;
     background-color: var(--primary-light);
     color: var(--primary);
@@ -230,53 +244,66 @@ section.single-page-container  .configure-container-si .book-now-btn-si:hover{
     margin: 0;
     font-weight: 700;
 }
-.described-si .rating-text-si{
+
+section.single-page-container .img-carousel-container-si .card .described-si .rating-text-si{
     font-size: 14px;
     font-weight: 400;
     color: var(--black-low);
 }
 
-.rate-venue-si{
+section.single-page-container .img-carousel-container-si .card .described-si .rate-venue-si{
     font-weight: 16px;
     font-weight: 700;
     color: var(--primary);
 }
 
 /* nav tab cutomize */
-.nav-tabs-si .nav-tabs .nav-item:not(:first-child){
+section.single-page-container .img-carousel-container-si .nav-tabs-si .nav-tabs .nav-item:not(:first-child){
     padding: 0px 10px;
+    outline: 0;
 }
 
-.nav-tabs-si .nav-tabs .nav-item .nav-link{
+section.single-page-container .img-carousel-container-si .nav-tabs-si .nav-tabs .nav-item .nav-link{
     font-size: 16px;
     font-weight: 400;
     color: var(--black-low);   
     box-shadow: none;
     outline: 0;
+    border: 0;
 }
 
-.nav-tabs-si .nav-tabs .nav-item .nav-link.active, .nav-tabs-si .nav-tabs .nav-item .nav-link:is(:hover,:active,:focus){
-    border: 0;
+section.single-page-container .img-carousel-container-si .nav-tabs-si .nav-tabs .nav-item .nav-link.active, 
+section.single-page-container .img-carousel-container-si .nav-tabs-si .nav-tabs .nav-item .nav-link:is(:hover,:active,:focus){
     border-bottom:1.6px solid var(--primary);
 }
 
-.nav-tabs-si .nav-tabs .nav-item .nav-link.active{
+section.single-page-container .img-carousel-container-si .nav-tabs-si .nav-tabs .nav-item .nav-link.active{
     font-weight: 700;
     color: black;
 }
 
-.tab-container-si{
+section.single-page-container .img-carousel-container-si .nav-tabs-si .tab-content .tab-container-si{
     padding: 15px 0px;
 }
 
-.tab-container-si .heading-si{
+section.single-page-container .img-carousel-container-si .nav-tabs-si .tab-content .tab-container-si .heading-si{
     font-weight: 700;
     color: black;
     padding: 15px 0px;
 }
 
-.tab-container-si .desc-si{
+section.single-page-container .img-carousel-container-si .nav-tabs-si .tab-content .tab-container-si .desc-si{
     font-size: 14px;
     color: var(--text);
     font-weight: 400;
+}
+section.single-page-container .img-carousel-container-si .nav-tabs-si .tab-content .tab-container-si .desc-si .icon-si{
+    font-size: 16px;
+    width: 30px;
+    display: inline-block;
+}
+
+section.single-page-container .img-carousel-container-si .nav-tabs-si .tab-content .tab-container-si .desc-si .text-si{
+    width: 150px;
+    display: inline-block;
 }

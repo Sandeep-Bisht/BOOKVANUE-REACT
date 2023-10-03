@@ -1,11 +1,16 @@
-import React, { lazy } from 'react'
+import React, { lazy, useContext } from 'react'
 import '../../css/footer.css'
 import Logo from '../../assets/logo.png'
 import { FaFacebookF, FaInstagram } from 'react-icons/fa'
 import { CiTwitter } from 'react-icons/ci'
 import { BiLogoLinkedin } from 'react-icons/bi'
+import { Link } from 'react-router-dom'
+import { Context as AuthContext } from '../../context/AuthContext'
 
 export const Footer = () => {
+
+  const {state,resetLoginState,toggleLoginModal} = useContext(AuthContext)
+
   return (
     <footer className='bg-dark py-5'>
       <div className='container'>
@@ -19,7 +24,7 @@ export const Footer = () => {
             <div className='footer-links-wrapper'>
               <ul className='footer-links-list'>
                 <li className='footer-link'>
-                  <a className='footer-link-text' href=''>Home</a>
+                  <Link to="/" className='footer-link-text'>Home</Link>
                 </li>
                 <li className='footer-link'>
                   <a className='footer-link-text' href=''>About us</a>
@@ -27,12 +32,22 @@ export const Footer = () => {
                 <li className='footer-link'>
                   <a className='footer-link-text' href=''>Contact us</a>
                 </li>
+                {
+          !state.userData ?
+          <>
                 <li className='footer-link'>
-                  <button  className='btn footer-link-text p-0 border-0' type='button' data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                  <button  className='btn footer-link-text p-0 border-0' type='button' data-bs-toggle="modal" data-bs-target="#loginModal" onClick={()=>{
+                    resetLoginState(!state.loginState);
+                    toggleLoginModal('login');
+                  }}>Login</button>
                 </li>
                 <li className='footer-link'>
                   <a className='footer-link-text' href=''>Signup</a>
                 </li>
+                </>
+                :
+                null
+              }
               </ul>
             </div>
           </div>

@@ -23,7 +23,7 @@
     border-radius:5px ;
 }
 
-.login-modal-container .modal-wrapper-login .login-modal-button:is(:hover,:focus,:active){
+.login-modal-container .modal-wrapper-login .login-modal-button:is(:hover){
     background-color: var(--hover);
 }
 
@@ -55,3 +55,28 @@
     color: var(--grey);
     font-weight: normal;
   }
+
+.choose-user-type-sign{
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: 1px solid var(--black)!important;
+    color: var(--black);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.choose-user-type-sign.active{
+    border: 0!important;
+    background: var(--primary);
+    color: white;
+}
+
+.choose-user-type-sign .user-type-icon-sign{
+    font-size: 18px;
+    margin-right: 5px;
+}

@@ -1,84 +1,164 @@
-import React, { useState } from 'react'
+import React, { lazy, useState } from 'react'
 import { Default } from '../layouts/default'
 import '../../css/single.css'
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
 import Calendar from 'react-calendar';
 import { AiFillStar } from 'react-icons/ai'
 import LocationAwareMap from '../common/googlemap';
+import { Galleria } from 'primereact/galleria';
 
 const Single = () => {
 
+    const [images,setImages] = useState(
+        [
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria1.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria1s.jpg',
+                alt: 'Hockey',
+                title: 'Title 1'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria2.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria2s.jpg',
+                alt: 'Tennis',
+                title: 'Title 2'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria3.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria3s.jpg',
+                alt: 'Cricket',
+                title: 'Title 3'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria4.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria4s.jpg',
+                alt: 'Badminton',
+                title: 'Title 4'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria5.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria5s.jpg',
+                alt: 'Football',
+                title: 'Title 5'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria6.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria6s.jpg',
+                alt: 'Tennis',
+                title: 'Title 6'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria7.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria7s.jpg',
+                alt: 'Kabaddi',
+                title: 'Title 7'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria8.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria8s.jpg',
+                alt: 'Kho Kho',
+                title: 'Title 8'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria9.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria9s.jpg',
+                alt: 'Wrestling',
+                title: 'Title 9'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria10.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria10s.jpg',
+                alt: 'Punji Jumping',
+                title: 'Title 10'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria11.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria11s.jpg',
+                alt: 'Rafting',
+                title: 'Title 11'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria12.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria12s.jpg',
+                alt: 'Skating',
+                title: 'Title 12'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria13.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria13s.jpg',
+                alt: 'Sking',
+                title: 'Title 13'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria14.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria14s.jpg',
+                alt: 'Riding',
+                title: 'Title 14'
+            },
+            {
+                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria15.jpg',
+                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria15s.jpg',
+                alt: 'Bollyball',
+                title: 'Title 15'
+            }
+        ]
+    )
+
     const [value, onChange] = useState(new Date());
-
-    const handleScroll = (e) =>{
-        
-        const activeSlideElement = document.querySelector(`.thumb:nth-child(${e + 1})`);
-
-        if (activeSlideElement) {
-            activeSlideElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const responsiveOptions = [
+        {
+            breakpoint: '991px',
+            numVisible: 4
+        },
+        {
+            breakpoint: '767px',
+            numVisible: 3
+        },
+        {
+            breakpoint: '575px',
+            numVisible: 1
         }
-
-    }
+    ];
     
+    const itemTemplate = (item) => {
+        return <div className='carousel-img-wrapper-si'>
+        <img src={item.itemImageSrc} alt={item.alt} className='carousel-img-si img-fluid' loading={lazy}/>
+        <div className='img-overlay-si'>
+            <h4 className='overlay-title-si'>{item.alt}</h4>
+        </div>
+    </div>;
+    }
+
+    const thumbnailTemplate = (item) => {
+        return <div className='carousel-img-wrapper-si'>
+        <img src={item.itemImageSrc} alt={item.alt} className='carousel-img-si img-fluid' loading={lazy} />
+        <div className='img-overlay-si'>
+            <h4 className='overlay-title-si'>{item.alt}</h4>
+        </div>
+    </div>;
+    }
 
   return (
     <Default>
         <section className='container single-page-container mt-3'>
             <div className='row mb-5'>
                 <div className='col-12'>
-                    <h3 className='title-heading-si'>Name of the venue on the selected page~</h3>
+                    <h3 className='title-heading-si m-0'>Name of the venue on the selected page~</h3>
                 </div>
                 <div className='col-8 img-carousel-container-si'>
-                <Carousel
-                    emulateTouch={true}
-                    infiniteLoop={true}
-                    showArrows={false}
-                    showStatus={false}
-                    showIndicators={false}
-                    autoPlay={true}
-                    renderThumbs={(item)=> item}
-                    onChange={(e)=>handleScroll(e)}
-                    className='pb-1'
-                    >
-                          <div className='carousel-img-wrapper-si'>
-                              <img src="/venue.png" className='carousel-img-si' alt='carousel' />
-                              <div className='img-overlay-si'>
-                                  <h4 className='overlay-title-si'>Hockey</h4>
-                              </div>
-                          </div>
-                          <div 
-                          className='carousel-img-wrapper-si'>
-                              <img src="/facility.png" className='carousel-img-si' alt='carousel' />
-                              <div className='img-overlay-si'>
-                                  <h4 className='overlay-title-si'>Tennis</h4>
-                              </div>
-                          </div>
-                          <div className='carousel-img-wrapper-si'>
-                              <img src="/venue.png" className='carousel-img-si' alt='carousel' />
-                              <div className='img-overlay-si'>
-                                  <h4 className='overlay-title-si'>Badminton</h4>
-                              </div>
-                          </div>
-                          <div className='carousel-img-wrapper-si'>
-                              <img src="/facility.png" className='carousel-img-si' alt='carousel' />
-                              <div className='img-overlay-si'>
-                                  <h4 className='overlay-title-si'>BasketBall</h4>
-                              </div>
-                          </div>
-                          <div className='carousel-img-wrapper-si'>
-                              <img src="/venue.png" className='carousel-img-si' alt='carousel' />
-                              <div className='img-overlay-si'>
-                                  <h4 className='overlay-title-si'>Cricket</h4>
-                              </div>
-                          </div>
-                          <div className='carousel-img-wrapper-si'>
-                              <img src="/facility.png" className='carousel-img-si' alt='carousel' />
-                              <div className='img-overlay-si'>
-                                  <h4 className='overlay-title-si'>Football</h4>
-                              </div>
-                          </div>
-                </Carousel>
+                <div className='pb-1'>
+                    <Galleria 
+                        value={images} 
+                        responsiveOptions={responsiveOptions} 
+                        numVisible={4} 
+                        style={{ maxWidth: '100%' }} 
+                        item={itemTemplate} 
+                        thumbnail={thumbnailTemplate} 
+                        circular 
+                        autoPlay 
+                        transitionInterval={3000} 
+                        thumbnailsPosition="right"
+                    />
+                </div>
                 <div className='card mt-4'>
                     <div className='d-flex px-4 py-3 align-items-center described-si'>
                     <p className='m-0 location-name-si'>
@@ -95,39 +175,153 @@ const Single = () => {
                     </div>
                 </div>
                 <div className='mt-5 nav-tabs-si'>
-                <ul class="nav nav-tabs" id="singlePageTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+                <ul className="nav nav-tabs" id="singlePageTab" role="tablist">
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
                         Overview
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
                         Available Sports
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Amenities</button>
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Amenities</button>
                 </li>
                 </ul>
-                <div class="tab-content" id="singlePageTabContent">
+                <div className="tab-content" id="singlePageTabContent">
 
-                <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                <div className="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
                 <div className='tab-container-si'>
                     <h4 className='heading-si'>About the venue</h4>
                     <p className='desc-si'>Lorem ipsum dolor sit amet consectetur. Quisque fringilla non donec vestibulum mi enim. Semper arcu enim nunc sed lectus integer purus eleifend. Pellentesque maecenas porttitor facilisis pellentesque mauris id varius.</p>
                     <h4 className='heading-si'>Location Map</h4>
-                    <LocationAwareMap/>
+                    <LocationAwareMap height="40vh"/>
                 </div>
                 </div>
 
-                <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-                    <h2>profile</h2>
-                Lorem ipsum dolor sit amet consectetur. Quisque fringilla non donec vestibulum mi enim. Semper arcu enim nunc sed lectus integer purus eleifend. Pellentesque maecenas porttitor facilisis pellentesque mauris id varius.
+                <div className="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                <div className='tab-container-si'>
+                <h4 className='heading-si'>Sports</h4>
+                        <p className='mb-3 desc-si'>
+                        <span className='me-2 icon-si'>
+                            <svg width="20" height="26" viewBox="0 0 20 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18.6203 0.594324L16.775 0.0390829C16.3067 -0.101747 15.802 0.150141 15.6477 0.59976C15.5272 0.951885 15.6449 1.35273 15.9926 1.58567L10.0251 18.5083C9.80353 19.1421 9.24269 19.6106 8.56402 19.738C8.40416 19.7677 3.02269 20.7618 2.80119 20.8024C1.55048 21.0326 0.580184 21.9589 0.324961 23.1669L0.0249206 24.5753C-0.14614 25.3933 0.588601 26.1354 1.4579 25.9783C1.65699 25.9431 3.31994 25.6397 4.93808 25.3445C6.55616 25.052 8.12658 24.7649 8.13779 24.7622C9.92693 24.4508 11.3824 23.2184 11.9348 21.5445L18.295 2.29525C18.7212 2.31964 19.0858 2.06232 19.2092 1.69937C19.3663 1.23624 19.1026 0.737897 18.6203 0.594324ZM2.2768 25.2795C1.54485 25.4122 1.39062 25.442 1.34296 25.4474C0.883065 25.5259 0.48203 25.1305 0.574609 24.6836L0.874649 23.2752C1.08216 22.2839 1.88139 21.5228 2.90497 21.3359C2.96104 21.3251 3.03395 21.3115 3.12653 21.2953L2.2768 25.2795ZM11.3992 21.3793C10.9113 22.8609 9.62405 23.9523 8.03685 24.2313C8.03122 24.2313 7.94148 24.2476 7.79009 24.2747L8.57249 20.2878C9.60448 20.0955 10.2775 19.4725 10.5552 18.6843L16.5142 1.78878L17.751 2.15986L11.3992 21.3793ZM20 24.3045V24.9193C20 25.5151 19.4952 26 18.8783 26H13.9371C13.3202 26 12.8182 25.5152 12.8182 24.9193V24.3045C12.8182 23.7086 13.3202 23.2238 13.9371 23.2238H18.8783C19.4952 23.2237 20 23.7086 20 24.3045Z" fill="black"/>
+                            </svg>
+                        </span>
+                        Hockey
+                        </p>
+                        <p className='mb-3 desc-si'>
+                        <span className='me-2 icon-si'>
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.1126 10.9036C22.0073 10.9036 23.5499 9.36305 23.5499 7.45455C23.5499 5.5466 22.0078 4 20.1126 4C18.2103 4 16.665 5.5466 16.665 7.45455C16.665 9.36305 18.2109 10.9036 20.1126 10.9036ZM28 19.3213V14.9544L23.3608 12.305C22.5749 11.9046 21.7012 11.7688 20.8281 11.9558C20.4706 12.03 20.1343 12.1686 19.7562 12.3798C19.715 12.3913 18.3376 13.0013 17.5371 14.8774L14.3425 21.3305C14.3425 21.3305 11.195 21.9427 9.87769 22.1979L9.55541 22.3909L8.74024 19.4313C8.40279 18.228 9.66157 16.4834 9.7087 16.4124C10.5417 15.1887 10.7698 13.5766 10.3321 11.98C9.93348 10.5362 9.02568 9.31905 7.84382 8.6343C6.91923 8.10685 5.87982 7.96165 4.93627 8.22235C4.20343 8.4242 3.55021 8.85705 3.0454 9.4791L2.65487 10.0566C1.97565 11.2572 1.81911 12.762 2.21181 14.2135C2.61046 15.671 3.50796 16.8832 4.69578 17.5586L4.98015 17.7099C5.01806 17.7126 6.97448 18.5134 7.31463 19.6624C7.3103 19.6684 7.82811 21.5472 8.25059 23.0784L7.92885 23.2269L7.99169 23.2693C7.89636 23.4172 7.72899 23.745 7.7409 24.0805C7.7409 24.1872 7.74957 24.2939 7.76961 24.3973C7.94998 25.3461 8.87565 25.9797 9.82136 25.7866L15.858 24.6074C15.858 24.6074 16.3715 24.4506 16.5914 24.2934C16.8746 24.0915 17.088 23.668 17.088 23.668L18.6745 20.4654C18.6745 20.4654 19.7681 25.6409 19.7892 25.7366L19.5374 26H27.772L27.5656 24.7884C27.5656 24.7763 27.3062 23.6273 27.3062 23.6273C27.3148 23.6356 26.5999 20.4032 26.0533 17.8732C26.6199 18.2026 27.1879 18.5293 27.7573 18.8533L28 19.3213ZM7.24801 16.6671C6.63649 16.8321 5.98327 16.7319 5.35713 16.3816C4.48509 15.8866 3.81128 14.9654 3.52258 13.8538C3.21493 12.7461 3.32705 11.6115 3.82374 10.737L4.10106 10.331C4.42821 9.9279 4.8247 9.6584 5.30026 9.52475C6.81903 9.1106 8.49162 10.3723 9.03218 12.343C9.56462 14.3048 8.76732 16.2518 7.24801 16.6671Z" fill="black"/>
+                            </svg>    
+                        </span>Tennis
+                        </p>
+                        <p className='mb-3 desc-si'>
+                        <span className='me-2 icon-si'>
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15 4C8.92879 4 4 8.92879 4 15C4 21.0712 8.92879 26 15 26C21.0712 26 26 21.0712 26 15C26 8.92879 21.0712 4 15 4ZM14.7124 17.244C12.7599 18.8233 10.5741 20.2517 8.27193 21.6031C9.98321 23.3466 12.3663 24.4286 15 24.4286C15.4942 24.4286 15.9798 24.3901 16.4528 24.317C16.8323 21.8766 16.2516 19.3151 14.7124 17.244ZM17.5009 14.7022C16.9973 15.2263 16.4669 15.7339 15.9138 16.2257C17.618 18.4744 18.3424 21.2307 18.0871 23.9108C19.4542 23.437 20.6784 22.6568 21.6786 21.6526C21.6668 21.6291 21.655 21.6047 21.6448 21.5788C20.5904 18.96 19.2083 16.6681 17.5009 14.7022ZM13.6824 16.0725C11.4824 13.9511 8.50136 13.1088 5.683 13.5472C5.60993 14.0202 5.57143 14.5058 5.57143 15C5.57143 16.9981 6.19371 18.8508 7.256 20.3774C9.55107 19.0409 11.7377 17.6361 13.6824 16.0725ZM19.5697 12.2406C19.2523 12.679 18.9168 13.1064 18.5648 13.5236C20.2839 15.4714 21.6982 17.7256 22.8069 20.2847C23.8306 18.7769 24.4286 16.958 24.4286 15C24.4286 14.8083 24.4231 14.6174 24.4113 14.4288C22.6827 14.1145 21.0154 13.3846 19.5697 12.2406ZM8.34736 8.32143C7.34321 9.32086 6.56379 10.5458 6.08921 11.9129C9.2305 11.6136 12.4771 12.6609 14.8876 15.0542C15.429 14.5726 15.946 14.0752 16.4371 13.5606C14.2316 11.3574 11.5586 9.62336 8.41964 8.35443C8.39529 8.345 8.37093 8.33321 8.34736 8.32143ZM21.7383 8.40786C21.369 9.28786 20.9361 10.1262 20.4458 10.9276C21.5599 11.8344 22.8328 12.4488 24.163 12.7701C23.7568 11.0981 22.9043 9.59979 21.7383 8.40786ZM15.5712 5.58871C15.3826 5.57693 15.1917 5.57143 15 5.57143C13.042 5.57143 11.2223 6.16936 9.71371 7.19314C12.7254 8.50214 15.3174 10.2299 17.486 12.3804C17.8089 11.9899 18.1169 11.5892 18.4084 11.1775C16.8865 9.57386 15.9413 7.62371 15.5712 5.58871ZM17.2299 5.837C17.5764 7.27014 18.2623 8.63729 19.2884 9.81036C19.7465 9.02386 20.1456 8.19807 20.4796 7.32829C19.5155 6.63843 18.4163 6.12536 17.2299 5.837Z" fill="black"/>
+                            </svg>
+                        </span>
+                        Basketball
+                        </p>
                 </div>
-                <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-                    <h2>Contact</h2>
-                Lorem ipsum dolor sit amet consectetur. Quisque fringilla non donec vestibulum mi enim. Semper arcu enim nunc sed lectus integer purus eleifend. Pellentesque maecenas porttitor facilisis pellentesque mauris id varius.
+                </div>
+                <div className="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+                <div className='tab-container-si'>
+                <h4 className='heading-si'>Sports</h4>
+                        <p className='mb-3 desc-si'>
+                        <span className='me-2 icon-si'>
+                        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_115_1011)">
+                        <path d="M6.875 26.25V18.125H6.25C5.5625 18.125 5 17.5625 5 16.875V11.25C5 9.875 6.125 8.75 7.5 8.75H11.25C12.625 8.75 13.75 9.875 13.75 11.25V16.875C13.75 17.5625 13.1875 18.125 12.5 18.125H11.875V26.25C11.875 26.9375 11.3125 27.5 10.625 27.5H8.125C7.4375 27.5 6.875 26.9375 6.875 26.25ZM22.5 26.25V20H24.5125C25.3625 20 25.9625 19.1625 25.7 18.35L23.075 10.4625C22.725 9.4375 21.775 8.75 20.7 8.75H20.55C19.475 8.75 18.5125 9.4375 18.175 10.4625L15.55 18.35C15.275 19.1625 15.875 20 16.7375 20H18.75V26.25C18.75 26.9375 19.3125 27.5 20 27.5H21.25C21.9375 27.5 22.5 26.9375 22.5 26.25ZM9.375 7.5C10.7625 7.5 11.875 6.3875 11.875 5C11.875 3.6125 10.7625 2.5 9.375 2.5C7.9875 2.5 6.875 3.6125 6.875 5C6.875 6.3875 7.9875 7.5 9.375 7.5ZM20.625 7.5C22.0125 7.5 23.125 6.3875 23.125 5C23.125 3.6125 22.0125 2.5 20.625 2.5C19.2375 2.5 18.125 3.6125 18.125 5C18.125 6.3875 19.2375 7.5 20.625 7.5Z" fill="black"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_115_1011">
+                        <rect width="30" height="30" fill="white"/>
+                        </clipPath>
+                        </defs>
+                        </svg>
+                        </span>
+                        <span className='text-si'>
+                        Washroom
+                        </span>
+                        <span className='ms-2 icon-si'>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_310_3205)">
+                        <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#50B748"/>
+                        <path d="M12.1042 19.7641C12.296 19.727 12.4866 19.6842 12.6759 19.6358C12.9968 19.5461 13.313 19.4404 13.6234 19.3191C13.9341 19.1989 14.2387 19.0631 14.5359 18.9125C14.8332 18.7612 15.1227 18.5952 15.4034 18.415C15.6838 18.2347 15.9549 18.0406 16.2159 17.8333C16.4773 17.6257 16.7282 17.4052 16.9676 17.1725C17.2065 16.9404 17.4338 16.6964 17.6484 16.4416C17.8632 16.1866 18.0651 15.921 18.2534 15.6458C18.4416 15.3711 18.616 15.0871 18.7759 14.795C18.9358 14.5024 19.081 14.202 19.2109 13.895C19.3409 13.5878 19.4555 13.2744 19.5542 12.9558C19.6388 12.6769 19.711 12.3944 19.7709 12.1091L13.8292 6.16831C13.3275 5.66431 12.731 5.26452 12.0741 4.99193C11.4172 4.71934 10.7129 4.57934 10.0017 4.57997C9.2899 4.5792 8.58494 4.71912 7.92737 4.9917C7.26979 5.26429 6.67258 5.66415 6.17006 6.16831C5.66628 6.67098 5.2666 7.26809 4.99389 7.92544C4.72118 8.58279 4.58081 9.28747 4.58081 9.99914C4.58081 10.7108 4.72118 11.4155 4.99389 12.0728C5.2666 12.7302 5.66628 13.3273 6.17006 13.83L12.1042 19.7641Z" fill="#10A711"/>
+                        <path d="M10.0008 4.5808C11.3858 4.5808 12.7708 5.10997 13.8308 6.16913C14.3345 6.67181 14.7342 7.26891 15.0069 7.92626C15.2796 8.58361 15.42 9.28829 15.42 9.99997C15.42 10.7116 15.2796 11.4163 15.0069 12.0737C14.7342 12.731 14.3345 13.3281 13.8308 13.8308C13.3281 14.3346 12.731 14.7343 12.0736 15.007C11.4163 15.2797 10.7116 15.4201 9.99992 15.4201C9.28825 15.4201 8.58356 15.2797 7.92621 15.007C7.26887 14.7343 6.67176 14.3346 6.16909 13.8308C5.6653 13.3281 5.26562 12.731 4.99291 12.0737C4.72021 11.4163 4.57983 10.7116 4.57983 9.99997C4.57983 9.28829 4.72021 8.58361 4.99291 7.92626C5.26562 7.26891 5.6653 6.67181 6.16909 6.16913C6.67161 5.66497 7.26882 5.26511 7.92639 4.99253C8.58396 4.71995 9.28892 4.58002 10.0008 4.5808ZM12.4674 8.33247C12.3885 8.34002 12.3134 8.36978 12.2508 8.4183L9.20575 10.7016L7.79492 9.29163C7.48909 8.9733 6.88659 9.57497 7.20575 9.8808L8.87242 11.5475C8.94467 11.6158 9.03833 11.657 9.13751 11.6642C9.2367 11.6713 9.3353 11.6439 9.41659 11.5866L12.7499 9.08663C13.0299 8.88247 12.8574 8.3383 12.5108 8.3333C12.4966 8.33258 12.4824 8.33258 12.4683 8.3333L12.4674 8.33247Z" fill="white"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_310_3205">
+                        <rect width="20" height="20" fill="white"/>
+                        </clipPath>
+                        </defs>
+                        </svg>
+                        </span>
+                        </p>
+                        <p className='mb-3 desc-si'>
+                        <span className='me-2 icon-si'>
+                        <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.6719 4.23438C13.4375 4.46876 7.53125 10.4688 7.53125 15.4375C7.4548 16.3364 7.56586 17.2415 7.85741 18.0952C8.14896 18.949 8.61464 19.7329 9.22495 20.3974C9.83526 21.0618 10.5769 21.5922 11.4029 21.9551C12.2289 22.3179 13.1213 22.5053 14.0234 22.5053C14.9256 22.5053 15.818 22.3179 16.644 21.9551C17.47 21.5922 18.2116 21.0618 18.8219 20.3974C19.4322 19.7329 19.8979 18.949 20.1895 18.0952C20.481 17.2415 20.5921 16.3364 20.5156 15.4375C20.5156 10.4688 14.6094 4.51563 14.375 4.23438C14.331 4.18451 14.2769 4.14456 14.2163 4.1172C14.1557 4.08983 14.0899 4.07568 14.0234 4.07568C13.9569 4.07568 13.8912 4.08983 13.8306 4.1172C13.77 4.14456 13.7159 4.18451 13.6719 4.23438ZM15.875 18.625C16.6129 18.2262 17.2041 17.6021 17.5625 16.8438C17.624 16.7523 17.7159 16.6855 17.8218 16.655C17.9277 16.6245 18.041 16.6323 18.1418 16.6771C18.2425 16.7219 18.3243 16.8007 18.3726 16.8998C18.421 16.9988 18.4329 17.1118 18.4063 17.2188C17.9691 18.1528 17.247 18.9242 16.3438 19.4219H16.1094C16.0254 19.4052 15.9477 19.3659 15.8845 19.3081C15.8213 19.2504 15.7752 19.1765 15.751 19.0944C15.7269 19.0123 15.7256 18.9251 15.7475 18.8424C15.7694 18.7597 15.8135 18.6845 15.875 18.625Z" fill="black"/>
+                        <path d="M2.28125 14.4062L4.15625 12.0625H2.79688C3.0428 9.35592 4.26019 6.82986 6.22404 4.9512C8.18788 3.07255 10.7654 1.9683 13.4802 1.84256C16.195 1.71682 18.8636 2.57809 20.9927 4.26718C23.1218 5.95627 24.5674 8.35899 25.0625 11.0312L26 10.8906C25.4744 7.97918 23.9078 5.35831 21.5923 3.51683C19.2767 1.67536 16.3704 0.73903 13.4154 0.882478C10.4604 1.02593 7.65844 2.23936 5.53216 4.29645C3.40588 6.35355 2.10046 9.11384 1.85938 12.0625H0.40625L2.28125 14.4062ZM23.8438 13.9375H25.2031C24.9572 16.6441 23.7398 19.1701 21.776 21.0488C19.8121 22.9274 17.2346 24.0317 14.5198 24.1574C11.805 24.2832 9.1364 23.4219 7.00731 21.7328C4.87822 20.0437 3.43255 17.641 2.9375 14.9687L2 15.1094C2.52556 18.0208 4.0922 20.6417 6.40773 22.4832C8.72326 24.3246 11.6296 25.261 14.5846 25.1175C17.5396 24.9741 20.3416 23.7606 22.4678 21.7035C24.5941 19.6464 25.8995 16.8862 26.1406 13.9375H27.5938L25.7188 11.5937L23.8438 13.9375Z" fill="black"/>
+                        </svg>  
+                        </span>
+                        <span className='text-si'>
+                        Drinking Water
+                        </span>
+                        <span className='ms-2 icon-si'>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_310_3205)">
+                        <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#50B748"/>
+                        <path d="M12.1042 19.7641C12.296 19.727 12.4866 19.6842 12.6759 19.6358C12.9968 19.5461 13.313 19.4404 13.6234 19.3191C13.9341 19.1989 14.2387 19.0631 14.5359 18.9125C14.8332 18.7612 15.1227 18.5952 15.4034 18.415C15.6838 18.2347 15.9549 18.0406 16.2159 17.8333C16.4773 17.6257 16.7282 17.4052 16.9676 17.1725C17.2065 16.9404 17.4338 16.6964 17.6484 16.4416C17.8632 16.1866 18.0651 15.921 18.2534 15.6458C18.4416 15.3711 18.616 15.0871 18.7759 14.795C18.9358 14.5024 19.081 14.202 19.2109 13.895C19.3409 13.5878 19.4555 13.2744 19.5542 12.9558C19.6388 12.6769 19.711 12.3944 19.7709 12.1091L13.8292 6.16831C13.3275 5.66431 12.731 5.26452 12.0741 4.99193C11.4172 4.71934 10.7129 4.57934 10.0017 4.57997C9.2899 4.5792 8.58494 4.71912 7.92737 4.9917C7.26979 5.26429 6.67258 5.66415 6.17006 6.16831C5.66628 6.67098 5.2666 7.26809 4.99389 7.92544C4.72118 8.58279 4.58081 9.28747 4.58081 9.99914C4.58081 10.7108 4.72118 11.4155 4.99389 12.0728C5.2666 12.7302 5.66628 13.3273 6.17006 13.83L12.1042 19.7641Z" fill="#10A711"/>
+                        <path d="M10.0008 4.5808C11.3858 4.5808 12.7708 5.10997 13.8308 6.16913C14.3345 6.67181 14.7342 7.26891 15.0069 7.92626C15.2796 8.58361 15.42 9.28829 15.42 9.99997C15.42 10.7116 15.2796 11.4163 15.0069 12.0737C14.7342 12.731 14.3345 13.3281 13.8308 13.8308C13.3281 14.3346 12.731 14.7343 12.0736 15.007C11.4163 15.2797 10.7116 15.4201 9.99992 15.4201C9.28825 15.4201 8.58356 15.2797 7.92621 15.007C7.26887 14.7343 6.67176 14.3346 6.16909 13.8308C5.6653 13.3281 5.26562 12.731 4.99291 12.0737C4.72021 11.4163 4.57983 10.7116 4.57983 9.99997C4.57983 9.28829 4.72021 8.58361 4.99291 7.92626C5.26562 7.26891 5.6653 6.67181 6.16909 6.16913C6.67161 5.66497 7.26882 5.26511 7.92639 4.99253C8.58396 4.71995 9.28892 4.58002 10.0008 4.5808ZM12.4674 8.33247C12.3885 8.34002 12.3134 8.36978 12.2508 8.4183L9.20575 10.7016L7.79492 9.29163C7.48909 8.9733 6.88659 9.57497 7.20575 9.8808L8.87242 11.5475C8.94467 11.6158 9.03833 11.657 9.13751 11.6642C9.2367 11.6713 9.3353 11.6439 9.41659 11.5866L12.7499 9.08663C13.0299 8.88247 12.8574 8.3383 12.5108 8.3333C12.4966 8.33258 12.4824 8.33258 12.4683 8.3333L12.4674 8.33247Z" fill="white"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_310_3205">
+                        <rect width="20" height="20" fill="white"/>
+                        </clipPath>
+                        </defs>
+                        </svg>
+                        </span>
+                        </p>
+                        <p className='mb-3 desc-si'>
+                        <span className='me-2 icon-si'>
+                        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_115_1021)">
+                        <path d="M15 27.1875C15.2589 27.1875 15.4688 26.9776 15.4688 26.7188C15.4688 26.4599 15.2589 26.25 15 26.25C14.7411 26.25 14.5312 26.4599 14.5312 26.7188C14.5312 26.9776 14.7411 27.1875 15 27.1875Z" fill="black"/>
+                        <path d="M19.9828 21.2719C22.1228 20.1566 23.8267 18.3556 24.8218 16.1571C25.817 13.9587 26.0458 11.49 25.4717 9.14612C24.8975 6.80225 23.5536 4.71876 21.6551 3.22914C19.7566 1.73953 17.4132 0.929932 15 0.929932C12.5868 0.929932 10.2434 1.73953 8.3449 3.22914C6.44636 4.71876 5.10247 6.80225 4.52833 9.14612C3.9542 11.49 4.18301 13.9587 5.17815 16.1571C6.17329 18.3556 7.87722 20.1566 10.0172 21.2719C3.98906 21.7219 0.9375 23.0016 0.9375 25.0781C0.9375 28.3734 8.58281 29.0625 15 29.0625C21.4172 29.0625 29.0625 28.3734 29.0625 25.0781C29.0625 23.0016 26.0109 21.7219 19.9828 21.2719ZM7.03125 11.7188C7.03125 10.1427 7.49861 8.60201 8.37423 7.29155C9.24984 5.9811 10.4944 4.95972 11.9505 4.35659C13.4066 3.75345 15.0088 3.59565 16.5546 3.90312C18.1004 4.2106 19.5203 4.96955 20.6348 6.084C21.7492 7.19845 22.5082 8.61834 22.8156 10.1641C23.1231 11.7099 22.9653 13.3122 22.3622 14.7683C21.759 16.2244 20.7377 17.4689 19.4272 18.3445C18.1167 19.2201 16.5761 19.6875 15 19.6875C12.8875 19.6845 10.8623 18.844 9.36853 17.3502C7.87474 15.8564 7.03423 13.8313 7.03125 11.7188ZM15 28.125C6.90469 28.125 1.875 26.9578 1.875 25.0781C1.875 23.5406 5.23594 22.4766 11.0953 22.1391L12.0047 23.0531C9.06094 23.2172 5.15625 23.7 5.15625 25.0781C5.15625 26.6391 10.1344 27.0469 13.1016 27.1547H13.1156C13.1772 27.1559 13.2384 27.145 13.2957 27.1226C13.3531 27.1002 13.4054 27.0667 13.4498 27.024C13.4942 26.9814 13.5298 26.9304 13.5545 26.874C13.5792 26.8176 13.5925 26.7569 13.5938 26.6953C13.595 26.6338 13.5841 26.5726 13.5617 26.5152C13.5392 26.4579 13.5057 26.4055 13.4631 26.3611C13.4204 26.3167 13.3694 26.2812 13.313 26.2565C13.2566 26.2318 13.1959 26.2184 13.1344 26.2172C8.64375 26.0578 6.5625 25.4109 6.14531 25.0781C6.55781 24.75 8.57812 24.1219 12.9 23.9484L14.0766 25.125C14.3289 25.3475 14.6542 25.4693 14.9906 25.4672C15.3428 25.4677 15.6829 25.3393 15.9469 25.1063L17.1 23.9484C21.4219 24.1219 23.4422 24.75 23.8547 25.0781C23.4375 25.4109 21.3562 26.0578 16.8656 26.2172C16.7413 26.2197 16.6231 26.2714 16.5369 26.3611C16.4508 26.4508 16.4038 26.571 16.4062 26.6953C16.4087 26.8196 16.4605 26.9379 16.5502 27.024C16.6398 27.1102 16.7601 27.1572 16.8844 27.1547H16.8984C19.8656 27.0469 24.8438 26.6391 24.8438 25.0781C24.8438 23.7 20.9391 23.2172 17.9953 23.0531L18.9047 22.1391C24.7641 22.4766 28.125 23.5406 28.125 25.0781C28.125 26.9578 23.0953 28.125 15 28.125Z" fill="black"/>
+                        <path d="M19.6875 9.60938C19.6861 8.61523 19.2906 7.6622 18.5876 6.95923C17.8847 6.25627 16.9316 5.86074 15.9375 5.85938H12.6562C12.2836 5.86049 11.9266 6.009 11.6631 6.27249C11.3996 6.53597 11.2511 6.89301 11.25 7.26562V16.1719C11.25 16.5448 11.3982 16.9025 11.6619 17.1662C11.9256 17.43 12.2833 17.5781 12.6562 17.5781C13.0292 17.5781 13.3869 17.43 13.6506 17.1662C13.9143 16.9025 14.0625 16.5448 14.0625 16.1719V13.3594H15.9375C16.9316 13.358 17.8847 12.9625 18.5876 12.2595C19.2906 11.5566 19.6861 10.6035 19.6875 9.60938ZM14.0625 8.67188H15.9375C16.1861 8.67188 16.4246 8.77065 16.6004 8.94646C16.7762 9.12228 16.875 9.36073 16.875 9.60938C16.875 9.85802 16.7762 10.0965 16.6004 10.2723C16.4246 10.4481 16.1861 10.5469 15.9375 10.5469H14.0625V8.67188Z" fill="black"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_115_1021">
+                        <rect width="30" height="30" fill="white"/>
+                        </clipPath>
+                        </defs>
+                        </svg>
+                        </span>
+                        <span className='text-si'>
+                        Parking Area
+                        </span>
+                        <span className='ms-2 icon-si'>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_310_3205)">
+                        <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#50B748"/>
+                        <path d="M12.1042 19.7641C12.296 19.727 12.4866 19.6842 12.6759 19.6358C12.9968 19.5461 13.313 19.4404 13.6234 19.3191C13.9341 19.1989 14.2387 19.0631 14.5359 18.9125C14.8332 18.7612 15.1227 18.5952 15.4034 18.415C15.6838 18.2347 15.9549 18.0406 16.2159 17.8333C16.4773 17.6257 16.7282 17.4052 16.9676 17.1725C17.2065 16.9404 17.4338 16.6964 17.6484 16.4416C17.8632 16.1866 18.0651 15.921 18.2534 15.6458C18.4416 15.3711 18.616 15.0871 18.7759 14.795C18.9358 14.5024 19.081 14.202 19.2109 13.895C19.3409 13.5878 19.4555 13.2744 19.5542 12.9558C19.6388 12.6769 19.711 12.3944 19.7709 12.1091L13.8292 6.16831C13.3275 5.66431 12.731 5.26452 12.0741 4.99193C11.4172 4.71934 10.7129 4.57934 10.0017 4.57997C9.2899 4.5792 8.58494 4.71912 7.92737 4.9917C7.26979 5.26429 6.67258 5.66415 6.17006 6.16831C5.66628 6.67098 5.2666 7.26809 4.99389 7.92544C4.72118 8.58279 4.58081 9.28747 4.58081 9.99914C4.58081 10.7108 4.72118 11.4155 4.99389 12.0728C5.2666 12.7302 5.66628 13.3273 6.17006 13.83L12.1042 19.7641Z" fill="#10A711"/>
+                        <path d="M10.0008 4.5808C11.3858 4.5808 12.7708 5.10997 13.8308 6.16913C14.3345 6.67181 14.7342 7.26891 15.0069 7.92626C15.2796 8.58361 15.42 9.28829 15.42 9.99997C15.42 10.7116 15.2796 11.4163 15.0069 12.0737C14.7342 12.731 14.3345 13.3281 13.8308 13.8308C13.3281 14.3346 12.731 14.7343 12.0736 15.007C11.4163 15.2797 10.7116 15.4201 9.99992 15.4201C9.28825 15.4201 8.58356 15.2797 7.92621 15.007C7.26887 14.7343 6.67176 14.3346 6.16909 13.8308C5.6653 13.3281 5.26562 12.731 4.99291 12.0737C4.72021 11.4163 4.57983 10.7116 4.57983 9.99997C4.57983 9.28829 4.72021 8.58361 4.99291 7.92626C5.26562 7.26891 5.6653 6.67181 6.16909 6.16913C6.67161 5.66497 7.26882 5.26511 7.92639 4.99253C8.58396 4.71995 9.28892 4.58002 10.0008 4.5808ZM12.4674 8.33247C12.3885 8.34002 12.3134 8.36978 12.2508 8.4183L9.20575 10.7016L7.79492 9.29163C7.48909 8.9733 6.88659 9.57497 7.20575 9.8808L8.87242 11.5475C8.94467 11.6158 9.03833 11.657 9.13751 11.6642C9.2367 11.6713 9.3353 11.6439 9.41659 11.5866L12.7499 9.08663C13.0299 8.88247 12.8574 8.3383 12.5108 8.3333C12.4966 8.33258 12.4824 8.33258 12.4683 8.3333L12.4674 8.33247Z" fill="white"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_310_3205">
+                        <rect width="20" height="20" fill="white"/>
+                        </clipPath>
+                        </defs>
+                        </svg>
+                        </span>
+                        </p>
+                </div>
                 </div>
                 </div>
                 </div>
