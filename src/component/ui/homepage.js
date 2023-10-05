@@ -21,8 +21,7 @@ const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 const IMG_URL = process.env.REACT_APP_IMG_URL;
 
 const Homepage = () => {
-
-  const [isLoading,setIsLoading] = useState(true)
+  const [isLoading,setIsLoading] = useState(false)
   const [featuredFacility,setFeaturedFacility] = useState([])
   const [recentFacility,setRecentFacility] = useState([])
 
