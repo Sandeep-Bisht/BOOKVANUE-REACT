@@ -201,7 +201,7 @@ export const Login = () => {
   return (
     <>
     <Toast ref={toast} position="bottom-right"/>
-    <button  ref={buttonRef} type="button" class="btn d-none" data-bs-dismiss="modal" data-bs-target="#loginModal" aria-label="Close"></button>
+    <button  ref={buttonRef} type="button" className="btn d-none" data-bs-dismiss="modal" data-bs-target="#loginModal" aria-label="Close"></button>
     <BootstrapModal modalId="loginModal" centered className="login-modal-container">
       {state.currentmodal == 'login' ? <div className='modal-wrapper-login p-5 text-center'>
                 <div className='px-5'>

@@ -39,9 +39,9 @@ const DashboardLayout = () => {
                               </div>
                               {/* add accordion here */}
                               <div className={`accordion ${style.sidebarAccordion}`} id="accordionExample">
-                                <div class={`accordion-item ${style.menuItem}`}>
-                                    <h2 class="accordion-header" id="headingTwo">
-                                    <button class="accordion-button collapsed btn d-flex align-items-center justify-content-between" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <div className={`accordion-item ${style.menuItem}`}>
+                                    <h2 className="accordion-header" id="headingTwo">
+                                    <button className="accordion-button collapsed btn d-flex align-items-center justify-content-between" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                         <div className='d-flex align-items-center'>
                                             <AiOutlineSetting className="me-2 me-xxl-3" /> 
                                             Configurations
@@ -51,8 +51,8 @@ const DashboardLayout = () => {
                                         </div>
                                     </button>
                                     </h2>
-                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                    <div class={`accordion-body ${style.sidebarSubMenu} py-0`}>
+                                    <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                    <div className={`accordion-body ${style.sidebarSubMenu} py-0`}>
                                     <ul>
                                             <li>
                                             <Link to='/management/addFacility'><span>Add Facility</span></Link>

@@ -17,6 +17,7 @@ const AddFacility = () => {
   const [error, setError] = useState(null);
   const [position, setPosition] = useState([51.505, -0.09]); // Initial map position
   const [showMap, setShowMap] = useState(false)
+  const [markerPosition, setMarkerPosition] = useState(null)
 
   console.log("check location", latitude,longitude)
 
@@ -93,6 +94,13 @@ const AddFacility = () => {
     } else {
       return 'Unknown';
     }
+  };
+
+  const handleMarkerDrag = (event) => {
+    const { latLng } = event;
+    const lat = latLng.lat();
+    const lng = latLng.lng();
+    setMarkerPosition({ lat, lng });
   };
 
 
@@ -279,7 +287,17 @@ const AddFacility = () => {
           </div>  :
           <div className="row">
             <div className="col-md-12">
-           < LocationAwareMap />
+            < LocationAwareMap 
+           disableDefaultUI={false}
+            draggable={true}
+            zoomControl={true}
+             scrollwheel={true}
+              disableDoubleClickZoom={false}
+             markerPosition={markerPosition}
+              onMarkerDragEnd={handleMarkerDrag}   //function
+               markerDraggable={true}
+               markerTitle="Your location"
+               />
            <Button label="Back" onClick={()=>setShowMap(false)}/>
             </div>
 
