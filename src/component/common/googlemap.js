@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
 import Loader from './loader';
 
-const LocationAwareMap = ({height}) => {
+const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scrollwheel, disableDoubleClickZoom, styles, markerIcon, markerPosition, onMarkerDragEnd, markerDraggable, markerTitle, markers}) => {
   const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
   const { isLoaded } = useJsApiLoader({
@@ -41,12 +41,12 @@ const LocationAwareMap = ({height}) => {
     mapContainerStyle={mapContainerStyle}
     center={location ? { lat: location.coords.latitude, lng: location.coords.longitude } : { lat: 30.3317463, lng: 78.0289588 }}
     zoom={location ? 15 : 12} // Adjust the zoom level as needed
-    options={{disableDefaultUI: true,
-              draggable: false,
-              zoomControl: false, 
-              scrollwheel: false, 
-              disableDoubleClickZoom:true,
-              styles:[
+    options={{disableDefaultUI: disableDefaultUI == undefined ? true : disableDefaultUI,
+              draggable: draggable == undefined ? false : draggable,
+              zoomControl: zoomControl == undefined ? false : zoomControl, 
+              scrollwheel: scrollwheel == undefined ? false : scrollwheel, 
+              disableDoubleClickZoom: disableDoubleClickZoom == undefined ? true : disableDoubleClickZoom,
+              styles: styles == undefined ? [
               { 
                 featureType: "poi",
                 stylers: [
@@ -54,16 +54,37 @@ const LocationAwareMap = ({height}) => {
                 ]
               }
               ]
+              :
+              styles
             }}
   >
     {location && (
-      <MarkerF
-        title="Your Location"
-        position={{ lat: location.coords.latitude, lng: location.coords.longitude }}
-        icon={{
-            url:"/Location.svg"
-        }}
-      />
+      <>{
+        Array.isArray(markers) && markers.length > 0 ? 
+        markers.map((item)=>{
+          return (
+            <MarkerF
+            title={item.title}
+            position={item.position}
+            icon={{
+            url: item.url
+            }}
+          />
+          )
+        })
+        :
+        <MarkerF
+          title={markerTitle == undefined ? "Your Location" : markerTitle}
+          position={markerPosition == undefined ? { lat: location.coords.latitude, lng: location.coords.longitude } : markerPosition}
+          icon={{
+              url: markerIcon == undefined ? "/Location.svg" : markerIcon
+          }}
+          onDragEnd={onMarkerDragEnd == undefined ? null : onMarkerDragEnd}
+          draggable={markerDraggable == undefined ? false : markerDraggable}
+        />
+      }
+      
+      </>
     )}
   </GoogleMap>
   :

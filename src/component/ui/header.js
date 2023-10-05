@@ -1,9 +1,9 @@
 import React, { lazy, useContext, useEffect } from 'react'
 import '../../css/header.css'
 import Logo from '../../assets/logo.png'
-import { BiSearchAlt2 } from "react-icons/bi"
 import { Link, useNavigate } from 'react-router-dom'
 import { Context as AuthContext } from '../../context/AuthContext'
+import SearchLocation from '../common/searchLocation'
 
 export const Header = () => {
   
@@ -30,12 +30,7 @@ export const Header = () => {
       <span className="navbar-toggler-icon">
       </span>
     </button>
-    <div className='search-container-head'>
-      <div className="input-group search-bar-wrapper">
-        <span className="input-group-text" id="global-search"><BiSearchAlt2/></span>
-        <input type='search' className='form-control' id="globalSearch" placeholder='Search for Sports venues, Wedding venues & Party halls' aria-label='Search for Sports venues, Wedding venues & Party halls' aria-describedby="global-search"/>
-      </div>
-    </div>
+    <SearchLocation/>
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <div className="d-flex justify-content-between my-2 my-lg-0">
           <div className='action-container'>

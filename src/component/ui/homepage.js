@@ -37,7 +37,6 @@ const Homepage = () => {
       setFeaturedFacility(res1.data.data);
       setRecentFacility(res2.data.data)
       setIsLoading(false)
-      console.log('api called successfully.')
     }));
   }
 
