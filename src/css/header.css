@@ -149,3 +149,43 @@ header nav .navbar-toggler{
         padding: 0;
     }
 }
+
+
+/* searchbar css */
+
+header nav .search-container-head .search-bar-wrapper .suggestionList{
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    padding: 15px 0px;
+    margin-top: 15px;
+    background: white;
+    list-style: none;
+}
+
+header nav .search-container-head .search-bar-wrapper .suggestionList .suggestion-item{
+    padding: 5px 20px;
+    cursor: pointer;
+}
+
+header nav .search-container-head .search-bar-wrapper .suggestionList .suggestion-item:hover{
+    background-color: var(--light);
+}
+
+header nav .search-container-head .search-bar-wrapper .suggestionList .suggestion-item:hover .suggestion-heading, header nav .search-container-head .search-bar-wrapper .suggestionList .suggestion-item:hover .suggestion-desc{
+    color: var(--primary);
+} 
+
+header nav .search-container-head .search-bar-wrapper .suggestionList .suggestion-item .suggestion-heading{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--black-high);
+    margin: 0;
+}
+
+header nav .search-container-head .search-bar-wrapper .suggestionList .suggestion-item .suggestion-desc{
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--black);
+    margin: 0;
+}

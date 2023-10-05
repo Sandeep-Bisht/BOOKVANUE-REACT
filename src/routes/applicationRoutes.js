@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Homepage from '../component/ui/homepage'
 import Single from '../component/ui/single'
