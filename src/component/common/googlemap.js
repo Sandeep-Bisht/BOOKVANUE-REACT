@@ -75,7 +75,7 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
         :
         <MarkerF
           title={markerTitle == undefined ? "Your Location" : markerTitle}
-          position={markerPosition == undefined ? { lat: location.coords.latitude, lng: location.coords.longitude } : markerPosition}
+          position={markerPosition == undefined ? { lat: location.coords.latitude, lng: location.coords.longitude } : markerPosition ? markerPosition : { lat: location.coords.latitude, lng: location.coords.longitude }}
           icon={{
               url: markerIcon == undefined ? "/Location.svg" : markerIcon
           }}
