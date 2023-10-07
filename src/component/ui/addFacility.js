@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { MultiSelect } from "primereact/multiselect";
-import { FileUpload } from "primereact/fileupload";
 import { InputTextarea } from "primereact/inputtextarea";
-import { MdMyLocation } from "react-icons/md";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import LocationAwareMap from "../common/googlemap";
@@ -11,7 +9,6 @@ import { useForm, Controller } from "react-hook-form";
 import SearchLocation from "../common/searchLocation";
 
 const AddFacility = () => {
-  const [formData, setFormData] = useState({});
   const [selectedType, setSelectedType] = useState([]);
   const [visible, setVisible] = useState(false);
   const [latitude, setLatitude] = useState(null);
