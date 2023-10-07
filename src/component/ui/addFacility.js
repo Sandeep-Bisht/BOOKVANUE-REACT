@@ -11,10 +11,7 @@ import { FileUpload } from 'primereact/fileupload';
 import { AiOutlineCloudUpload } from 'react-icons/ai'
 
 const AddFacility = () => {
-  const [selectedType, setSelectedType] = useState([]);
   const [visible, setVisible] = useState(false);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
   const [error, setError] = useState(null);
   const [markerPosition, setMarkerPosition] = useState(null);
 
@@ -26,7 +23,7 @@ const AddFacility = () => {
   } = useForm();
 
   const handleAddFacility = (data) => {
-    console.log(selectedType, "form valuess i am trigred", data);
+    console.log("form valuess i am trigred", data);
   };
 
   const facilityType = [{ name: "Sports" }, { name: "Venue" }];
@@ -35,8 +32,7 @@ const AddFacility = () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLatitude(position.coords.latitude);
-          setLongitude(position.coords.longitude);
+          setMarkerPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
           setError(null);
         },
         (error) => {
@@ -110,7 +106,10 @@ const AddFacility = () => {
   };
 
   const selectSearch = (event) => {
-
+    if(event.coords){
+      setMarkerPosition(event.coords)
+    }
+    
   }
 
   return (

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 
-const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scrollwheel, disableDoubleClickZoom, styles, markerIcon, markerPosition, onMarkerDragEnd, markerDraggable, markerTitle, markers, nearbyMarkers}) => {
+const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scrollwheel, disableDoubleClickZoom, styles, markerIcon, markerPosition, onMarkerDragEnd, markerDraggable, markerTitle, markers, nearbyMarkers, loaderStyle}) => {
   const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
   const [markersData,setMarkersData] = useState(markers)
@@ -67,7 +67,7 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
     {isLoaded && !isLoading ?
     <GoogleMap
     mapContainerStyle={mapContainerStyle}
-    center={location ? { lat: location.coords.latitude, lng: location.coords.longitude } : { lat: 30.3317463, lng: 78.0289588 }}
+    center={markerPosition == undefined ? location ? { lat: location.coords.latitude, lng: location.coords.longitude } : { lat: 30.3317463, lng: 78.0289588 } : markerPosition}
     zoom={location ? 15 : 12} // Adjust the zoom level as needed
     options={{disableDefaultUI: disableDefaultUI == undefined ? true : disableDefaultUI,
               draggable: draggable == undefined ? false : draggable,
@@ -119,7 +119,7 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
     )}
   </GoogleMap>
   :
-  <Loader/>
+  <Loader className={loaderStyle}/>
    }</>
   );
 };
