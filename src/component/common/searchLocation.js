@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { BiSearchAlt2 } from "react-icons/bi"
 import { useNavigate } from 'react-router-dom';
 
-const SearchLocation = () => {
+const SearchLocation = ({cb, className}) => {
     const [query, setQuery] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const navigate = useNavigate();
@@ -34,14 +34,19 @@ const SearchLocation = () => {
       (result, status) => {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           setQuery('');
-          navigate(`/location/${result.name}`, { state: { lat: result.geometry.location.lat(), lng: result.geometry.location.lng() } });
+          if(cb == undefined){
+            navigate(`/location/${result.name}`, { state: { lat: result.geometry.location.lat(), lng: result.geometry.location.lng() } });
+          }
+          else{
+            cb({coords: { lat: result.geometry.location.lat(), lng: result.geometry.location.lng() }, result})
+          }
         }
       }
     );
   };
 
   return (
-    <div className='search-container-head'>
+    <div className={`search-container-head ${className ? className : ''}`}>
       <div className="input-group search-bar-wrapper">
         <span className="input-group-text" id="global-search"><BiSearchAlt2/></span>
         <input type='search'

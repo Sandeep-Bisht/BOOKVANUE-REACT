@@ -7,6 +7,8 @@ import { Dialog } from "primereact/dialog";
 import LocationAwareMap from "../common/googlemap";
 import { useForm, Controller } from "react-hook-form";
 import SearchLocation from "../common/searchLocation";
+import { FileUpload } from 'primereact/fileupload';
+import { AiOutlineCloudUpload } from 'react-icons/ai'
 
 const AddFacility = () => {
   const [selectedType, setSelectedType] = useState([]);
@@ -146,8 +148,6 @@ const AddFacility = () => {
                         <InputText
                           className="form-input"
                           id="alias"
-                          // value={formData.alias}
-                          // onChange={(e) => handleChange(e)}
                           {...register("alias", {
                             required: true,
                             pattern: /^[A-Za-z\s]+$/,
@@ -197,15 +197,26 @@ const AddFacility = () => {
                       </button>
                     </div>
                   </div>
-
+                  <div className="col-6 mb-5">
+                  <div className="card">
+                      <FileUpload name="images[]" multiple 
+                      accept="image/*" 
+                      cancelOptions={{ iconOnly: true, className: 'custom-cancel-btn p-button-danger p-button-rounded p-button-outlined' }}
+                      chooseOptions={{ icon: <AiOutlineCloudUpload/>, iconOnly: true, className: 'custom-choose-btn p-button-rounded p-button-outlined' }}
+                      uploadOptions={{className:'d-none'}} maxFileSize={10000000} emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>} />
+                  </div>
+                  </div>
+                  <div className="col-6 mb-5">
+                  <div className="card">
+                      <FileUpload name="featuredImage" accept="image/*" uploadOptions={{className:'d-none'}} maxFileSize={10000000} emptyTemplate={<p className="m-0">Drag and drop file to here to upload.</p>} />
+                  </div>
+                  </div>
                   <div className="col-12 mb-5">
                     <span className="p-float-label">
                       <InputTextarea
                         autoResize
                         id="description"
                         className="w-100"
-                        // value={formData.description}
-                        // onChange={(e) => handleChange(e)}
                         {...register("description", {
                           required: true,
                         })}
@@ -228,7 +239,6 @@ const AddFacility = () => {
             </div>
           </div>
         </div>
-        <div className="card flex justify-content-center">
           <Dialog
             className="text-center"
             header="Select Location"
@@ -240,7 +250,7 @@ const AddFacility = () => {
             <div className="row">
               <div className="col-md-6 mb-3">
                 <div className="card flex justify-content-center">
-                  <SearchLocation cb={selectSearch} />
+                  <SearchLocation cb={selectSearch} className="w-100"/>
                 </div>
               </div>
               <div className="col-md-6">
@@ -275,7 +285,6 @@ const AddFacility = () => {
               </div>
             </div>
           </Dialog>
-        </div>
       </section>
     </>
   )
