@@ -66,7 +66,7 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
     <GoogleMap
     mapContainerStyle={mapContainerStyle}
     center={markerPosition == undefined ? location ? { lat: location.coords.latitude, lng: location.coords.longitude } : { lat: 30.3317463, lng: 78.0289588 } : markerPosition}
-    zoom={location ? 15 : 12} // Adjust the zoom level as needed
+    zoom={(location || markerPosition) ? 15 : 12} // Adjust the zoom level as needed
     options={{disableDefaultUI: disableDefaultUI == undefined ? true : disableDefaultUI,
               draggable: draggable == undefined ? false : draggable,
               zoomControl: zoomControl == undefined ? false : zoomControl, 
@@ -84,7 +84,7 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
               styles
             }}
   >
-    {location && (
+    {(location || markerPosition) && (
       <>
       <MarkerF
           title={markerTitle == undefined ? "Your Location" : markerTitle}

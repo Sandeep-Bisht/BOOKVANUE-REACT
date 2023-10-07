@@ -259,12 +259,12 @@ const AddFacility = () => {
                     severity="secondary"
                     onClick={handleButtonClick}
                   />
-                  {error && (
+                  {/* {error && (
                     <div>
                       <p>{error}</p>
                       {error.includes("enable location access")}
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="col-md-12">
