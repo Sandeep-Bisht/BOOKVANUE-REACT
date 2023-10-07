@@ -7,6 +7,7 @@ import Cookies from 'js-cookie'
 import DashboardLayout from '../component/layouts/dashboard'
 import Dashboard from '../component/ui/dashboard'
 import AddFacility from '../component/ui/addFacility'
+import SearchResult from '../component/ui/searchResult'
 
 const ApplicationRoutes = () => {
 
@@ -31,6 +32,7 @@ const ApplicationRoutes = () => {
     <Routes>
         <Route exact path='/' element={<Homepage/>}/>
         <Route path='/single' element={<Single/>}/>
+        <Route path="/location/:locationName" element={<SearchResult/>} />
         <Route path='/management' element={<ProtectedRoutes role={['User']}><DashboardLayout/></ProtectedRoutes>}>
           <Route path="/management/dashboard" element={<Dashboard />} />
           <Route path="/management/addFacility" element={<AddFacility />} />

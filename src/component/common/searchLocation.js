@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { BiSearchAlt2 } from "react-icons/bi"
+import { useNavigate } from 'react-router-dom';
 
 const SearchLocation = () => {
     const [query, setQuery] = useState('');
     const [suggestions, setSuggestions] = useState([]);
-    const [selectedPlace, setSelectedPlace] = useState(null);
+    const navigate = useNavigate();
 
 
     const handleInputChange = (e) => {
@@ -19,7 +20,6 @@ const SearchLocation = () => {
           (predictions, status) => {
             if (status === window.google.maps.places.PlacesServiceStatus.OK) {
               setSuggestions(predictions);
-              console.log(predictions)
             }
           }
         );
@@ -33,8 +33,8 @@ const SearchLocation = () => {
       { placeId: place.place_id },
       (result, status) => {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-          // Store the selected place in state
-          setSelectedPlace(result);
+          setQuery('');
+          navigate(`/location/${result.name}`, { state: { lat: result.geometry.location.lat(), lng: result.geometry.location.lng() } });
         }
       }
     );
@@ -49,8 +49,8 @@ const SearchLocation = () => {
          onChange={handleInputChange}
          className='form-control' 
          id="globalSearch" 
-         placeholder='Search for Sports venues, Wedding venues & Party halls' 
-         aria-label='Search for Sports venues, Wedding venues & Party halls' 
+         placeholder='Search for cities, places...' 
+         aria-label='Search for cities, places...' 
          aria-describedby="global-search"/>
 
          {query !== '' && query  && query.length > 1 ?  

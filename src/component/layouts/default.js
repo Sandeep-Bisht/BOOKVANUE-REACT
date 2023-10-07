@@ -10,7 +10,9 @@ export const Default = ({children}) => {
 
   return (<>
             <Header/>
+            <div className='main'>
             {children}
+            </div>
             {!state.userData ? <Login/> : null }
             <Footer/>
           </>)

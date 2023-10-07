@@ -1,9 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
 import Loader from './loader';
+import axios from 'axios';
 
-const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scrollwheel, disableDoubleClickZoom, styles, markerIcon, markerPosition, onMarkerDragEnd, markerDraggable, markerTitle, markers}) => {
+const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
+
+const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scrollwheel, disableDoubleClickZoom, styles, markerIcon, markerPosition, onMarkerDragEnd, markerDraggable, markerTitle, markers, nearbyMarkers}) => {
   const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
+
+  const [markersData,setMarkersData] = useState(markers)
+  const [isLoading,setIsLoading] = useState(true)
+
+  const getFacilities = async ({lat,lng}) =>{
+    await axios.post( `${BASE_URL}/searchLocation`, {lat,lng})
+  .then((response) => {
+    setMarkersData(response.data.facility)
+    console.log(response.data.facility,'data is this')
+    setIsLoading(false)
+  })
+  .catch((err) => {
+    setIsLoading(false)
+  });
+}
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -13,13 +31,23 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
   const [location, setLocation] = useState(null);
   // Function to handle location change
   const handleLocationUpdate = (position) => {
+    if(nearbyMarkers){
+      getFacilities({ lat: position.coords.latitude, lng: position.coords.longitude })
+    }
+    else{
+      setIsLoading(false)
+    }
+
     setLocation(position);
   };
 
   // Use the Geolocation API to get the user's current location
   useEffect(() => {
     if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(handleLocationUpdate);
+      navigator.geolocation.getCurrentPosition(handleLocationUpdate,
+        (error) => {
+          console.error("Error getting location:", error);
+        });
     } else {
         alert('Geolocation is not available in this browser.');
     }
@@ -36,7 +64,7 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
 
   return (
     <>
-    {isLoaded ?
+    {isLoaded && !isLoading ?
     <GoogleMap
     mapContainerStyle={mapContainerStyle}
     center={location ? { lat: location.coords.latitude, lng: location.coords.longitude } : { lat: 30.3317463, lng: 78.0289588 }}
@@ -59,21 +87,8 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
             }}
   >
     {location && (
-      <>{
-        Array.isArray(markers) && markers.length > 0 ? 
-        markers.map((item)=>{
-          return (
-            <MarkerF
-            title={item.title}
-            position={item.position}
-            icon={{
-            url: item.url
-            }}
-          />
-          )
-        })
-        :
-        <MarkerF
+      <>
+      <MarkerF
           title={markerTitle == undefined ? "Your Location" : markerTitle}
           position={markerPosition == undefined ? { lat: location.coords.latitude, lng: location.coords.longitude } : markerPosition ? markerPosition : { lat: location.coords.latitude, lng: location.coords.longitude }}
           icon={{
@@ -82,6 +97,22 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
           onDragEnd={onMarkerDragEnd == undefined ? null : onMarkerDragEnd}
           draggable={markerDraggable == undefined ? false : markerDraggable}
         />
+        
+        {
+        Array.isArray(markersData) && markersData.length > 0 ? 
+        markersData.map((item)=>{
+          return (
+            <MarkerF
+            title={item.official_name}
+            position={{lat: item.lat, lng: item.long}}
+            icon={{
+            url: item.url ? item.url :"/Location.svg"
+            }}
+          />
+          )
+        })
+        :
+        null
       }
       
       </>

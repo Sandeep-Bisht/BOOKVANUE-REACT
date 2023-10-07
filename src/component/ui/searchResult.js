@@ -1,106 +1,82 @@
 import React, { lazy, useEffect, useState } from 'react'
-import { Default } from '../layouts/default'
-import LocationAwareMap from '../common/googlemap'
-import '../../css/homepage.css'
-import { MdSportsTennis } from 'react-icons/md'
-import { CiLocationOn } from 'react-icons/ci'
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import Loader from '../common/loader';
+import { Default } from '../layouts/default';
+import Nodatafound from '../common/nodatafound';
 import { AiFillStar } from 'react-icons/ai'
-import { IoMdAddCircleOutline } from 'react-icons/io'
-import FacilityIcon from '../../assets/addFacility.svg'
-import CricketIcon from '../../assets/cricket.svg';
-import SoccerIcon from '../../assets/soccer.svg'
-import BadmintonIcon from '../../assets/badminton.svg'
-import BasketballIcon from '../../assets/basketball.svg'
-import VolleyballIcon from '../../assets/volleyball.svg'
-import GolfIcon from '../../assets/golf.svg'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
-import Loader from '../common/loader'
-import truncateString from '../../utils/truncateString'
+import axios from 'axios';
+import truncateString from '../../utils/truncateString';
 
+const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 const IMG_URL = process.env.REACT_APP_IMG_URL;
 
-const Homepage = () => {
-  const [isLoading,setIsLoading] = useState(false)
-  const [featuredFacility,setFeaturedFacility] = useState([])
-  const [recentFacility,setRecentFacility] = useState([])
+const SearchResult = () => {
+    const { locationName } = useParams();
+    const {state} = useLocation();
+    const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(true)
+    const [facilities,setFacilities] = useState([]);
 
-  useEffect(()=>{
-    getInitialData();
-  },[])
+    const getFacilities = async ({lat,lng}) =>{
+        await axios.post( `${BASE_URL}/searchLocation`, {lat,lng})
+      .then((response) => {
+        setFacilities(response.data.facility)
+        setIsLoading(false)
+      })
+      .catch((err) => {
+        setIsLoading(false)
+      });
+    }
 
-  
-  const getInitialData = async() =>{
-    const featuredVenues = axios.get(`${BASE_URL}/get-featured-facility/4`);
-    const recentVenues = axios.get(`${BASE_URL}/get-recent-facility/3`);
-    // you could also use destructuring to have an array of responses
-    await axios.all([featuredVenues, recentVenues]).then(axios.spread(function(res1, res2) {
-      setFeaturedFacility(res1.data.data);
-      setRecentFacility(res2.data.data)
-      setIsLoading(false)
-    }));
-  }
 
-  return (<>
-    {isLoading ?
+    useEffect(() => {
+        if(state){
+            let {lat , lng} = state;
+            getFacilities({lat , lng})
+        }
+        else{
+            const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+                locationName
+              )}&key=${googleMapsApiKey}`;
+            fetch(apiUrl).then((response) => response.json()).then((data) => {
+            if (data.status === 'OK') {
+              // Geocoding was successful
+              const firstResult = data.results[0];
+              getFacilities({lat : firstResult.geometry.location.lat , lng : firstResult.geometry.location.lng})
+            } else {
+                navigate('/')
+            }
+          })
+          .catch(() => {
+            navigate('/')
+          });
+
+        }
+
+      }, [locationName]);
+    
+  return (
+    <>
+    {
+        isLoading ?
+        <>
         <Loader/>
-      :
-      <Default>
-      <section>
-        <div className='customize-map-box-shadow-h'></div>
-      <LocationAwareMap/>
-      </section>
-      <section className='search-wrapper-h py-3'>
-      <div className='container'>
-        <div className='row'>
-          <div className='col-6'>
-            <label className='mb-1'>Sports</label>
-            <div className="input-group">
-              <span className="input-group-text" id="basic-addon2" data-bs-toggle="dropdown">
-                <MdSportsTennis className='custom-icons-h'/>
-              </span>
-              <div className="dropdown custom-dropdown-h" id="basic-addon2">
-                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Type of sport
-                </button>
-                <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="">Cricket</a></li>
-                  <li><a className="dropdown-item" href="">BasketBall</a></li>
-                  <li><a className="dropdown-item" href="">Badminton</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className='col-6'>
-            <label className='mb-1'>Venue</label>
-            <div className="input-group">
-              <span className="input-group-text" id="basic-addon2" data-bs-toggle="dropdown">
-                <CiLocationOn className='custom-icons-h'/>
-              </span>
-              <div className="dropdown custom-dropdown-h" id="basic-addon2">
-                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Type of venue
-                </button>
-                <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="">Party Hall</a></li>
-                  <li><a className="dropdown-item" href="">Marriege Hall</a></li>
-                  <li><a className="dropdown-item" href="">Club</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      </section>
-      {featuredFacility.length > 0 ?
+        </>
+        :
+        <>
+            <Default>
+                {
+                facilities.length > 0 ? 
+                <>
       <section className='featured-venue-h py-5 mb-5'>
         <div className='container'>
-        <h2 className='main-heading'>~Featured Venue Near You~</h2>
+        <h2 className='main-heading'>~Search Result~</h2>
         <div className='row'>
-          {featuredFacility.map((item,index)=>{
+          {facilities.map((item,index)=>{
             const imgURL = item.featured_image.replace(/\\\//g, '/');
-            return (<div className='col-3 venue-cart-container' key={`${item.official_name}-${index}`}>
+            return (<div className='col-4 venue-cart-container mb-5' key={`${item.official_name}-${index}`}>
             <div className="venue-card">
               <div className='venue-card-header'>
               <img src={`${IMG_URL}${imgURL}`} className="card-img-top" alt="venue card" loading={lazy}/>
@@ -109,7 +85,7 @@ const Homepage = () => {
               </div>
               <div className='venue-detail'>
                 <h6 className='venue-name'>{item.official_name}</h6>
-                <p className='venue-distance'>(~0.5 Km)</p>
+                <p className='venue-distance'>(~{Math.round(item.distance * 100) / 100} Km)</p>
               </div>
               </div>
               <div className="venue-card-body">
@@ -141,103 +117,18 @@ const Homepage = () => {
           })}
         </div>
         </div>
-      </section> : null}
-      
-      <section className='add-facility-h'>
-        <div className='container'>
-          <div className='row'>
-            <div className='col-7 d-flex align-items-center'>
-              <div className='facility-content-f p-5'>
-                <h2 className='facility-heading-f'>Looking to Add your Facility?</h2>
-                <p className='facility-description-f'>Lorem ipsum dolor sit amet consectetur. Imperdiet id sed ut velit odio porttitor. Mi maecenas mauris scelerisque enim non felis elementum.</p>
-                <button type='button' className='btn facility-button-f'>Click to Add your Facilities
-                  <IoMdAddCircleOutline className='ms-2 add-icon'/>
-                </button>
-              </div>
-            </div>
-            <div className='col-5'>
-              <div className='add-facility-icon-wrapper-f'>
-                <img src={FacilityIcon} alt='Add Facility' className='add-facility-icon-f'  loading={lazy}/>
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
-      <section className='recent-add-h'>
-        <div className='container'>
-        <h2 className='main-heading'>~Recently Added Sports~</h2>
-          <div className='row g-3'>
-          <div className='col-2 recent-add-sport-card-wrapper-h'>
-              <div className='recent-add-sport-card-h'>
-                <img src={CricketIcon} alt="Cricket" className='recent-add-sport-img-h w-50 mb-3' loading={lazy}/>
-                <h6 className='recent-add-sport-card-heading-h'>Cricket</h6>
-                <p className='recent-add-sport-desc-h'>Lorem ipsum dolor sit amet consectetur. Imperdiet id sed ut velit odio porttitor.</p>
-              </div>
-            </div>
-            <div className='col-2 recent-add-sport-card-wrapper-h'>
-              <div className='recent-add-sport-card-h'>
-                <img src={SoccerIcon} alt="Cricket" className='recent-add-sport-img-h w-50 mb-3' loading={lazy}/>
-                <h6 className='recent-add-sport-card-heading-h'>Soccer</h6>
-                <p className='recent-add-sport-desc-h'>Lorem ipsum dolor sit amet consectetur. Imperdiet id sed ut velit odio porttitor.</p>
-              </div>
-            </div>
-            <div className='col-2 recent-add-sport-card-wrapper-h'>
-              <div className='recent-add-sport-card-h'>
-                <img src={BadmintonIcon} alt="Cricket" className='recent-add-sport-img-h w-50 mb-3' loading={lazy}/>
-                <h6 className='recent-add-sport-card-heading-h'>Badminton</h6>
-                <p className='recent-add-sport-desc-h'>Lorem ipsum dolor sit amet consectetur. Imperdiet id sed ut velit odio porttitor.</p>
-              </div>
-            </div>
-            <div className='col-2 recent-add-sport-card-wrapper-h'>
-              <div className='recent-add-sport-card-h'>
-                <img src={BasketballIcon} alt="Cricket" className='recent-add-sport-img-h w-50 mb-3' loading={lazy}/>
-                <h6 className='recent-add-sport-card-heading-h'>Basketball</h6>
-                <p className='recent-add-sport-desc-h'>Lorem ipsum dolor sit amet consectetur. Imperdiet id sed ut velit odio porttitor.</p>
-              </div>
-            </div>
-            <div className='col-2 recent-add-sport-card-wrapper-h'>
-              <div className='recent-add-sport-card-h'>
-                <img src={VolleyballIcon} alt="Cricket" className='recent-add-sport-img-h w-50 mb-3' loading={lazy}/>
-                <h6 className='recent-add-sport-card-heading-h'>Volleyball</h6>
-                <p className='recent-add-sport-desc-h'>Lorem ipsum dolor sit amet consectetur. Imperdiet id sed ut velit odio porttitor.</p>
-              </div>
-            </div>
-            <div className='col-2 recent-add-sport-card-wrapper-h'>
-              <div className='recent-add-sport-card-h'>
-                <img src={GolfIcon} alt="Cricket" className='recent-add-sport-img-h w-50 mb-3' loading={lazy}/>
-                <h6 className='recent-add-sport-card-heading-h'>Golf</h6>
-                <p className='recent-add-sport-desc-h'>Lorem ipsum dolor sit amet consectetur. Imperdiet id sed ut velit odio porttitor.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {recentFacility.length > 0 ? 
-      <section className='recent-add-h recent-venue-h pt-5'>
-        <div className='container'>
-        <h2 className='main-heading pt-5'>~Recently Added Venues~</h2>
-          <div className='row'>
-          {recentFacility.map((item,index)=>{
-            const imgURL = item.featured_image.replace(/\\\//g, '/');
-            return(
-            <div className='col-4 recent-add-card-wrapper-h' key={`${item.official_name}-${index}`}>
-              <div className='recent-add-card-h p-4'>
-                <img src={`${IMG_URL}${imgURL}`} alt="facility name" className='recent-add-img-h w-100' loading={lazy}/>
-                <h6 className='recent-add-card-heading-h'>{item.official_name}</h6>
-                <p className='recent-add-desc-h'>{truncateString(item.description,200)}</p>
-              </div>
-            </div>)
-          })}
-          </div>
-        </div>
-      </section>: null}
-      
-      {/* end recently added section */}
-      </Default>
+                </>
+                :
+                <>  
+                    <Nodatafound/>
+                </>
+                }
+            </Default>
+        </> 
     }
     </>
-    
   )
 }
 
-export default Homepage
+export default SearchResult
