@@ -150,6 +150,10 @@ color: #A7A29E!important;
     transition: .2s ease;
    
 }
+.common-location-btn.form-input.btn:first-child:active
+{
+ color: #fff;
+}
 .common-location-btn.form-input:hover{
    background: #008b83; 
 }
