@@ -9,7 +9,7 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
   const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
   const [markersData,setMarkersData] = useState(markers)
-  const [isLoading,setIsLoading] = useState(true)
+  const [isLoading,setIsLoading] = useState(false)
 
   const getFacilities = async ({lat,lng}) =>{
     await axios.post( `${BASE_URL}/searchLocation`, {lat,lng})
@@ -32,10 +32,8 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
   // Function to handle location change
   const handleLocationUpdate = (position) => {
     if(nearbyMarkers){
+      setIsLoading(true)
       getFacilities({ lat: position.coords.latitude, lng: position.coords.longitude })
-    }
-    else{
-      setIsLoading(false)
     }
 
     setLocation(position);
