@@ -108,9 +108,18 @@ h1, h2, h3, h4, h5, h6, button{
   height: 42px;
   border-radius: 3px!important;
 }
-.p-inputtext:enabled:focus
+.p-inputtext:enabled:focus,.p-button.p-button-secondary:enabled:focus,.p-button:focus
 {
   box-shadow: none!important;
+}
+.p-button.p-button-outlined:enabled:hover, .p-button.p-button-outlined:not(button):not(a):not(.p-disabled):hover
+{
+  color: transparent!important;
+  border: 1px solid;
+}
+.p-inputtext:enabled:hover
+{
+  border-color:inherit!important;
 }
 .form-row label
 {
@@ -140,7 +149,7 @@ color: #A7A29E!important;
 
 .common-location-btn.form-input
 {
-  background: #00BFB4;
+  background: #00BFB4!important;
     color: #fff;
     width: 100%;
     border-color: #00bfb4!important;
@@ -156,4 +165,113 @@ color: #A7A29E!important;
 }
 .common-location-btn.form-input:hover{
    background: #008b83; 
+}
+
+
+/* -----------------search-location-popup------------------- */
+.common-location-btn.form-input .p-button-label
+{
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: center;
+  color: #fff;
+
+}
+ span.pop-icon
+{
+   position: absolute!important;
+   right: 40px;
+  
+}
+.search-location-popup .p-dialog-content::-webkit-scrollbar 
+{
+  width: 0.1em;
+}
+.search-location-popup .p-dialog-content::-webkit-scrollbar-thumb
+{
+  background-color: transparent;
+}
+.search-location-popup .p-dialog .p-dialog-header .p-dialog-title
+{
+  text-align: left;
+}
+.search-location-popup .search-container-head .search-bar-wrapper
+{
+   width: 100%;
+}
+.search-location-popup .search-container-head .search-bar-wrapper input[type="search"]
+{
+  border-bottom:none!important;
+}
+
+ .upload-heading
+{
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: #000;
+  font-weight: 400;
+}
+.upload-heading span{
+  font-weight: 700;
+  color: #00BFB4;
+}
+
+.upload-card .p-fileupload .p-fileupload-buttonbar
+{
+  border: 0;
+  background-color:#f4fffe;
+  padding-bottom: 0;
+  display: flex;
+  justify-content: center;
+}
+.upload-card  .p-fileupload .p-fileupload-content
+{
+  border: 0;
+  background-color:#f4fffe;
+}
+.upload-card 
+{
+  border: 2px  dashed #dddcdb!important;
+}
+.upload-card .p-fileupload .p-fileupload-buttonbar .p-button
+{
+  background: #00BFB4!important;
+    border: 0;
+}
+.upload-card .p-fileupload .p-fileupload-buttonbar .p-button svg path{
+  fill:#fff;
+}
+
+.upload-card .p-button.p-button-icon-only.p-button-rounded
+{
+  height: 35px;
+  width: 35px;
+}
+.upload-card .p-fileupload .p-progressbar
+{
+  background: #f4fffe;
+}
+
+.select-location-btn-wrapper
+{
+  display:flex;
+  justify-content: space-between;
+}
+.select-location-btn-wrapper .common-location-btn.form-input
+{
+  padding: 0 70px;
+}
+.select-location-btn-wrapper .common-location-btn.form-input.cancel
+{
+  background: #CBCBCB!important;
+  
+  border-color: #cbcbcb!important;
+  padding: 0 70px;
+
+
+}
+.common-location-btn.form-input.cancel  .p-button-label
+{
+  color: #515151!important;
 }
