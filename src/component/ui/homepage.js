@@ -22,7 +22,7 @@ const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 const IMG_URL = process.env.REACT_APP_IMG_URL;
 
 const Homepage = () => {
-  const [isLoading,setIsLoading] = useState(true)
+    const [isLoading,setIsLoading] = useState(true)
   const [featuredFacility,setFeaturedFacility] = useState([])
   const [recentFacility,setRecentFacility] = useState([])
   const [sports,setSports] = useState([])
@@ -39,6 +39,7 @@ const Homepage = () => {
       navigator.geolocation.getCurrentPosition(function(position) {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
+        setLocationPermitted(true)
         setCurrentLocation({lat:latitude,lng:longitude})
         getInitialData({lat:latitude,lng:longitude})
         // You can use latitude and longitude as needed
@@ -74,8 +75,8 @@ const Homepage = () => {
     await axios.all([featuredVenues, recentVenues, sports, venues]).then(axios.spread(function(res1, res2, res3, res4) {
       setFeaturedFacility(res1.data.facility);
       setRecentFacility(res2.data.facility)
-      setSports(res3.data.data)
-      setVenues(res4.data.data)
+            setSports(res3.data.data)
+            setVenues(res4.data.data)
       setIsLoading(false)
     }));
   }

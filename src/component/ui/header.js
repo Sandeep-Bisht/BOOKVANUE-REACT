@@ -7,8 +7,7 @@ import SearchLocation from "../common/searchLocation";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const { state, resetLoginState, toggleLoginModal, logout } =
-    useContext(AuthContext);
+  const { state, resetLoginState, toggleLoginModal, logout } = useContext(AuthContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
