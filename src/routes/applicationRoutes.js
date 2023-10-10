@@ -31,7 +31,7 @@ const ApplicationRoutes = () => {
   return (
     <Routes>
         <Route exact path='/' element={<Homepage/>}/>
-        <Route path='/single' element={<Single/>}/>
+        <Route path='/facility/:slug' element={<Single/>}/>
         <Route path="/location/:locationName" element={<SearchResult/>} />
         <Route path='/management' element={<ProtectedRoutes role={['User']}><DashboardLayout/></ProtectedRoutes>}>
           <Route path="/management/dashboard" element={<Dashboard />} />

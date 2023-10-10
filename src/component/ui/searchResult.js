@@ -29,6 +29,7 @@ const SearchResult = () => {
         setIsLoading(false)
       });
     }
+    
 
 
     useEffect(() => {
