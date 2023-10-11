@@ -29,6 +29,7 @@ const SearchResult = () => {
         setIsLoading(false)
       });
     }
+    
 
 
     useEffect(() => {
@@ -110,7 +111,7 @@ const SearchResult = () => {
                 <p className='venue-description'>
                   {truncateString(item.description,200)}
                 </p>
-                <Link to="/single" className='btn venue-booking-btn'>Book Now</Link>
+                <Link to={`/facility/${item.slug}`} className='btn venue-booking-btn'>Book Now</Link>
               </div>
             </div>
           </div>)

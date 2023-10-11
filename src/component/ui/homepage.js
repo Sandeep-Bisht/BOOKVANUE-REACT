@@ -22,22 +22,61 @@ const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 const IMG_URL = process.env.REACT_APP_IMG_URL;
 
 const Homepage = () => {
-  const [isLoading,setIsLoading] = useState(false)
+    const [isLoading,setIsLoading] = useState(true)
   const [featuredFacility,setFeaturedFacility] = useState([])
   const [recentFacility,setRecentFacility] = useState([])
+  const [sports,setSports] = useState([])
+  const [venues,setVenues] = useState([])
+  const [locationPermitted,setLocationPermitted] = useState(false)
+  const [currentLocation,setCurrentLocation] = useState(null)
 
   useEffect(()=>{
-    getInitialData();
+    checkLocationPermission();
   },[])
 
+  const checkLocationPermission = () =>{
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        setLocationPermitted(true)
+        setCurrentLocation({lat:latitude,lng:longitude})
+        getInitialData({lat:latitude,lng:longitude})
+        // You can use latitude and longitude as needed
+      }, function(error) {
+        getInitialData()
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            console.log("User denied the request for Geolocation.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            console.log("Location information is unavailable.");
+            break;
+          case error.TIMEOUT:
+            console.log("The request to get user location timed out.");
+            break;
+          case error.UNKNOWN_ERROR:
+            console.log("An unknown error occurred.");
+            break;
+        }
+      });
+    } else {
+      getInitialData()
+    }
+  }
+
   
-  const getInitialData = async() =>{
-    const featuredVenues = axios.get(`${BASE_URL}/get-featured-facility/4`);
+  const getInitialData = async(coords) =>{
+    const featuredVenues = coords ? axios.post( `${BASE_URL}/searchLocation`, {...coords, count:4}) : axios.get(`${BASE_URL}/get-featured-facility/4`);
     const recentVenues = axios.get(`${BASE_URL}/get-recent-facility/3`);
+    const sports = axios.get(`${BASE_URL}/get-all-sports`);
+    const venues = axios.get(`${BASE_URL}/get-all-venues`);
     // you could also use destructuring to have an array of responses
-    await axios.all([featuredVenues, recentVenues]).then(axios.spread(function(res1, res2) {
-      setFeaturedFacility(res1.data.data);
-      setRecentFacility(res2.data.data)
+    await axios.all([featuredVenues, recentVenues, sports, venues]).then(axios.spread(function(res1, res2, res3, res4) {
+      setFeaturedFacility(res1.data.facility);
+      setRecentFacility(res2.data.facility)
+            setSports(res3.data.data)
+            setVenues(res4.data.data)
       setIsLoading(false)
     }));
   }
@@ -49,7 +88,7 @@ const Homepage = () => {
       <Default>
       <section>
         <div className='customize-map-box-shadow-h'></div>
-      <LocationAwareMap/>
+        <LocationAwareMap nearbyMarkers={currentLocation &&  featuredFacility.length > 0 ? true : false}/>
       </section>
       <section className='search-wrapper-h py-3'>
       <div className='container'>
@@ -61,14 +100,16 @@ const Homepage = () => {
                 <MdSportsTennis className='custom-icons-h'/>
               </span>
               <div className="dropdown custom-dropdown-h" id="basic-addon2">
-                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"  disabled={sports.length > 0 ? false : true}>
                   Type of sport
                 </button>
+                {sports.length > 0 ? 
                 <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="">Cricket</a></li>
-                  <li><a className="dropdown-item" href="">BasketBall</a></li>
-                  <li><a className="dropdown-item" href="">Badminton</a></li>
+                  {sports.map((item,index)=>{
+                    return <li key={index}><a className="dropdown-item" href="">{item.name}</a></li>
+                  })}
                 </ul>
+                : null}
               </div>
             </div>
           </div>
@@ -79,14 +120,16 @@ const Homepage = () => {
                 <CiLocationOn className='custom-icons-h'/>
               </span>
               <div className="dropdown custom-dropdown-h" id="basic-addon2">
-                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={venues.length > 0 ? false : true}>
                   Type of venue
                 </button>
+                {venues.length > 0 ? 
                 <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="">Party Hall</a></li>
-                  <li><a className="dropdown-item" href="">Marriege Hall</a></li>
-                  <li><a className="dropdown-item" href="">Club</a></li>
+                  {venues.map((item,index)=>{
+                  return <li key={index}><a className="dropdown-item" href="">{item.name}</a></li>
+                })}
                 </ul>
+                : null}
               </div>
             </div>
           </div>
@@ -96,7 +139,7 @@ const Homepage = () => {
       {featuredFacility.length > 0 ?
       <section className='featured-venue-h py-5 mb-5'>
         <div className='container'>
-        <h2 className='main-heading'>~Featured Venue Near You~</h2>
+        <h2 className='main-heading'>~Featured Facility {locationPermitted ? " Near You" : null}~</h2>
         <div className='row'>
           {featuredFacility.map((item,index)=>{
             const imgURL = item.featured_image.replace(/\\\//g, '/');
@@ -134,7 +177,7 @@ const Homepage = () => {
                 <p className='venue-description'>
                   {truncateString(item.description,200)}
                 </p>
-                <Link to="/single" className='btn venue-booking-btn'>Book Now</Link>
+                <Link to={`/facility/${item.slug}`} className='btn venue-booking-btn'>Book Now</Link>
               </div>
             </div>
           </div>)
@@ -215,7 +258,7 @@ const Homepage = () => {
       {recentFacility.length > 0 ? 
       <section className='recent-add-h recent-venue-h pt-5'>
         <div className='container'>
-        <h2 className='main-heading pt-5'>~Recently Added Venues~</h2>
+        <h2 className='main-heading pt-5'>~Recently Added Facilities~</h2>
           <div className='row'>
           {recentFacility.map((item,index)=>{
             const imgURL = item.featured_image.replace(/\\\//g, '/');

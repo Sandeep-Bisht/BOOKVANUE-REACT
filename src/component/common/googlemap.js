@@ -7,8 +7,8 @@ const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 
 const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scrollwheel, disableDoubleClickZoom, styles, markerIcon, markerPosition, onMarkerDragEnd, markerDraggable, markerTitle, markers, nearbyMarkers, loaderStyle}) => {
   const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
-
-  const [markersData,setMarkersData] = useState(markers)
+  
+  const [markersData,setMarkersData] = useState(markers == undefined ? null : [...markers])
   const [isLoading,setIsLoading] = useState(false)
 
   const getFacilities = async ({lat,lng}) =>{
@@ -60,13 +60,15 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
     height: height ? height : '70vh',
   };
 
+  console.log(markersData,'markers data is this')
+
   return (
     <>
     {isLoaded && !isLoading ?
     <GoogleMap
     mapContainerStyle={mapContainerStyle}
     center={markerPosition == undefined ? location ? { lat: location.coords.latitude, lng: location.coords.longitude } : { lat: 30.3317463, lng: 78.0289588 } : markerPosition}
-    zoom={(location || markerPosition) ? 15 : 12} // Adjust the zoom level as needed
+    zoom={(location || markerPosition) ? 13 : 12} // Adjust the zoom level as needed
     options={{disableDefaultUI: disableDefaultUI == undefined ? true : disableDefaultUI,
               draggable: draggable == undefined ? false : draggable,
               zoomControl: zoomControl == undefined ? false : zoomControl, 
@@ -87,6 +89,7 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
     {(location || markerPosition) && (
       <>
       <MarkerF
+          key={'bookvenue'}
           title={markerTitle == undefined ? "Your Location" : markerTitle}
           position={markerPosition == undefined ? { lat: location.coords.latitude, lng: location.coords.longitude } : markerPosition ? markerPosition : { lat: location.coords.latitude, lng: location.coords.longitude }}
           icon={{
@@ -99,13 +102,12 @@ const LocationAwareMap = ({height, disableDefaultUI, draggable, zoomControl, scr
         {
         Array.isArray(markersData) && markersData.length > 0 ? 
         markersData.map((item)=>{
+          console.log(item,'item getting mapped')
           return (
             <MarkerF
+            key={item.slug}
             title={item.official_name}
-            position={{lat: item.lat, lng: item.long}}
-            icon={{
-            url: item.url ? item.url :"/Location.svg"
-            }}
+            position={{lat: parseFloat(item.lat), lng: parseFloat(item.long)}}
           />
           )
         })

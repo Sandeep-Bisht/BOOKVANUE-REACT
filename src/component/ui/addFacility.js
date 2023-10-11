@@ -318,6 +318,7 @@ const AddFacility = () => {
                                     onMarkerDragEnd={handleMarkerDrag} //function
                                     markerDraggable={true}
                                     markerTitle="Your location"
+                                    height="60vh"
                                 />
                             </div>
                         </div>

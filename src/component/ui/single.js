@@ -1,13 +1,29 @@
-import React, { lazy, useState } from 'react'
+import React, { lazy, useContext, useEffect, useState } from 'react'
 import { Default } from '../layouts/default'
 import '../../css/single.css'
 import Calendar from 'react-calendar';
 import { AiFillStar } from 'react-icons/ai'
 import LocationAwareMap from '../common/googlemap';
 import { Galleria } from 'primereact/galleria';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+import Loader from '../common/loader';
+import Nodatafound from '../common/nodatafound';
+import { Context as AuthContext } from '../../context/AuthContext';
 
+const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
+const IMG_URL = process.env.REACT_APP_IMG_URL;
 const Single = () => {
 
+    
+    const { state, resetLoginState, toggleLoginModal } = useContext(AuthContext);
+    const { slug } = useParams();
+    const [isLoading,setIsLoading] = useState(true);
+    const [facility,setFacility] = useState(null)
+    const [selectedType,setSelectedType] = useState(null)
+    const [error,setError] = useState({})
+    const navigate = useNavigate()
+    
     const [images,setImages] = useState(
         [
             {
@@ -103,6 +119,32 @@ const Single = () => {
         ]
     )
 
+    useEffect(() => {      
+        getFacilitySlug({slug})
+      }, [slug]);
+
+
+      
+    const getFacilitySlug = async ({slug}) =>{
+        await axios.get( `${BASE_URL}/get-facility-by-slug/${slug}`)
+      .then((response) => {
+        if(response.data.facility){
+            let imagesCopy = [ response.data.facility.featured_image ]
+            if(response.data.facility.images){
+                let otherImages = JSON.parse(response.data.facility.images);
+                imagesCopy = [...imagesCopy,...otherImages]
+            }
+            setImages(imagesCopy);
+            setFacility(response.data.facility)
+        }
+        
+        setIsLoading(false)
+      })
+      .catch((err) => {
+        setIsLoading(false)
+      });
+    }
+
     const [value, onChange] = useState(new Date());
     const responsiveOptions = [
         {
@@ -118,31 +160,58 @@ const Single = () => {
             numVisible: 1
         }
     ];
+
+    const handleClick = () =>{
+        const date = new Date(value);
+
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+
+        const formattedDate = `${day}-${month}-${year}`;
+
+        let errorCopy = {...error}
+
+        if(!selectedType){
+            errorCopy.typeError = "select type."
+            setError(errorCopy)
+        }
+        else{
+            navigate(`/booknow/${facility.slug}`,{state:{date:formattedDate,type:selectedType,facility:facility}})
+        }
+        
+    }
     
     const itemTemplate = (item) => {
+        let imgUrl = item.replace(/[\\"]/g, '');
         return <div className='carousel-img-wrapper-si'>
-        <img src={item.itemImageSrc} alt={item.alt} className='carousel-img-si img-fluid' loading={lazy}/>
+        <img src={`${IMG_URL}${imgUrl}`} alt={facility.official_name} className='carousel-img-si img-fluid' loading={lazy}/>
         <div className='img-overlay-si'>
-            <h4 className='overlay-title-si'>{item.alt}</h4>
+            <h4 className='overlay-title-si'>{facility.official_name}</h4>
         </div>
     </div>;
     }
 
     const thumbnailTemplate = (item) => {
+        let imgUrl = item.replace(/[\\"]/g, '');
         return <div className='carousel-img-wrapper-si'>
-        <img src={item.itemImageSrc} alt={item.alt} className='carousel-img-si img-fluid' loading={lazy} />
+        <img src={`${IMG_URL}${imgUrl}`} alt={facility.official_name} className='carousel-img-si img-fluid' loading={lazy} />
         <div className='img-overlay-si'>
-            <h4 className='overlay-title-si'>{item.alt}</h4>
+            <h4 className='overlay-title-si'>{facility.official_name}</h4>
         </div>
     </div>;
     }
 
   return (
+    <>
+    {isLoading ? <Loader/> : 
+    <>
+    {facility ? 
     <Default>
         <section className='container single-page-container mt-3'>
             <div className='row mb-5'>
                 <div className='col-12'>
-                    <h3 className='title-heading-si m-0'>Name of the venue on the selected page~</h3>
+                    <h3 className='title-heading-si m-0'>{facility.official_name}</h3>
                 </div>
                 <div className='col-8 img-carousel-container-si'>
                 <div className='pb-1'>
@@ -154,7 +223,7 @@ const Single = () => {
                         item={itemTemplate} 
                         thumbnail={thumbnailTemplate} 
                         circular 
-                        autoPlay 
+                        // autoPlay 
                         transitionInterval={3000} 
                         thumbnailsPosition="right"
                     />
@@ -162,7 +231,7 @@ const Single = () => {
                 <div className='card mt-4'>
                     <div className='d-flex px-4 py-3 align-items-center described-si'>
                     <p className='m-0 location-name-si'>
-                        Location Name 
+                        {facility.address}
                     </p>
                     <h6 className='rating-icon-si ms-4'>
                         <AiFillStar className='me-1'/>
@@ -195,9 +264,9 @@ const Single = () => {
                 <div className="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
                 <div className='tab-container-si'>
                     <h4 className='heading-si'>About the venue</h4>
-                    <p className='desc-si'>Lorem ipsum dolor sit amet consectetur. Quisque fringilla non donec vestibulum mi enim. Semper arcu enim nunc sed lectus integer purus eleifend. Pellentesque maecenas porttitor facilisis pellentesque mauris id varius.</p>
+                    <p className='desc-si'>{facility.description}</p>
                     <h4 className='heading-si'>Location Map</h4>
-                    <LocationAwareMap height="40vh"/>
+                    <LocationAwareMap height="40vh" markerPosition={{lat:parseFloat(facility.lat),lng:parseFloat(facility.long)}}/>
                 </div>
                 </div>
 
@@ -361,14 +430,39 @@ const Single = () => {
                         <Calendar onChange={onChange} 
                             value={value}
                             className="common-calendor-si"
+                            minDate={new Date()}
                         />
                     </div>
-                    <button type='button' className='btn book-now-btn-si mt-2'>Book Now</button>
+                        <select className='form-input w-100' value={selectedType} onChange={(e)=>{setSelectedType(e.target.value);
+                        setError({})}}>
+                            <option value={null} hidden>Choose Type</option>
+                            <option value='sports'>Sports</option>
+                            <option value='venues'>Venues</option>
+                        </select>
+                    {error && error.typeError ? <p className='text-danger m-0'>{error.typeError}</p> : null}
+                    {!state.userData ? 
+                    <button type='button' className='btn book-now-btn-si mt-2' 
+                    data-bs-toggle="modal"
+                    data-bs-target="#loginModal"
+                    onClick={() => {
+                      resetLoginState(!state.loginState);
+                      toggleLoginModal("login");
+                    }}
+                    >Book Now</button>
+                    :
+                    <button type='button' className='btn book-now-btn-si mt-2'  onClick={()=>handleClick()} >Book Now</button>
+                    }
                     </div>
                 </div>
             </div>
         </section>
     </Default>
+    :
+    <Nodatafound/>
+    }
+    </>
+    }
+    </>
   )
 }
 
