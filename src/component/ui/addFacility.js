@@ -196,14 +196,36 @@ const AddFacility = () => {
                                             </button>
                                         </div>
                                     </div>
+                                 
                                     <div className="col-6 mb-5">
                                         <p className="upload-heading">Upload Image</p>
                                         <div className="card border-0 upload-card">
-                                            <FileUpload name="images[]" multiple
+                                        <Controller
+      name="file" // The name of your form field
+      control={control}
+      render={({ field }) => (
+        <FileUpload
+          name="file" // The name of the file input field
+          cancelOptions={{ iconOnly: true, className: 'custom-cancel-btn p-button-danger p-button-rounded p-button-outlined' }}
+          chooseOptions={{ icon: <AiOutlineCloudUpload />, iconOnly: true, className: 'custom-choose-btn p-button-rounded p-button-outlined' }}
+           uploadOptions={{ className: 'd-none' }} emptyTemplate={<p className="m-0 upload-heading text-center">Drag & Drop or <span>Browse</span> your files</p>}
+          multiple={false} // Set to true if you want to allow multiple files
+          maxFileSize={10000000} // Maximum file size in bytes
+          customUpload
+          uploadHandler={(file) => {
+            field.onChange(file); // Set the selected file as the form field value
+          }}
+        />
+      )}
+    />
+                                            {/* <FileUpload name="images[]" 
+                                             
+                                            multiple
                                                 accept="image/*"
                                                 cancelOptions={{ iconOnly: true, className: 'custom-cancel-btn p-button-danger p-button-rounded p-button-outlined' }}
                                                 chooseOptions={{ icon: <AiOutlineCloudUpload />, iconOnly: true, className: 'custom-choose-btn p-button-rounded p-button-outlined' }}
-                                                uploadOptions={{ className: 'd-none' }} maxFileSize={10000000} emptyTemplate={<p className="m-0 upload-heading text-center">Drag & Drop or <span>Browse</span> your files</p>} />
+                                                uploadOptions={{ className: 'd-none' }} maxFileSize={10000000} emptyTemplate={<p className="m-0 upload-heading text-center">Drag & Drop or <span>Browse</span> your files</p>} 
+                                                /> */}
                                         </div>
                                     </div>
                                     <div className="col-6 mb-5">
