@@ -75,8 +75,8 @@ const Homepage = () => {
     await axios.all([featuredVenues, recentVenues, sports, venues]).then(axios.spread(function(res1, res2, res3, res4) {
       setFeaturedFacility(res1.data.facility);
       setRecentFacility(res2.data.facility)
-            setSports(res3.data.data)
-            setVenues(res4.data.data)
+            setSports(res3.data)
+            setVenues(res4.data)
       setIsLoading(false)
     }));
   }
@@ -88,7 +88,19 @@ const Homepage = () => {
       <Default>
       <section>
         <div className='customize-map-box-shadow-h'></div>
-        <LocationAwareMap nearbyMarkers={currentLocation &&  featuredFacility.length > 0 ? true : false}/>
+        <LocationAwareMap 
+        nearbyMarkers={currentLocation &&  featuredFacility?.length > 0 ? true : false}
+        disableDefaultUI={false}
+       // draggable={true}
+        zoomControl={true}
+       scrollwheel={true}
+        disableDoubleClickZoom={false}
+        // markerPosition={markerPosition}
+        // onMarkerDragEnd={handleMarkerDrag} //function
+       // markerDraggable={true}
+        markerTitle="Your location"
+        height="60vh"
+        />
       </section>
       <section className='search-wrapper-h py-3'>
       <div className='container'>
@@ -100,13 +112,13 @@ const Homepage = () => {
                 <MdSportsTennis className='custom-icons-h'/>
               </span>
               <div className="dropdown custom-dropdown-h" id="basic-addon2">
-                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"  disabled={sports.length > 0 ? false : true}>
+                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"  disabled={sports?.length > 0 ? false : true}>
                   Type of sport
                 </button>
-                {sports.length > 0 ? 
+                {sports?.length > 0 ? 
                 <ul className="dropdown-menu">
                   {sports.map((item,index)=>{
-                    return <li key={index}><a className="dropdown-item" href="">{item.name}</a></li>
+                    return <li key={index}><a className="dropdown-item" href="">{item?.name}</a></li>
                   })}
                 </ul>
                 : null}
@@ -120,10 +132,10 @@ const Homepage = () => {
                 <CiLocationOn className='custom-icons-h'/>
               </span>
               <div className="dropdown custom-dropdown-h" id="basic-addon2">
-                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={venues.length > 0 ? false : true}>
+                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={venues?.length > 0 ? false : true}>
                   Type of venue
                 </button>
-                {venues.length > 0 ? 
+                {venues?.length > 0 ? 
                 <ul className="dropdown-menu">
                   {venues.map((item,index)=>{
                   return <li key={index}><a className="dropdown-item" href="">{item.name}</a></li>
@@ -136,7 +148,7 @@ const Homepage = () => {
         </div>
       </div>
       </section>
-      {featuredFacility.length > 0 ?
+      {featuredFacility?.length > 0 ?
       <section className='featured-venue-h py-5 mb-5'>
         <div className='container'>
         <h2 className='main-heading'>~Featured Facility {locationPermitted ? " Near You" : null}~</h2>
@@ -255,7 +267,7 @@ const Homepage = () => {
           </div>
         </div>
       </section>
-      {recentFacility.length > 0 ? 
+      {recentFacility?.length > 0 ? 
       <section className='recent-add-h recent-venue-h pt-5'>
         <div className='container'>
         <h2 className='main-heading pt-5'>~Recently Added Facilities~</h2>
