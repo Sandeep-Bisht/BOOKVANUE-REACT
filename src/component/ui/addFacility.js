@@ -9,6 +9,7 @@ import { useForm, Controller } from "react-hook-form";
 import SearchLocation from "../common/searchLocation";
 import { FileUpload } from "primereact/fileupload";
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import { Dropdown } from "primereact/dropdown";
 
 const AddFacility = () => {
   const [visible, setVisible] = useState(false);
@@ -27,6 +28,11 @@ const AddFacility = () => {
   };
 
   const facilityType = [{ name: "Sports" }, { name: "Venue" }];
+  const facilityTypeOptions = [
+    { label: "Option 1", value: "option1" },
+    { label: "Option 2", value: "option2" },
+    { label: "Option 3", value: "option3" },
+  ];
 
   const handleButtonClick = () => {
     if ("geolocation" in navigator) {
@@ -121,7 +127,10 @@ const AddFacility = () => {
           <div className="row ">
             <h4 className=" fw-bold "> Add Facility</h4>
             <div className="col-12 mt-5">
-              <form onSubmit={handleSubmit(handleAddFacility)} enctype="multipart/form-data">
+              <form
+                onSubmit={handleSubmit(handleAddFacility)}
+                enctype="multipart/form-data"
+              >
                 <div className="row">
                   <div className="col-lg-3 mb-5">
                     <div className="form-row">
@@ -148,22 +157,33 @@ const AddFacility = () => {
                         <InputText
                           className="form-input"
                           id="alias"
-                          {...register("alias", {
-                            required: true,
-                            pattern: /^[A-Za-z\s]+$/,
-                          })}
+                          {...register("alias")}
+                         
                         />
                         <label htmlFor="alias">Alias</label>
                       </span>
                     </div>
-                    {errors.alias && (
-                      <p className="text-danger">This field is required</p>
-                    )}
+                   
                   </div>
                   <div className="col-lg-3 mb-5">
                     <div className="form-row">
                       <span className="p-float-label">
                         <Controller
+                          name="selectType"
+                          className="form-input"
+                          control={control}
+                          rules={{ required: true }} // Add validation rules if needed
+                          render={({ field }) => (
+                            <Dropdown
+                              id="selectType"
+                              {...field}
+                              options={facilityTypeOptions}
+                              optionLabel="label"
+                              placeholder="Select a type"
+                            />
+                          )}
+                        />
+                        {/* <Controller
                           name="selectType"
                           control={control}
                           rules={{ required: true }} // Add validation rules if needed
@@ -174,10 +194,10 @@ const AddFacility = () => {
                               options={facilityType}
                               optionLabel="name"
                               className="w-full md:w-20rem form-input"
-                              multiple={true}
+                              multiple={false}
                             />
                           )}
-                        />
+                        /> */}
 
                         <label htmlFor="ms-cities">Select Type</label>
                       </span>
@@ -210,6 +230,11 @@ const AddFacility = () => {
                           </svg>
                         </span>
                       </button>
+                      <input type="hidden" name="lat" value={markerPosition ? markerPosition.lat : null} {...register("lat",{required:true})}/>
+                      <input type="hidden" name="lng" value={markerPosition ? markerPosition.lng : null} {...register("lng",{required:true})}/>
+                      {(errors.lat || errors.lng) && (
+                      <p className="text-danger">Location required</p>
+                    )}
                     </div>
                   </div>
 
@@ -217,38 +242,26 @@ const AddFacility = () => {
                     <p className="upload-heading">Upload Featured Image</p>
                     <div className="card border-0 upload-card">
                       <Controller
-                        name="file" // The name of your form field
+                        name="file"
                         control={control}
                         render={({ field }) => (
-                          <FileUpload
-                            // name="file" // The name of the file input field
-                            cancelOptions={{
-                              iconOnly: true,
-                              className:
-                                "custom-cancel-btn p-button-danger p-button-rounded p-button-outlined",
+                          <input
+                            className="form-input"
+                            type="file"
+                            {...register("file", {
+                                required: true,
+                              })}
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              field.onChange(file);
                             }}
-                            chooseOptions={{
-                              icon: <AiOutlineCloudUpload />,
-                              iconOnly: true,
-                              className:
-                                "custom-choose-btn p-button-rounded p-button-outlined",
-                            }}
-                            uploadOptions={{ className: "d-none" }}
-                            emptyTemplate={
-                              <p className="m-0 upload-heading text-center">
-                                Drag & Drop or <span>Browse</span> your files
-                              </p>
-                            }
-                            multiple={false} // Set to true if you want to allow multiple files
-                            maxFileSize={10000000} // Maximum file size in bytes
-                            customUpload
-                            uploadHandler={(file) => {
-                                field.onChange(file); // Set the selected file as the form field value
-                              }}
-                            
                           />
+                          
                         )}
                       />
+                        {errors.file && (
+                      <p className="text-danger">This field is required</p>
+                    )}
                       {/* <FileUpload name="images[]" 
                                              
                                             multiple
@@ -259,24 +272,62 @@ const AddFacility = () => {
                                                 /> */}
                     </div>
                   </div>
-                
+
+                  <div className="col-lg-6 mb-5">
+                    <div className="form-row">
+                      <span className="p-float-label">
+                        <InputTextarea
+                          className="form-input"
+                          id="address"
+                          {...register("address")}
+                          
+                        />
+                        <label htmlFor="address">Address</label>
+                      </span>
+                    </div>
+                   
+                  </div>
+
+                  <div className="col-lg-3 mb-5">
+                    <div className="form-row">
+                      <span className="p-float-label">
+                        <Controller
+                          name="selectAminites "
+                          control={control}
+                          rules={{ required: true }} // Add validation rules if needed
+                          render={({ field }) => (
+                            <MultiSelect
+                              id="selectAminites "
+                              {...field}
+                              options={facilityType}
+                              optionLabel="name"
+                              className="w-full md:w-20rem form-input"
+                              multiple={true}
+                            />
+                          )}
+                        />
+
+                        <label htmlFor="ms-cities">Select Aminites </label>
+                      </span>
+                    </div>
+                    {errors.selectAminites && (
+                      <p className="text-danger">This field is required</p>
+                    )}
+                  </div>
+
                   <div className="col-12 mb-5">
                     <span className="p-float-label">
                       <InputTextarea
                         autoResize
                         id="description"
-                        className="w-100"
-                        {...register("description", {
-                          required: true,
-                        })}
+                        className="w-100"                        
                         rows={7}
                         cols={30}
+                        {...register("description")}
                       />
                       <label htmlFor="description">Description</label>
                     </span>
-                    {errors.description && (
-                      <p className="text-danger">This field is required</p>
-                    )}
+                   
                   </div>
                   <div className="col-12 d-flex align-items-center justify-content-center">
                     <button type="submit" className="btn primary-btn">
