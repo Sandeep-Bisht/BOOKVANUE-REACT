@@ -22,13 +22,12 @@ const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 const IMG_URL = process.env.REACT_APP_IMG_URL;
 
 const Homepage = () => {
-    const [isLoading,setIsLoading] = useState(true)
-  const [featuredFacility,setFeaturedFacility] = useState([])
+  const [isLoading,setIsLoading] = useState(true)
+  const [allFacilities,setAllFacilities] = useState([])
   const [recentFacility,setRecentFacility] = useState([])
   const [sports,setSports] = useState([])
   const [venues,setVenues] = useState([])
   const [locationPermitted,setLocationPermitted] = useState(false)
-  const [currentLocation,setCurrentLocation] = useState(null)
 
   useEffect(()=>{
     checkLocationPermission();
@@ -40,7 +39,6 @@ const Homepage = () => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         setLocationPermitted(true)
-        setCurrentLocation({lat:latitude,lng:longitude})
         getInitialData({lat:latitude,lng:longitude})
         // You can use latitude and longitude as needed
       }, function(error) {
@@ -67,41 +65,38 @@ const Homepage = () => {
 
   
   const getInitialData = async(coords) =>{
-    const featuredVenues = coords ? axios.post( `${BASE_URL}/searchLocation`, {...coords, count:4}) : axios.get(`${BASE_URL}/get-featured-facility/4`);
+    const getAllFacilities = coords ? axios.get(`${BASE_URL}/get-all-facility`,{params:coords}) : axios.get(`${BASE_URL}/get-all-facility`);
     const recentVenues = axios.get(`${BASE_URL}/get-recent-facility/3`);
-    const sports = axios.get(`${BASE_URL}/get-all-sports`);
-    const venues = axios.get(`${BASE_URL}/get-all-venues`);
+    // const sports = axios.get(`${BASE_URL}/get-all-sports`);
+    // const venues = axios.get(`${BASE_URL}/get-all-venues`);
     // you could also use destructuring to have an array of responses
-    await axios.all([featuredVenues, recentVenues, sports, venues]).then(axios.spread(function(res1, res2, res3, res4) {
-      setFeaturedFacility(res1.data.facility);
+    await axios.all([getAllFacilities, recentVenues]).then(axios.spread(function(res1, res2) {
+      setAllFacilities(res1.data.facility);
       setRecentFacility(res2.data.facility)
-            setSports(res3.data)
-            setVenues(res4.data)
+            // setSports(res3.data)
+            // setVenues(res4.data)
       setIsLoading(false)
-    }));
+    })).catch((error)=>{
+      setIsLoading(false)
+      console.log("Error geting initial data:"+error)
+    });
   }
 
   return (<>
-    {isLoading ?
-        <Loader/>
-      :
+    
       <Default>
       <section>
         <div className='customize-map-box-shadow-h'></div>
         <LocationAwareMap 
-        nearbyMarkers={currentLocation &&  featuredFacility?.length > 0 ? true : false}
-        disableDefaultUI={false}
-       // draggable={true}
-        zoomControl={true}
-       scrollwheel={true}
-        disableDoubleClickZoom={false}
-        // markerPosition={markerPosition}
-        // onMarkerDragEnd={handleMarkerDrag} //function
-       // markerDraggable={true}
         markerTitle="Your location"
         height="60vh"
+        markers={allFacilities}
         />
       </section>
+      {isLoading ?
+        <Loader/>
+      :
+      <>
       <section className='search-wrapper-h py-3'>
       <div className='container'>
         <div className='row'>
@@ -148,14 +143,14 @@ const Homepage = () => {
         </div>
       </div>
       </section>
-      {featuredFacility?.length > 0 ?
+      {allFacilities?.length > 0 ?
       <section className='featured-venue-h py-5 mb-5'>
         <div className='container'>
         <h2 className='main-heading'>~Featured Facility {locationPermitted ? " Near You" : null}~</h2>
         <div className='row'>
-          {featuredFacility.map((item,index)=>{
-            const imgURL = item.featured_image.replace(/\\\//g, '/');
-            return (<div className='col-3 venue-cart-container' key={`${item.official_name}-${index}`}>
+          {[...Array(4)].map((_,index)=>{
+            const imgURL = allFacilities[index].featured_image ? allFacilities[index].featured_image.replace(/\\\//g, '/') : null;
+            return (<div className='col-3 venue-cart-container' key={`${allFacilities[index].official_name}-${index}`}>
             <div className="venue-card">
               <div className='venue-card-header'>
               <img src={`${IMG_URL}${imgURL}`} className="card-img-top" alt="venue card" loading={lazy}/>
@@ -163,8 +158,8 @@ const Homepage = () => {
                 4.5 <AiFillStar className='ms-1'/>
               </div>
               <div className='venue-detail'>
-                <h6 className='venue-name'>{item.official_name}</h6>
-                <p className='venue-distance'>(~0.5 Km)</p>
+                <h6 className='venue-name'>{allFacilities[index].official_name}</h6>
+                <p className='venue-distance'>{ allFacilities[index].distance ? `(${allFacilities[index].distance.toFixed(2)}) Km` : null}</p>
               </div>
               </div>
               <div className="venue-card-body">
@@ -187,9 +182,9 @@ const Homepage = () => {
                 </span>
                 </div>
                 <p className='venue-description'>
-                  {truncateString(item.description,200)}
+                  {truncateString(allFacilities[index].description,200)}
                 </p>
-                <Link to={`/facility/${item.slug}`} className='btn venue-booking-btn'>Book Now</Link>
+                <Link to={`/facility/${allFacilities[index].slug}`} className='btn venue-booking-btn'>Book Now</Link>
               </div>
             </div>
           </div>)
@@ -273,7 +268,7 @@ const Homepage = () => {
         <h2 className='main-heading pt-5'>~Recently Added Facilities~</h2>
           <div className='row'>
           {recentFacility.map((item,index)=>{
-            const imgURL = item.featured_image.replace(/\\\//g, '/');
+            const imgURL = item.featured_image ? item.featured_image.replace(/\\\//g, '/') : null;
             return(
             <div className='col-4 recent-add-card-wrapper-h' key={`${item.official_name}-${index}`}>
               <div className='recent-add-card-h p-4'>
@@ -286,10 +281,10 @@ const Homepage = () => {
           </div>
         </div>
       </section>: null}
-      
+      </>
+      }     
       {/* end recently added section */}
       </Default>
-    }
     </>
     
   )

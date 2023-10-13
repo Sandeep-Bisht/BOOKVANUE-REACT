@@ -7,7 +7,7 @@ import SearchLocation from "../common/searchLocation";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const { state, resetLoginState, toggleLoginModal, logout } = useContext(AuthContext);
+  const { state, resetLoginState, logout } = useContext(AuthContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -66,7 +66,6 @@ export const Header = () => {
                       data-bs-target="#loginModal"
                       onClick={() => {
                         resetLoginState(!state.loginState);
-                        toggleLoginModal("login");
                       }}
                     >
                       {/* login svg */}
@@ -88,20 +87,19 @@ export const Header = () => {
                         />
                       </svg>
                       {/* login svg end */}
-                      <p className="action-text">Login</p>
+                      <p className="action-text">Login/Signup</p>
                     </div>
 
-                    <div className="vr mx-2 mx-xl-3"></div>
+                    {/* <div className="vr mx-2 mx-xl-3"></div> */}
                   </div>
 
-                  <div className="action-container">
+                  <div className="action-container d-none">
                     <div
                       className="action"
                       data-bs-toggle="modal"
                       data-bs-target="#loginModal"
                       onClick={() => {
                         resetLoginState(!state.loginState);
-                        toggleLoginModal("signup");
                       }}
                     >
                       {/* sign up svg */}

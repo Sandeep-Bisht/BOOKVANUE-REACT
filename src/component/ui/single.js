@@ -16,7 +16,7 @@ const IMG_URL = process.env.REACT_APP_IMG_URL;
 const Single = () => {
 
     
-    const { state, resetLoginState, toggleLoginModal } = useContext(AuthContext);
+    const { state, resetLoginState } = useContext(AuthContext);
     const { slug } = useParams();
     const [isLoading,setIsLoading] = useState(true);
     const [facility,setFacility] = useState(null)
@@ -266,7 +266,7 @@ const Single = () => {
                     <h4 className='heading-si'>About the venue</h4>
                     <p className='desc-si'>{facility.description}</p>
                     <h4 className='heading-si'>Location Map</h4>
-                    <LocationAwareMap height="40vh" markerPosition={{lat:parseFloat(facility.lat),lng:parseFloat(facility.long)}}/>
+                    <LocationAwareMap height="40vh" coords={{lat:parseFloat(facility.lat),lng:parseFloat(facility.long)}}/>
                 </div>
                 </div>
 
@@ -446,7 +446,6 @@ const Single = () => {
                     data-bs-target="#loginModal"
                     onClick={() => {
                       resetLoginState(!state.loginState);
-                      toggleLoginModal("login");
                     }}
                     >Book Now</button>
                     :

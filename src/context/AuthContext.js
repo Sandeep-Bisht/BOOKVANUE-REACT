@@ -5,8 +5,6 @@ const authReducer = (state, action) => {
     switch (action.type) {
         case 'resetLoginState':
             return {...state, loginState:action.payload};
-        case 'toggleLoginModal':
-            return {...state, currentmodal:action.payload}
         case 'userLoggedIn':
             return {...state, userData:action.payload}
         case 'logout':
@@ -19,10 +17,6 @@ const authReducer = (state, action) => {
 const resetLoginState = dispatch => async ( payload ) => {
     dispatch({ type:'resetLoginState', payload})
 } 
-
-const toggleLoginModal = dispatch => async( payload ) => {
-    dispatch({type:'toggleLoginModal',payload})
-}
 
 const userLoggedIn = dispatch => async( payload ) => {
     dispatch({type:'userLoggedIn',payload})
@@ -56,6 +50,6 @@ catch(error){
 
 export const { Provider, Context } = createDataContext(
     authReducer,
-    {resetLoginState, toggleLoginModal, userLoggedIn, logout},
-    {loginState:true,currentmodal:null,userData:null}
+    {resetLoginState, userLoggedIn, logout},
+    {loginState:true,userData:null}
 );

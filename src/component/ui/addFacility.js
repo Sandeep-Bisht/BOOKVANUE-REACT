@@ -335,12 +335,7 @@ const AddFacility = () => {
             <div className="col-md-12">
               <div className="card flex justify-content-center">
                 <LocationAwareMap
-                  disableDefaultUI={false}
-                  draggable={true}
-                  zoomControl={true}
-                  scrollwheel={true}
-                  disableDoubleClickZoom={false}
-                  markerPosition={markerPosition}
+                  coords={markerPosition}
                   onMarkerDragEnd={handleMarkerDrag} //function
                   markerDraggable={true}
                   markerTitle="Your location"

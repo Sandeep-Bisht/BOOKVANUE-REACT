@@ -9,7 +9,7 @@ import { Context as AuthContext } from '../../context/AuthContext'
 
 export const Footer = () => {
 
-  const {state,resetLoginState,toggleLoginModal} = useContext(AuthContext)
+  const {state,resetLoginState} = useContext(AuthContext)
 
   return (
     <footer className='bg-dark py-5'>
@@ -38,7 +38,6 @@ export const Footer = () => {
                 <li className='footer-link'>
                   <button  className='btn footer-link-text p-0 border-0' type='button' data-bs-toggle="modal" data-bs-target="#loginModal" onClick={()=>{
                     resetLoginState(!state.loginState);
-                    toggleLoginModal('login');
                   }}>Login</button>
                 </li>
                 <li className='footer-link'>
