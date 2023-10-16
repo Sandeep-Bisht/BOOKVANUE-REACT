@@ -218,7 +218,7 @@ export const Login = () => {
       >
           <div className="modal-wrapper-login p-5 text-center">
             <div className="px-5">
-              <h2 className="login-modal-heading">Login to Bookvenue</h2>
+              <h4 className="login-modal-heading">Login/Signup to Bookvenue</h4>
               <p className="login-modal-info mb-4">
                 Please enter your mobile number
               </p>

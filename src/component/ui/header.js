@@ -35,8 +35,8 @@ export const Header = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <SearchLocation />
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <SearchLocation className="w-50"/>
+          <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
             <div className="d-flex justify-content-between my-2 my-lg-0">
               <div className="action-container">
                 {/* Calender foor booking svg */}
@@ -69,7 +69,7 @@ export const Header = () => {
                       }}
                     >
                       {/* login svg */}
-                      <svg
+                      {/* <svg
                         className="action-icon"
                         width="30"
                         height="30"
@@ -85,9 +85,46 @@ export const Header = () => {
                           d="M23.7692 2H19.1538C18.5231 2 18 2.50514 18 3.11429C18 3.72343 18.5231 4.22857 19.1538 4.22857H23.7692C24.8308 4.22857 25.6923 5.06057 25.6923 6.08571V23.9143C25.6923 24.9394 24.8308 25.7714 23.7692 25.7714H19.1538C18.5231 25.7714 18 26.2766 18 26.8857C18 27.4949 18.5231 28 19.1538 28H23.7692C26.1077 28 28 26.1726 28 23.9143V6.08571C28 3.82743 26.1077 2 23.7692 2Z"
                           fill="#00BFB4"
                         />
+                      </svg> */}
+                      <svg
+                        className="action-icon"
+                        width="30"
+                        height="30"
+                        viewBox="0 0 30 30"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clipPath="url(#clip0_118_191)">
+                          <path
+                            d="M20.625 6.5625H26.25"
+                            stroke="#00BFB4"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d="M23.4375 3.75V9.375"
+                            stroke="#00BFB4"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d="M5 23.9998C6.01386 22.2418 7.47168 20.782 9.22701 19.7671C10.9823 18.7522 12.9734 18.2179 15.0001 18.2179C17.0268 18.2179 19.0178 18.7523 20.7731 19.7672C22.5284 20.7821 23.9862 22.242 25 24M21.1901 13.8997C20.7491 15.0925 19.9737 16.1323 18.9571 16.8944C17.9405 17.6564 16.7258 18.1082 15.4591 18.1954C14.1924 18.2827 12.9275 18.0017 11.8164 17.3862C10.7052 16.7708 9.79503 15.847 9.19523 14.7259C8.59543 13.6048 8.33149 12.3341 8.43512 11.0664C8.53875 9.79864 9.00555 8.58784 9.77943 7.57944C10.5533 6.57105 11.6014 5.80793 12.7977 5.38177C13.994 4.95561 15.2877 4.88454 16.5233 5.17708"
+                            stroke="#00BFB4"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_118_191">
+                            <rect width="30" height="30" fill="white" />
+                          </clipPath>
+                        </defs>
                       </svg>
                       {/* login svg end */}
-                      <p className="action-text">Login/Signup</p>
+                      <p className="action-text">Login / Signup</p>
                     </div>
 
                     {/* <div className="vr mx-2 mx-xl-3"></div> */}

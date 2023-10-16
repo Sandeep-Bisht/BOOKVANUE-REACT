@@ -38,11 +38,11 @@ export const Footer = () => {
                 <li className='footer-link'>
                   <button  className='btn footer-link-text p-0 border-0' type='button' data-bs-toggle="modal" data-bs-target="#loginModal" onClick={()=>{
                     resetLoginState(!state.loginState);
-                  }}>Login</button>
+                  }}>Login / Signup</button>
                 </li>
-                <li className='footer-link'>
+                {/* <li className='footer-link'>
                   <a className='footer-link-text' href=''>Signup</a>
-                </li>
+                </li> */}
                 </>
                 :
                 null

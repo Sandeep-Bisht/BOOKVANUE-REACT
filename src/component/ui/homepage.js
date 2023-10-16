@@ -27,6 +27,7 @@ const Homepage = () => {
   const [recentFacility,setRecentFacility] = useState([])
   const [sports,setSports] = useState([])
   const [venues,setVenues] = useState([])
+  const [allServices,setAllServices] = useState([])
   const [locationPermitted,setLocationPermitted] = useState(false)
 
   useEffect(()=>{
@@ -67,12 +68,14 @@ const Homepage = () => {
   const getInitialData = async(coords) =>{
     const getAllFacilities = coords ? axios.get(`${BASE_URL}/get-all-facility`,{params:coords}) : axios.get(`${BASE_URL}/get-all-facility`);
     const recentVenues = axios.get(`${BASE_URL}/get-recent-facility/3`);
-    // const sports = axios.get(`${BASE_URL}/get-all-sports`);
+    const getAllServices = axios.get(`${BASE_URL}/get-all-services`);
     // const venues = axios.get(`${BASE_URL}/get-all-venues`);
     // you could also use destructuring to have an array of responses
-    await axios.all([getAllFacilities, recentVenues]).then(axios.spread(function(res1, res2) {
+    await axios.all([getAllFacilities, recentVenues,getAllServices]).then(axios.spread(function(res1, res2, res3) {
       setAllFacilities(res1.data.facility);
-      setRecentFacility(res2.data.facility)
+      setRecentFacility(res2.data.facility);
+      setAllServices(res3.data.services)
+      // console.log(res3,'response 3 is this')
             // setSports(res3.data)
             // setVenues(res4.data)
       setIsLoading(false)
@@ -100,7 +103,37 @@ const Homepage = () => {
       <section className='search-wrapper-h py-3'>
       <div className='container'>
         <div className='row'>
-          <div className='col-6'>
+          {allServices && allServices.length > 0 ? 
+          <>
+            {allServices.map((item,ind)=>{
+              return (
+              <div className={`col-${12 / allServices.length}`}>
+            <label className='mb-1'>{item.name}</label>
+            <div className="input-group">
+              <span className="input-group-text" id="basic-addon2" data-bs-toggle="dropdown">
+                <MdSportsTennis className='custom-icons-h'/>
+              </span>
+              <div className="dropdown custom-dropdown-h" id="basic-addon2">
+                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"  disabled={item.services?.length > 0 ? false : true}>
+                  Type of {item.name}
+                </button>
+                {item.services?.length > 0 ? 
+                <ul className="dropdown-menu">
+                  {item.services.map((items,index)=>{
+                    return <li key={index}><a className="dropdown-item" href="">{items?.name}</a></li>
+                  })}
+                </ul>
+                : null}
+              </div>
+            </div>
+          </div>
+              )
+            })}
+          </>
+          :
+          null
+        }
+          {/* <div className='col-6'>
             <label className='mb-1'>Sports</label>
             <div className="input-group">
               <span className="input-group-text" id="basic-addon2" data-bs-toggle="dropdown">
@@ -139,7 +172,7 @@ const Homepage = () => {
                 : null}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       </section>

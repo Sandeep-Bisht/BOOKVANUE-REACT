@@ -37,6 +37,8 @@ const LocationAwareMap = ({height, styles, icon, coords, onMarkerDragEnd, marker
     height: height ? height : '70vh',
   };
 
+  console.log(markers,'markers are these')
+
   return (
     <>
     {isLoaded ?
@@ -73,6 +75,21 @@ const LocationAwareMap = ({height, styles, icon, coords, onMarkerDragEnd, marker
       
       </>
     )}
+
+      {
+        Array.isArray(markers) && markers.length > 0 ? 
+        markers.map((item,index)=>{
+          return (
+            <MarkerF
+            key={item.slug}
+            title={item.official_name}
+            position={{lat: parseFloat(item.lat), lng: parseFloat(item.lng)}}
+          />
+          )
+        })
+        :
+        null
+      }
   </GoogleMap>
   :
   <Loader className={loaderStyle}/>
