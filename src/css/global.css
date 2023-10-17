@@ -79,6 +79,17 @@ h1, h2, h3, h4, h5, h6, button{
 .primary-btn:hover{
   background-color: var(--hover);
 }
+.primary-btn.reset
+{
+  background-color: var(--grey);
+  color:var(--text)!important ;
+
+}
+.primary-btn.reset:hover
+{
+  background-color: var(--black-low);
+  color: var(--light)!important;
+}
 
 .noDataFound-container{
   display: flex;
@@ -107,6 +118,7 @@ h1, h2, h3, h4, h5, h6, button{
   color: #A7A29E;
   height: 42px;
   border-radius: 3px!important;
+  width: 100%;
 }
 .p-inputtext:enabled:focus,.p-button.p-button-secondary:enabled:focus,.p-button:focus
 {
@@ -123,14 +135,21 @@ h1, h2, h3, h4, h5, h6, button{
 }
 .form-row label
 {
-
-font-size: 14px;
+display: block;
+margin-bottom: 10px;
+font-size: 15px;
+color: #000;
 font-weight: 400;
-line-height: 20px;
-text-align: left;
-color: #A7A29E!important;
 
 }
+
+.form-input::placeholder
+{
+  font-size: 15px;
+color:var(--grey);
+font-weight: 400;
+}
+
 :focus-visible {
   outline: none;
 }

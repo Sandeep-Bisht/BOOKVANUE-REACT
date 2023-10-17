@@ -344,6 +344,7 @@ const AddFacility = () => {
 
                   <div className="col-lg-6 mb-5">
                     <div className="form-row">
+                    <p className="upload-heading invisible">Upload Featured Image</p>
                       <span className="p-float-label">
                         <InputTextarea
                           className="form-input w-100"
