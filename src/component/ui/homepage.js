@@ -3,16 +3,9 @@ import { Default } from '../layouts/default'
 import LocationAwareMap from '../common/googlemap'
 import '../../css/homepage.css'
 import { MdSportsTennis } from 'react-icons/md'
-import { CiLocationOn } from 'react-icons/ci'
 import { AiFillStar } from 'react-icons/ai'
 import { IoMdAddCircleOutline } from 'react-icons/io'
 import FacilityIcon from '../../assets/addFacility.svg'
-import CricketIcon from '../../assets/cricket.svg';
-import SoccerIcon from '../../assets/soccer.svg'
-import BadmintonIcon from '../../assets/badminton.svg'
-import BasketballIcon from '../../assets/basketball.svg'
-import VolleyballIcon from '../../assets/volleyball.svg'
-import GolfIcon from '../../assets/golf.svg'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import Loader from '../common/loader'
@@ -25,8 +18,6 @@ const Homepage = () => {
   const [isLoading,setIsLoading] = useState(true)
   const [allFacilities,setAllFacilities] = useState([])
   const [recentFacility,setRecentFacility] = useState([])
-  const [sports,setSports] = useState([])
-  const [venues,setVenues] = useState([])
   const [allServices,setAllServices] = useState([])
   const [locationPermitted,setLocationPermitted] = useState(false)
 
@@ -69,15 +60,11 @@ const Homepage = () => {
     const getAllFacilities = coords ? axios.get(`${BASE_URL}/get-all-facility`,{params:coords}) : axios.get(`${BASE_URL}/get-all-facility`);
     const recentVenues = axios.get(`${BASE_URL}/get-recent-facility/3`);
     const getAllServices = axios.get(`${BASE_URL}/get-all-services`);
-    // const venues = axios.get(`${BASE_URL}/get-all-venues`);
     // you could also use destructuring to have an array of responses
     await axios.all([getAllFacilities, recentVenues,getAllServices]).then(axios.spread(function(res1, res2, res3) {
       setAllFacilities(res1.data.facility);
       setRecentFacility(res2.data.facility);
       setAllServices(res3.data.services)
-      // console.log(res3,'response 3 is this')
-            // setSports(res3.data)
-            // setVenues(res4.data)
       setIsLoading(false)
     })).catch((error)=>{
       setIsLoading(false)
@@ -105,13 +92,15 @@ const Homepage = () => {
         <div className='row'>
           {allServices && allServices.length > 0 ? 
           <>
-            {allServices.map((item,ind)=>{
+            {allServices.map((item)=>{
+              const ServiceIconURL = item.icon ? item.icon.replace(/\\\//g, '/') : null;
               return (
               <div className={`col-${12 / allServices.length}`}>
             <label className='mb-1'>{item.name}</label>
             <div className="input-group">
               <span className="input-group-text" id="basic-addon2" data-bs-toggle="dropdown">
-                <MdSportsTennis className='custom-icons-h'/>
+                {/* <MdSportsTennis className='custom-icons-h'/> */}
+                <img src={`${IMG_URL}${ServiceIconURL}`} alt={item?.name} className='me-2' width="20"/>
               </span>
               <div className="dropdown custom-dropdown-h" id="basic-addon2">
                 <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"  disabled={item.services?.length > 0 ? false : true}>
@@ -120,7 +109,8 @@ const Homepage = () => {
                 {item.services?.length > 0 ? 
                 <ul className="dropdown-menu">
                   {item.services.map((items,index)=>{
-                    return <li key={index}><a className="dropdown-item" href="">{items?.name}</a></li>
+                    const imgURL = items.icon ? items.icon.replace(/\\\//g, '/') : null;
+                    return <li key={index}><Link to={`/${item.name}/${items.name}`} className="dropdown-item d-flex align-items-center" href=""><img src={`${IMG_URL}${imgURL}`} alt={items?.name} className='me-2' width="20"/>{items?.name}</Link></li>
                   })}
                 </ul>
                 : null}
@@ -133,46 +123,6 @@ const Homepage = () => {
           :
           null
         }
-          {/* <div className='col-6'>
-            <label className='mb-1'>Sports</label>
-            <div className="input-group">
-              <span className="input-group-text" id="basic-addon2" data-bs-toggle="dropdown">
-                <MdSportsTennis className='custom-icons-h'/>
-              </span>
-              <div className="dropdown custom-dropdown-h" id="basic-addon2">
-                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"  disabled={sports?.length > 0 ? false : true}>
-                  Type of sport
-                </button>
-                {sports?.length > 0 ? 
-                <ul className="dropdown-menu">
-                  {sports.map((item,index)=>{
-                    return <li key={index}><a className="dropdown-item" href="">{item?.name}</a></li>
-                  })}
-                </ul>
-                : null}
-              </div>
-            </div>
-          </div>
-          <div className='col-6'>
-            <label className='mb-1'>Venue</label>
-            <div className="input-group">
-              <span className="input-group-text" id="basic-addon2" data-bs-toggle="dropdown">
-                <CiLocationOn className='custom-icons-h'/>
-              </span>
-              <div className="dropdown custom-dropdown-h" id="basic-addon2">
-                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={venues?.length > 0 ? false : true}>
-                  Type of venue
-                </button>
-                {venues?.length > 0 ? 
-                <ul className="dropdown-menu">
-                  {venues.map((item,index)=>{
-                  return <li key={index}><a className="dropdown-item" href="">{item.name}</a></li>
-                })}
-                </ul>
-                : null}
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
       </section>
@@ -246,10 +196,11 @@ const Homepage = () => {
           </div>
         </div>
       </section>
-      <section className='recent-add-h'>
+      {/* <section className='recent-add-h'>
         <div className='container'>
         <h2 className='main-heading'>~Recently Added Sports~</h2>
           <div className='row g-3'>
+            
           <div className='col-2 recent-add-sport-card-wrapper-h'>
               <div className='recent-add-sport-card-h'>
                 <img src={CricketIcon} alt="Cricket" className='recent-add-sport-img-h w-50 mb-3' loading={lazy}/>
@@ -294,7 +245,36 @@ const Homepage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
+      {allServices && allServices.length > 0 ? 
+          <section className='recent-add-h'>
+          <div className='container'>
+          <h2 className='main-heading'>~Recently Added Sports~</h2>
+            <div className='row g-3'>
+              {allServices.map((item)=>{
+                return (<>
+                {item.name == "sports" && item.services && item.services.length > 0 ? <>
+                {item.services.map((items)=>{
+                const imgURL = items.featured_image ? items.featured_image.replace(/\\\//g, '/') : null;
+                return(<div className='col-2 recent-add-sport-card-wrapper-h' key={`${items.id}-${items.name}`}>
+                <div className='recent-add-sport-card-h'>
+                  <img src={`${IMG_URL}${imgURL}`} alt={items.name} className='recent-add-sport-img-h mb-3' loading={lazy} width="80"/>
+                  <h6 className='recent-add-sport-card-heading-h'>{items.name}</h6>
+                  <p className='recent-add-sport-desc-h'>{truncateString(items.description,70)}</p>
+                </div>
+                </div>)
+                })}
+                </>
+                :
+                null}
+                </>)
+              })}
+            </div>
+          </div>
+        </section>
+          :
+      null}
+
       {recentFacility?.length > 0 ? 
       <section className='recent-add-h recent-venue-h pt-5'>
         <div className='container'>

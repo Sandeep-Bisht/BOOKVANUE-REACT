@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
 import Loader from './loader';
+import { useNavigate } from 'react-router-dom';
 
-const LocationAwareMap = ({height, styles, icon, coords, onMarkerDragEnd, markerDraggable, markerTitle, markers, loaderStyle}) => {
+const LocationAwareMap = ({height, styles, icon, coords, onMarkerDragEnd, markerDraggable, markerTitle, markers, loaderStyle, redirect}) => {
   const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
+  const navigate = useNavigate();
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -37,7 +39,6 @@ const LocationAwareMap = ({height, styles, icon, coords, onMarkerDragEnd, marker
     height: height ? height : '70vh',
   };
 
-  console.log(markers,'markers are these')
 
   return (
     <>
@@ -84,6 +85,11 @@ const LocationAwareMap = ({height, styles, icon, coords, onMarkerDragEnd, marker
             key={item.slug}
             title={item.official_name}
             position={{lat: parseFloat(item.lat), lng: parseFloat(item.lng)}}
+            onClick={()=>{
+              navigate(`/facility/${item.slug}`)
+            }}
+            icon={{url: "/markerLocation.svg"}}
+          
           />
           )
         })

@@ -7,14 +7,77 @@ import { Dialog } from "primereact/dialog";
 import LocationAwareMap from "../common/googlemap";
 import { useForm, Controller } from "react-hook-form";
 import SearchLocation from "../common/searchLocation";
-import { FileUpload } from "primereact/fileupload";
-import { AiOutlineCloudUpload } from "react-icons/ai";
 import { Dropdown } from "primereact/dropdown";
+import axios from "axios";
+import Loader from "../common/loader";
+import { useMutation } from "react-query";
+
+const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
+const IMG_URL = process.env.REACT_APP_IMG_URL;
 
 const AddFacility = () => {
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState(null);
   const [markerPosition, setMarkerPosition] = useState(null);
+  const [coordsError,setCoordsError] = useState(false);
+  const [coords,setCoords] = useState(null)
+
+  const [categories,setCategories] = useState(null);
+  const [aminities,setAminities] = useState(null);
+  const [isLoading,setIsLoading] = useState(true)
+
+    
+  const getInitialData = async() =>{
+    const getAllServiceCategory = axios.get(`${BASE_URL}/get-all-services`);
+    const getAllAminities = axios.get(`${BASE_URL}/get-all-amenities`);
+
+    await axios.all([getAllServiceCategory, getAllAminities]).then(axios.spread(function(res1, res2) {
+      setCategories(res1.data.services);
+      setAminities(res2.data.amenities);
+      setIsLoading(false)
+    })).catch((error)=>{
+      setIsLoading(false)
+      console.log("Error geting initial data:"+error)
+    });
+  }
+
+  useEffect(()=>{
+    getInitialData()
+  },[])
+
+
+  const createFacility = useMutation(
+    (formData) =>
+      fetch(`${BASE_URL}/create-facility`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+          return response.json();
+        })
+        .catch((error) => {
+          throw error;
+        }),
+    {
+      onSuccess: (data) => {
+        console.log(data,'facility created successfully')
+      },
+      onError: (error) => {
+        console.log('error creating facility')
+      },
+    }
+  );
+
+  // form code
+
+
 
   const {
     control,
@@ -23,16 +86,42 @@ const AddFacility = () => {
     formState: { errors },
   } = useForm();
 
-  const handleAddFacility = (data) => {
-    console.log("form valuess i am trigred", data);
-  };
+  const handleConfirmLocation = () =>{
+    
+    if(markerPosition && markerPosition.lat && markerPosition.lng){
+      setCoords(markerPosition)
+      setVisible(false)
+      setCoordsError(false)
+    }
+    else{
+      setCoordsError(true)
+    }
+  }
 
-  const facilityType = [{ name: "Sports" }, { name: "Venue" }];
-  const facilityTypeOptions = [
-    { label: "Option 1", value: "option1" },
-    { label: "Option 2", value: "option2" },
-    { label: "Option 3", value: "option3" },
-  ];
+  const handleAddFacility = (data) => {
+    if(coords && coords.lat && coords.lng){
+      let dataCopy = {...data,...coords,service_category_id:data.service_category_id.id}
+      if(data.amenities){
+        dataCopy = {...dataCopy,amenities:data.amenities.map(({ id }) => ( id ))}
+      }
+      else{
+        dataCopy = {...dataCopy,amenities:null}
+      }
+
+      // const formData = new FormData();
+
+      // for (const key in dataCopy) {
+      //   formData.append(key, dataCopy[key]);
+      // }
+      console.log(dataCopy,'data is this')
+      createFacility.mutate(dataCopy)
+      // console.log(dataCopy,'complete data is this')
+    }
+    else{
+      setCoordsError(true);
+    }
+    
+  };
 
   const handleButtonClick = () => {
     if ("geolocation" in navigator) {
@@ -122,6 +211,7 @@ const AddFacility = () => {
 
   return (
     <>
+    {isLoading ? <Loader/> :
       <section>
         <div className="container">
           <div className="row ">
@@ -136,17 +226,17 @@ const AddFacility = () => {
                     <div className="form-row">
                       <span className="p-float-label">
                         <InputText
-                          className="form-input"
-                          id="officialName"
-                          {...register("officialName", {
+                          className="form-input w-100"
+                          id="name"
+                          {...register("name", {
                             required: true,
                             pattern: /^[A-Za-z\s]+$/,
                           })}
                         />
-                        <label htmlFor="officialName">Official Name</label>
+                        <label htmlFor="name">Official Name</label>
                       </span>
                     </div>
-                    {errors.officialName && (
+                    {errors.name && (
                       <p className="text-danger">This field is required</p>
                     )}
                   </div>
@@ -155,7 +245,7 @@ const AddFacility = () => {
                     <div className=" form-row">
                       <span className="p-float-label">
                         <InputText
-                          className="form-input"
+                          className="form-input w-100"
                           id="alias"
                           {...register("alias")}
                          
@@ -169,40 +259,25 @@ const AddFacility = () => {
                     <div className="form-row">
                       <span className="p-float-label">
                         <Controller
-                          name="selectType"
-                          className="form-input"
+                          name="service_category_id"
+                          className="form-input w-100"
                           control={control}
                           rules={{ required: true }} // Add validation rules if needed
                           render={({ field }) => (
                             <Dropdown
-                              id="selectType"
+                              id="service_category_id"
                               {...field}
-                              options={facilityTypeOptions}
-                              optionLabel="label"
+                              options={categories}
+                              optionLabel="name"
                               placeholder="Select a type"
                             />
                           )}
                         />
-                        {/* <Controller
-                          name="selectType"
-                          control={control}
-                          rules={{ required: true }} // Add validation rules if needed
-                          render={({ field }) => (
-                            <MultiSelect
-                              id="selectType"
-                              {...field}
-                              options={facilityType}
-                              optionLabel="name"
-                              className="w-full md:w-20rem form-input"
-                              multiple={false}
-                            />
-                          )}
-                        /> */}
 
-                        <label htmlFor="ms-cities">Select Type</label>
+                        <label htmlFor="service_category_id">Select Type</label>
                       </span>
                     </div>
-                    {errors.selectType && (
+                    {errors.service_category_id && (
                       <p className="text-danger">This field is required</p>
                     )}
                   </div>
@@ -230,11 +305,13 @@ const AddFacility = () => {
                           </svg>
                         </span>
                       </button>
-                      <input type="hidden" name="lat" value={markerPosition ? markerPosition.lat : null} {...register("lat",{required:true})}/>
-                      <input type="hidden" name="lng" value={markerPosition ? markerPosition.lng : null} {...register("lng",{required:true})}/>
-                      {(errors.lat || errors.lng) && (
+                      {/* {(errors.lat || errors.lng) && (
                       <p className="text-danger">Location required</p>
-                    )}
+                    )} */}
+                    {coordsError ? <div className="col-md-12">
+                    <p className="text-danger">Select location first.</p>
+                    </div> : null}
+
                     </div>
                   </div>
 
@@ -242,34 +319,26 @@ const AddFacility = () => {
                     <p className="upload-heading">Upload Featured Image</p>
                     <div className="card border-0 upload-card">
                       <Controller
-                        name="file"
+                        name="featured_image"
                         control={control}
                         render={({ field }) => (
                           <input
                             className="form-input"
                             type="file"
-                            {...register("file", {
+                            {...register("featured_image", {
                                 required: true,
                               })}
                             onChange={(e) => {
-                              const file = e.target.files[0];
-                              field.onChange(file);
+                              const featured_image = e.target.files[0];
+                              field.onChange(featured_image);
                             }}
                           />
                           
                         )}
                       />
-                        {errors.file && (
+                        {errors.featured_image && (
                       <p className="text-danger">This field is required</p>
                     )}
-                      {/* <FileUpload name="images[]" 
-                                             
-                                            multiple
-                                                accept="image/*"
-                                                cancelOptions={{ iconOnly: true, className: 'custom-cancel-btn p-button-danger p-button-rounded p-button-outlined' }}
-                                                chooseOptions={{ icon: <AiOutlineCloudUpload />, iconOnly: true, className: 'custom-choose-btn p-button-rounded p-button-outlined' }}
-                                                uploadOptions={{ className: 'd-none' }} maxFileSize={10000000} emptyTemplate={<p className="m-0 upload-heading text-center">Drag & Drop or <span>Browse</span> your files</p>} 
-                                                /> */}
                     </div>
                   </div>
 
@@ -277,10 +346,10 @@ const AddFacility = () => {
                     <div className="form-row">
                       <span className="p-float-label">
                         <InputTextarea
-                          className="form-input"
+                          className="form-input w-100"
                           id="address"
                           {...register("address")}
-                          
+                          rows={5}
                         />
                         <label htmlFor="address">Address</label>
                       </span>
@@ -292,14 +361,13 @@ const AddFacility = () => {
                     <div className="form-row">
                       <span className="p-float-label">
                         <Controller
-                          name="selectAminites "
-                          control={control}
-                          rules={{ required: true }} // Add validation rules if needed
+                          name="amenities"
+                          control={control} // Add validation rules if needed
                           render={({ field }) => (
                             <MultiSelect
-                              id="selectAminites "
+                              id="amenities "
                               {...field}
-                              options={facilityType}
+                              options={aminities}
                               optionLabel="name"
                               className="w-full md:w-20rem form-input"
                               multiple={true}
@@ -307,12 +375,9 @@ const AddFacility = () => {
                           )}
                         />
 
-                        <label htmlFor="ms-cities">Select Aminites </label>
+                        <label htmlFor="amenities">Select Aminites </label>
                       </span>
                     </div>
-                    {errors.selectAminites && (
-                      <p className="text-danger">This field is required</p>
-                    )}
                   </div>
 
                   <div className="col-12 mb-5">
@@ -375,12 +440,6 @@ const AddFacility = () => {
                     ></path>
                   </svg>
                 </span>
-                {/* {error && (
-                    <div>
-                      <p>{error}</p>
-                      {error.includes("enable location access")}
-                    </div>
-                  )} */}
               </div>
             </div>
             <div className="col-md-12">
@@ -394,10 +453,15 @@ const AddFacility = () => {
                 />
               </div>
             </div>
+            {coordsError ? <div className="col-md-12">
+            <p className="text-danger">Select location first.</p>
+            </div> : null}
+            
             <div className="col-md-12 mt-lg-4">
               <div className="select-location-btn-wrapper">
                 <div className="left">
                   <Button
+                  onClick={()=>{setVisible(false)}}
                     label="Cancel"
                     className="common-location-btn form-input cancel "
                   />
@@ -405,6 +469,7 @@ const AddFacility = () => {
                 <div className="right">
                   <Button
                     label="Confirm"
+                    onClick={()=>handleConfirmLocation()}
                     className="common-location-btn form-input  "
                   />
                 </div>
@@ -413,6 +478,7 @@ const AddFacility = () => {
           </div>
         </Dialog>
       </section>
+      }
     </>
   );
 };
