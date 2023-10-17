@@ -51,7 +51,10 @@ const UserDashboard = () => {
 
 
                         <div className="col-9">
+                            <div className="aside-outlet-wrapper-usr">
                             <Outlet />
+                            </div>
+                      
                         </div>
                     </div>
                 </div>
