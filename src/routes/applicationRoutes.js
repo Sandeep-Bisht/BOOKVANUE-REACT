@@ -9,6 +9,9 @@ import Dashboard from '../component/ui/dashboard'
 import AddFacility from '../component/ui/addFacility'
 import SearchResult from '../component/ui/searchResult'
 import Booknow from '../component/ui/booknow'
+import Profile from '../component/ui/profile'
+import UserDashboard from '../component/layouts/userDashboard'
+import Bookings from '../component/ui/bookings'
 
 const ApplicationRoutes = () => {
 
@@ -39,6 +42,11 @@ const ApplicationRoutes = () => {
           <Route path="/management/dashboard" element={<Dashboard />} />
           <Route path="/management/addFacility" element={<AddFacility />} />
         </Route>
+        <Route path='/user' element={<ProtectedRoutes role={['User']}><UserDashboard/></ProtectedRoutes>}>
+          <Route path="/user/profile" element={<Profile />} />
+          <Route path="/user/bookings" element={<Bookings />} />
+        </Route>
+        
     </Routes>
   )
 }

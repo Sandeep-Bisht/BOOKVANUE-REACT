@@ -68,24 +68,6 @@ export const Header = () => {
                         resetLoginState(!state.loginState);
                       }}
                     >
-                      {/* login svg */}
-                      {/* <svg
-                        className="action-icon"
-                        width="30"
-                        height="30"
-                        viewBox="0 0 30 30"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20.6693 14.1497L16.1084 9.34812C15.6675 8.88396 14.9378 8.88396 14.4969 9.34812C14.056 9.81227 14.056 10.5805 14.4969 11.0447L17.1118 13.7976H3.14023C2.5169 13.7976 2 14.3418 2 14.998C2 15.6542 2.5169 16.1984 3.14023 16.1984H17.1118L14.4969 18.9513C14.056 19.4155 14.056 20.1837 14.4969 20.6479C14.7249 20.888 15.0138 21 15.3027 21C15.5915 21 15.8804 20.888 16.1084 20.6479L20.6693 15.8463C21.1102 15.3821 21.1102 14.6139 20.6693 14.1497Z"
-                          fill="#00BFB4"
-                        />
-                        <path
-                          d="M23.7692 2H19.1538C18.5231 2 18 2.50514 18 3.11429C18 3.72343 18.5231 4.22857 19.1538 4.22857H23.7692C24.8308 4.22857 25.6923 5.06057 25.6923 6.08571V23.9143C25.6923 24.9394 24.8308 25.7714 23.7692 25.7714H19.1538C18.5231 25.7714 18 26.2766 18 26.8857C18 27.4949 18.5231 28 19.1538 28H23.7692C26.1077 28 28 26.1726 28 23.9143V6.08571C28 3.82743 26.1077 2 23.7692 2Z"
-                          fill="#00BFB4"
-                        />
-                      </svg> */}
                       <svg
                         className="action-icon"
                         width="30"
@@ -127,7 +109,6 @@ export const Header = () => {
                       <p className="action-text">Login / Signup</p>
                     </div>
 
-                    {/* <div className="vr mx-2 mx-xl-3"></div> */}
                   </div>
 
                   <div className="action-container d-none">
@@ -189,7 +170,7 @@ export const Header = () => {
                     <div
                       className="action"
                       onClick={() => {
-                        navigate("/management/dashboard");
+                        navigate("/user/profile");
                       }}
                     >
                       {/* login svg */}
