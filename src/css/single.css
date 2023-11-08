@@ -180,11 +180,16 @@ section.single-page-container .configure-container-si .card .common-calendor-si 
     font-family: 'Poppins', sans-serif;
     color: var(--text);
 }
+section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__month-view .react-calendar__month-view__days .react-calendar__month-view__days__day:disabled{
+    color: var(--grey);
+    font-weight: 400;
+    cursor: not-allowed;
+}
 
-section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__month-view .react-calendar__month-view__days .react-calendar__month-view__days__day--neighboringMonth{
+/* section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__month-view .react-calendar__month-view__days .react-calendar__month-view__days__day--neighboringMonth{
     font-weight: 400;
     color: var(--grey);
-}
+} */
 
 section.single-page-container .configure-container-si .card .common-calendor-si .react-calendar__viewContainer .react-calendar__month-view .react-calendar__month-view__days .react-calendar__tile--active{
     background: var(--primary)!important;
@@ -312,4 +317,58 @@ section.single-page-container .img-carousel-container-si .nav-tabs-si .tab-conte
 section.single-page-container .img-carousel-container-si .nav-tabs-si .tab-content .tab-container-si .desc-si .text-si{
     width: 150px;
     display: inline-block;
+}
+
+/* New css */
+
+.choose-service-btn-si{
+    width: fit-content;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid;
+    border-color: var(--light);
+    border-radius: 3px;
+    color: var(--black-low);
+    transition: all ease-in-out 0.3s;
+    font-size: 14px;
+    font-weight: 400;
+    flex-wrap: wrap;
+}
+
+.choose-service-btn-si:hover, .choose-service-btn-si.active{
+    border-color:var(--primary);
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.choose-service-btn-si:disabled{
+    background-color: var(--light);
+    border-color: var(--light);
+}
+
+.choose-courts-btn-si{
+    width: fit-content;
+    padding: 10px;
+    border: 1px solid;
+    border-color: var(--light);
+    border-radius: 3px;
+    color: var(--black-low);
+    transition: all ease-in-out 0.3s;
+    font-size: 14px;
+    font-weight: 400;
+}
+.choose-courts-btn-si .headingSi{
+    color: var(--black);
+    font-weight: 500;
+}
+
+.choose-courts-btn-si:hover{
+    border-color:var(--black) ;
+}
+
+.singlePage-slots-wrapper{
+    flex-direction: row;
+    flex-wrap: wrap;
 }

@@ -1,4 +1,4 @@
-import React, { lazy, useContext, useEffect, useState } from 'react'
+import React, { lazy, useContext, useEffect, useRef, useState } from 'react'
 import { Default } from '../layouts/default'
 import '../../css/single.css'
 import Calendar from 'react-calendar';
@@ -10,6 +10,8 @@ import axios from 'axios';
 import Loader from '../common/loader';
 import Nodatafound from '../common/nodatafound';
 import { Context as AuthContext } from '../../context/AuthContext';
+import { useMutation } from 'react-query';
+import { Toast } from 'primereact/toast';
 
 const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 const IMG_URL = process.env.REACT_APP_IMG_URL;
@@ -20,104 +22,13 @@ const Single = () => {
     const { slug } = useParams();
     const [isLoading,setIsLoading] = useState(true);
     const [facility,setFacility] = useState(null)
-    const [selectedType,setSelectedType] = useState(null)
-    const [error,setError] = useState({})
+    const [selectedService,setSelectedService] = useState(null)
+    const [slots,setSlots] = useState(null);
+    const [courtId,setCourtId] = useState(null)
     const navigate = useNavigate()
+    const toast = useRef(null);
     
-    const [images,setImages] = useState(
-        [
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria1.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria1s.jpg',
-                alt: 'Hockey',
-                title: 'Title 1'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria2.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria2s.jpg',
-                alt: 'Tennis',
-                title: 'Title 2'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria3.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria3s.jpg',
-                alt: 'Cricket',
-                title: 'Title 3'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria4.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria4s.jpg',
-                alt: 'Badminton',
-                title: 'Title 4'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria5.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria5s.jpg',
-                alt: 'Football',
-                title: 'Title 5'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria6.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria6s.jpg',
-                alt: 'Tennis',
-                title: 'Title 6'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria7.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria7s.jpg',
-                alt: 'Kabaddi',
-                title: 'Title 7'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria8.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria8s.jpg',
-                alt: 'Kho Kho',
-                title: 'Title 8'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria9.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria9s.jpg',
-                alt: 'Wrestling',
-                title: 'Title 9'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria10.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria10s.jpg',
-                alt: 'Punji Jumping',
-                title: 'Title 10'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria11.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria11s.jpg',
-                alt: 'Rafting',
-                title: 'Title 11'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria12.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria12s.jpg',
-                alt: 'Skating',
-                title: 'Title 12'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria13.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria13s.jpg',
-                alt: 'Sking',
-                title: 'Title 13'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria14.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria14s.jpg',
-                alt: 'Riding',
-                title: 'Title 14'
-            },
-            {
-                itemImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria15.jpg',
-                thumbnailImageSrc: 'https://primefaces.org/cdn/primereact/images/galleria/galleria15s.jpg',
-                alt: 'Bollyball',
-                title: 'Title 15'
-            }
-        ]
-    )
+    const [images,setImages] = useState([])
 
     useEffect(() => {      
         getFacilitySlug({slug})
@@ -130,10 +41,15 @@ const Single = () => {
       .then((response) => {
         if(response.data.facility){
             let imagesCopy = [ response.data.facility.featured_image ]
-            if(response.data.facility.images){
-                let otherImages = JSON.parse(response.data.facility.images);
-                imagesCopy = [...imagesCopy,...otherImages]
+
+            if(response.data.facility.services && response.data.facility.services.length > 0){
+                response.data.facility.services.map((item)=>{
+                    let otherImages = item.featured_image;
+                    if(otherImages) imagesCopy = [...imagesCopy,otherImages];
+                    
+                })
             }
+            // upcoming_holiday
             setImages(imagesCopy);
             setFacility(response.data.facility)
         }
@@ -141,11 +57,13 @@ const Single = () => {
         setIsLoading(false)
       })
       .catch((err) => {
+        console.log(err);
         setIsLoading(false)
       });
     }
 
-    const [value, onChange] = useState(new Date());
+    const [value, onChange] = useState(null);
+    
     const responsiveOptions = [
         {
             breakpoint: '991px',
@@ -162,23 +80,23 @@ const Single = () => {
     ];
 
     const handleClick = () =>{
-        const date = new Date(value);
+        // const date = new Date(value);
 
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
+        // const day = date.getDate().toString().padStart(2, '0');
+        // const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        // const year = date.getFullYear();
 
-        const formattedDate = `${day}-${month}-${year}`;
+        // const formattedDate = `${day}-${month}-${year}`;
 
-        let errorCopy = {...error}
+        // let errorCopy = {...error}
 
-        if(!selectedType){
-            errorCopy.typeError = "select type."
-            setError(errorCopy)
-        }
-        else{
-            navigate(`/booknow/${facility.slug}`,{state:{date:formattedDate,type:selectedType,facility:facility}})
-        }
+        // if(!selectedType){
+        //     errorCopy.typeError = "select type."
+        //     setError(errorCopy)
+        // }
+        // else{
+            // navigate(`/booknow/${facility.slug}`,{state:{date:formattedDate,type:'sports',facility:facility}})
+        // }
         
     }
     
@@ -193,6 +111,9 @@ const Single = () => {
     }
 
     const thumbnailTemplate = (item) => {
+
+      if(!item) return null;
+      
         let imgUrl = item.replace(/[\\"]/g, '');
         return <div className='carousel-img-wrapper-si'>
         <img src={`${IMG_URL}${imgUrl}`} alt={facility.official_name} className='carousel-img-si img-fluid' loading={lazy} />
@@ -202,8 +123,99 @@ const Single = () => {
     </div>;
     }
 
+    const checkServiceDisabled = (id) =>{
+        let facilityCopy = {...facility}
+        let services = facilityCopy.services
+        let exists = services.find((item)=> item.id === id);
+        if(exists){
+           let serviceHolidays = exists.upcoming_holiday;
+
+           if(!serviceHolidays) return null;
+
+           const dateArray = serviceHolidays.split(',').map(date => date.trim());
+           const dateToCheck = new Date(value);
+
+            // Convert the date to the same format as the dates in dateArray
+            const formattedDateToCheck = `${('0' + (dateToCheck.getDate())).slice(-2)}-${('0' + (dateToCheck.getMonth() + 1)).slice(-2)}-${dateToCheck.getFullYear()}`;
+
+            // Check if the formatted date exists in dateArray
+            const dateExists = dateArray.includes(formattedDateToCheck);
+            return dateExists;
+        }
+        return true;
+    }
+
+    const handleCourtChange = async (courtId) =>{
+        setSlots(null)
+        setCourtId(courtId)
+        let bookingDate = new Date(value);
+        let formattedDate = `${bookingDate.getFullYear()}-${('0' + (bookingDate.getMonth() + 1)).slice(-2)}-${('0' + (bookingDate.getDate())).slice(-2)}`;
+        let formData = {
+            court_id:courtId,
+            facility_service_id:selectedService,
+            date:formattedDate,
+        }
+        getSlotsOfCourt.mutate(formData);
+    }
+
+
+    const getSlotsOfCourt = useMutation(
+        (formData) =>
+          fetch(`${BASE_URL}/get-slots-of-court`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(response.statusText);
+              }
+              return response.json();
+            })
+            .catch((error) => {
+              throw error;
+            }),
+        {
+          onSuccess: (data) => {
+            toast.current.show({
+              severity: "success",
+              summary: "Success",
+              detail: `${data.message}`,
+              life: 2000,
+            });
+            if (data) {
+              try {
+                setSlots(data.slots);
+              } catch (error) {
+                throw new Error("Something went wrong while trying to get slots.");
+              }
+            } else {
+              toast.current.show({
+                severity: "error",
+                summary: "Error",
+                detail: `something went wrong while trying to get slots.`,
+                life: 2000,
+              });
+            }
+          },
+          onError: (error) => {
+            toast.current.show({
+              severity: "error",
+              summary: "Error",
+              detail: `${error.message}`,
+              life: 2000,
+            });
+          },
+        }
+      );
+    
+
   return (
     <>
+    <Toast ref={toast} position="bottom-right" />
     {isLoading ? <Loader/> : 
     <>
     {facility ? 
@@ -223,7 +235,7 @@ const Single = () => {
                         item={itemTemplate} 
                         thumbnail={thumbnailTemplate} 
                         circular 
-                        // autoPlay 
+                        autoPlay 
                         transitionInterval={3000} 
                         thumbnailsPosition="right"
                     />
@@ -251,8 +263,8 @@ const Single = () => {
                     </button>
                 </li>
                 <li className="nav-item" role="presentation">
-                    <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
-                        Available Sports
+                    <button className="nav-link text-capitalize" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
+                        Available {facility.category}
                     </button>
                 </li>
                 <li className="nav-item" role="presentation">
@@ -266,41 +278,29 @@ const Single = () => {
                     <h4 className='heading-si'>About the venue</h4>
                     <p className='desc-si'>{facility.description}</p>
                     <h4 className='heading-si'>Location Map</h4>
-                    <LocationAwareMap height="40vh" coords={{lat:parseFloat(facility.lat),lng:parseFloat(facility.long)}}/>
+                    <LocationAwareMap height="40vh" coords={{lat:parseFloat(facility.lat),lng:parseFloat(facility.lng)}}/>
                 </div>
                 </div>
 
                 <div className="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                 <div className='tab-container-si'>
-                <h4 className='heading-si'>Sports</h4>
-                        <p className='mb-3 desc-si'>
-                        <span className='me-2 icon-si'>
-                            <svg width="20" height="26" viewBox="0 0 20 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18.6203 0.594324L16.775 0.0390829C16.3067 -0.101747 15.802 0.150141 15.6477 0.59976C15.5272 0.951885 15.6449 1.35273 15.9926 1.58567L10.0251 18.5083C9.80353 19.1421 9.24269 19.6106 8.56402 19.738C8.40416 19.7677 3.02269 20.7618 2.80119 20.8024C1.55048 21.0326 0.580184 21.9589 0.324961 23.1669L0.0249206 24.5753C-0.14614 25.3933 0.588601 26.1354 1.4579 25.9783C1.65699 25.9431 3.31994 25.6397 4.93808 25.3445C6.55616 25.052 8.12658 24.7649 8.13779 24.7622C9.92693 24.4508 11.3824 23.2184 11.9348 21.5445L18.295 2.29525C18.7212 2.31964 19.0858 2.06232 19.2092 1.69937C19.3663 1.23624 19.1026 0.737897 18.6203 0.594324ZM2.2768 25.2795C1.54485 25.4122 1.39062 25.442 1.34296 25.4474C0.883065 25.5259 0.48203 25.1305 0.574609 24.6836L0.874649 23.2752C1.08216 22.2839 1.88139 21.5228 2.90497 21.3359C2.96104 21.3251 3.03395 21.3115 3.12653 21.2953L2.2768 25.2795ZM11.3992 21.3793C10.9113 22.8609 9.62405 23.9523 8.03685 24.2313C8.03122 24.2313 7.94148 24.2476 7.79009 24.2747L8.57249 20.2878C9.60448 20.0955 10.2775 19.4725 10.5552 18.6843L16.5142 1.78878L17.751 2.15986L11.3992 21.3793ZM20 24.3045V24.9193C20 25.5151 19.4952 26 18.8783 26H13.9371C13.3202 26 12.8182 25.5152 12.8182 24.9193V24.3045C12.8182 23.7086 13.3202 23.2238 13.9371 23.2238H18.8783C19.4952 23.2237 20 23.7086 20 24.3045Z" fill="black"/>
-                            </svg>
-                        </span>
-                        Hockey
-                        </p>
-                        <p className='mb-3 desc-si'>
-                        <span className='me-2 icon-si'>
-                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20.1126 10.9036C22.0073 10.9036 23.5499 9.36305 23.5499 7.45455C23.5499 5.5466 22.0078 4 20.1126 4C18.2103 4 16.665 5.5466 16.665 7.45455C16.665 9.36305 18.2109 10.9036 20.1126 10.9036ZM28 19.3213V14.9544L23.3608 12.305C22.5749 11.9046 21.7012 11.7688 20.8281 11.9558C20.4706 12.03 20.1343 12.1686 19.7562 12.3798C19.715 12.3913 18.3376 13.0013 17.5371 14.8774L14.3425 21.3305C14.3425 21.3305 11.195 21.9427 9.87769 22.1979L9.55541 22.3909L8.74024 19.4313C8.40279 18.228 9.66157 16.4834 9.7087 16.4124C10.5417 15.1887 10.7698 13.5766 10.3321 11.98C9.93348 10.5362 9.02568 9.31905 7.84382 8.6343C6.91923 8.10685 5.87982 7.96165 4.93627 8.22235C4.20343 8.4242 3.55021 8.85705 3.0454 9.4791L2.65487 10.0566C1.97565 11.2572 1.81911 12.762 2.21181 14.2135C2.61046 15.671 3.50796 16.8832 4.69578 17.5586L4.98015 17.7099C5.01806 17.7126 6.97448 18.5134 7.31463 19.6624C7.3103 19.6684 7.82811 21.5472 8.25059 23.0784L7.92885 23.2269L7.99169 23.2693C7.89636 23.4172 7.72899 23.745 7.7409 24.0805C7.7409 24.1872 7.74957 24.2939 7.76961 24.3973C7.94998 25.3461 8.87565 25.9797 9.82136 25.7866L15.858 24.6074C15.858 24.6074 16.3715 24.4506 16.5914 24.2934C16.8746 24.0915 17.088 23.668 17.088 23.668L18.6745 20.4654C18.6745 20.4654 19.7681 25.6409 19.7892 25.7366L19.5374 26H27.772L27.5656 24.7884C27.5656 24.7763 27.3062 23.6273 27.3062 23.6273C27.3148 23.6356 26.5999 20.4032 26.0533 17.8732C26.6199 18.2026 27.1879 18.5293 27.7573 18.8533L28 19.3213ZM7.24801 16.6671C6.63649 16.8321 5.98327 16.7319 5.35713 16.3816C4.48509 15.8866 3.81128 14.9654 3.52258 13.8538C3.21493 12.7461 3.32705 11.6115 3.82374 10.737L4.10106 10.331C4.42821 9.9279 4.8247 9.6584 5.30026 9.52475C6.81903 9.1106 8.49162 10.3723 9.03218 12.343C9.56462 14.3048 8.76732 16.2518 7.24801 16.6671Z" fill="black"/>
-                            </svg>    
-                        </span>Tennis
-                        </p>
-                        <p className='mb-3 desc-si'>
-                        <span className='me-2 icon-si'>
-                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15 4C8.92879 4 4 8.92879 4 15C4 21.0712 8.92879 26 15 26C21.0712 26 26 21.0712 26 15C26 8.92879 21.0712 4 15 4ZM14.7124 17.244C12.7599 18.8233 10.5741 20.2517 8.27193 21.6031C9.98321 23.3466 12.3663 24.4286 15 24.4286C15.4942 24.4286 15.9798 24.3901 16.4528 24.317C16.8323 21.8766 16.2516 19.3151 14.7124 17.244ZM17.5009 14.7022C16.9973 15.2263 16.4669 15.7339 15.9138 16.2257C17.618 18.4744 18.3424 21.2307 18.0871 23.9108C19.4542 23.437 20.6784 22.6568 21.6786 21.6526C21.6668 21.6291 21.655 21.6047 21.6448 21.5788C20.5904 18.96 19.2083 16.6681 17.5009 14.7022ZM13.6824 16.0725C11.4824 13.9511 8.50136 13.1088 5.683 13.5472C5.60993 14.0202 5.57143 14.5058 5.57143 15C5.57143 16.9981 6.19371 18.8508 7.256 20.3774C9.55107 19.0409 11.7377 17.6361 13.6824 16.0725ZM19.5697 12.2406C19.2523 12.679 18.9168 13.1064 18.5648 13.5236C20.2839 15.4714 21.6982 17.7256 22.8069 20.2847C23.8306 18.7769 24.4286 16.958 24.4286 15C24.4286 14.8083 24.4231 14.6174 24.4113 14.4288C22.6827 14.1145 21.0154 13.3846 19.5697 12.2406ZM8.34736 8.32143C7.34321 9.32086 6.56379 10.5458 6.08921 11.9129C9.2305 11.6136 12.4771 12.6609 14.8876 15.0542C15.429 14.5726 15.946 14.0752 16.4371 13.5606C14.2316 11.3574 11.5586 9.62336 8.41964 8.35443C8.39529 8.345 8.37093 8.33321 8.34736 8.32143ZM21.7383 8.40786C21.369 9.28786 20.9361 10.1262 20.4458 10.9276C21.5599 11.8344 22.8328 12.4488 24.163 12.7701C23.7568 11.0981 22.9043 9.59979 21.7383 8.40786ZM15.5712 5.58871C15.3826 5.57693 15.1917 5.57143 15 5.57143C13.042 5.57143 11.2223 6.16936 9.71371 7.19314C12.7254 8.50214 15.3174 10.2299 17.486 12.3804C17.8089 11.9899 18.1169 11.5892 18.4084 11.1775C16.8865 9.57386 15.9413 7.62371 15.5712 5.58871ZM17.2299 5.837C17.5764 7.27014 18.2623 8.63729 19.2884 9.81036C19.7465 9.02386 20.1456 8.19807 20.4796 7.32829C19.5155 6.63843 18.4163 6.12536 17.2299 5.837Z" fill="black"/>
-                            </svg>
-                        </span>
-                        Basketball
-                        </p>
+                <h4 className='heading-si text-capitalize'>{facility.category}</h4>
+                {facility.services.length > 0 ? <>
+                {facility.services.map((item,ind)=>{
+                    const iconURL = item.icon ? item.icon.replace(/\\\//g, '/') : null;
+                    return (<p className='mb-3 desc-si' key={item.name + ind}>
+                    <span className='me-2 icon-si'>
+                    <img src={`${IMG_URL}${iconURL}`}  alt={item.name} width='16'/>
+                    </span>
+                    <span className='text-capitalize'>{item.name}</span>
+                    </p>)
+                })}
+                </> : null}
                 </div>
                 </div>
                 <div className="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
                 <div className='tab-container-si'>
-                <h4 className='heading-si'>Sports</h4>
+                <h4 className='heading-si'>Amenities</h4>
                         <p className='mb-3 desc-si'>
                         <span className='me-2 icon-si'>
                         <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -397,49 +397,80 @@ const Single = () => {
                 </div>
                 <div className='col-4'>
                     <div className='configure-container-si'>
-                    <div className='card p-3 mb-3'>
-                        <p className='heading-si'>Available Sports</p>
-                        <div className='d-flex flex-wrap'>
-                        <span className='me-3 desc-si'>
-                        <span className='me-1 icon-si'>
-                            <svg width="20" height="26" viewBox="0 0 20 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18.6203 0.594324L16.775 0.0390829C16.3067 -0.101747 15.802 0.150141 15.6477 0.59976C15.5272 0.951885 15.6449 1.35273 15.9926 1.58567L10.0251 18.5083C9.80353 19.1421 9.24269 19.6106 8.56402 19.738C8.40416 19.7677 3.02269 20.7618 2.80119 20.8024C1.55048 21.0326 0.580184 21.9589 0.324961 23.1669L0.0249206 24.5753C-0.14614 25.3933 0.588601 26.1354 1.4579 25.9783C1.65699 25.9431 3.31994 25.6397 4.93808 25.3445C6.55616 25.052 8.12658 24.7649 8.13779 24.7622C9.92693 24.4508 11.3824 23.2184 11.9348 21.5445L18.295 2.29525C18.7212 2.31964 19.0858 2.06232 19.2092 1.69937C19.3663 1.23624 19.1026 0.737897 18.6203 0.594324ZM2.2768 25.2795C1.54485 25.4122 1.39062 25.442 1.34296 25.4474C0.883065 25.5259 0.48203 25.1305 0.574609 24.6836L0.874649 23.2752C1.08216 22.2839 1.88139 21.5228 2.90497 21.3359C2.96104 21.3251 3.03395 21.3115 3.12653 21.2953L2.2768 25.2795ZM11.3992 21.3793C10.9113 22.8609 9.62405 23.9523 8.03685 24.2313C8.03122 24.2313 7.94148 24.2476 7.79009 24.2747L8.57249 20.2878C9.60448 20.0955 10.2775 19.4725 10.5552 18.6843L16.5142 1.78878L17.751 2.15986L11.3992 21.3793ZM20 24.3045V24.9193C20 25.5151 19.4952 26 18.8783 26H13.9371C13.3202 26 12.8182 25.5152 12.8182 24.9193V24.3045C12.8182 23.7086 13.3202 23.2238 13.9371 23.2238H18.8783C19.4952 23.2237 20 23.7086 20 24.3045Z" fill="black"/>
-                            </svg>
-                        </span>
-                        Hockey</span>
-                        <span className='me-3 desc-si'>
-                        <span className='me-1 icon-si'>
-                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20.1126 10.9036C22.0073 10.9036 23.5499 9.36305 23.5499 7.45455C23.5499 5.5466 22.0078 4 20.1126 4C18.2103 4 16.665 5.5466 16.665 7.45455C16.665 9.36305 18.2109 10.9036 20.1126 10.9036ZM28 19.3213V14.9544L23.3608 12.305C22.5749 11.9046 21.7012 11.7688 20.8281 11.9558C20.4706 12.03 20.1343 12.1686 19.7562 12.3798C19.715 12.3913 18.3376 13.0013 17.5371 14.8774L14.3425 21.3305C14.3425 21.3305 11.195 21.9427 9.87769 22.1979L9.55541 22.3909L8.74024 19.4313C8.40279 18.228 9.66157 16.4834 9.7087 16.4124C10.5417 15.1887 10.7698 13.5766 10.3321 11.98C9.93348 10.5362 9.02568 9.31905 7.84382 8.6343C6.91923 8.10685 5.87982 7.96165 4.93627 8.22235C4.20343 8.4242 3.55021 8.85705 3.0454 9.4791L2.65487 10.0566C1.97565 11.2572 1.81911 12.762 2.21181 14.2135C2.61046 15.671 3.50796 16.8832 4.69578 17.5586L4.98015 17.7099C5.01806 17.7126 6.97448 18.5134 7.31463 19.6624C7.3103 19.6684 7.82811 21.5472 8.25059 23.0784L7.92885 23.2269L7.99169 23.2693C7.89636 23.4172 7.72899 23.745 7.7409 24.0805C7.7409 24.1872 7.74957 24.2939 7.76961 24.3973C7.94998 25.3461 8.87565 25.9797 9.82136 25.7866L15.858 24.6074C15.858 24.6074 16.3715 24.4506 16.5914 24.2934C16.8746 24.0915 17.088 23.668 17.088 23.668L18.6745 20.4654C18.6745 20.4654 19.7681 25.6409 19.7892 25.7366L19.5374 26H27.772L27.5656 24.7884C27.5656 24.7763 27.3062 23.6273 27.3062 23.6273C27.3148 23.6356 26.5999 20.4032 26.0533 17.8732C26.6199 18.2026 27.1879 18.5293 27.7573 18.8533L28 19.3213ZM7.24801 16.6671C6.63649 16.8321 5.98327 16.7319 5.35713 16.3816C4.48509 15.8866 3.81128 14.9654 3.52258 13.8538C3.21493 12.7461 3.32705 11.6115 3.82374 10.737L4.10106 10.331C4.42821 9.9279 4.8247 9.6584 5.30026 9.52475C6.81903 9.1106 8.49162 10.3723 9.03218 12.343C9.56462 14.3048 8.76732 16.2518 7.24801 16.6671Z" fill="black"/>
-                            </svg>    
-                        </span>Tennis</span>
-                        <span className='me-3 desc-si'>
-                        <span className='me-1 icon-si'>
-                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15 4C8.92879 4 4 8.92879 4 15C4 21.0712 8.92879 26 15 26C21.0712 26 26 21.0712 26 15C26 8.92879 21.0712 4 15 4ZM14.7124 17.244C12.7599 18.8233 10.5741 20.2517 8.27193 21.6031C9.98321 23.3466 12.3663 24.4286 15 24.4286C15.4942 24.4286 15.9798 24.3901 16.4528 24.317C16.8323 21.8766 16.2516 19.3151 14.7124 17.244ZM17.5009 14.7022C16.9973 15.2263 16.4669 15.7339 15.9138 16.2257C17.618 18.4744 18.3424 21.2307 18.0871 23.9108C19.4542 23.437 20.6784 22.6568 21.6786 21.6526C21.6668 21.6291 21.655 21.6047 21.6448 21.5788C20.5904 18.96 19.2083 16.6681 17.5009 14.7022ZM13.6824 16.0725C11.4824 13.9511 8.50136 13.1088 5.683 13.5472C5.60993 14.0202 5.57143 14.5058 5.57143 15C5.57143 16.9981 6.19371 18.8508 7.256 20.3774C9.55107 19.0409 11.7377 17.6361 13.6824 16.0725ZM19.5697 12.2406C19.2523 12.679 18.9168 13.1064 18.5648 13.5236C20.2839 15.4714 21.6982 17.7256 22.8069 20.2847C23.8306 18.7769 24.4286 16.958 24.4286 15C24.4286 14.8083 24.4231 14.6174 24.4113 14.4288C22.6827 14.1145 21.0154 13.3846 19.5697 12.2406ZM8.34736 8.32143C7.34321 9.32086 6.56379 10.5458 6.08921 11.9129C9.2305 11.6136 12.4771 12.6609 14.8876 15.0542C15.429 14.5726 15.946 14.0752 16.4371 13.5606C14.2316 11.3574 11.5586 9.62336 8.41964 8.35443C8.39529 8.345 8.37093 8.33321 8.34736 8.32143ZM21.7383 8.40786C21.369 9.28786 20.9361 10.1262 20.4458 10.9276C21.5599 11.8344 22.8328 12.4488 24.163 12.7701C23.7568 11.0981 22.9043 9.59979 21.7383 8.40786ZM15.5712 5.58871C15.3826 5.57693 15.1917 5.57143 15 5.57143C13.042 5.57143 11.2223 6.16936 9.71371 7.19314C12.7254 8.50214 15.3174 10.2299 17.486 12.3804C17.8089 11.9899 18.1169 11.5892 18.4084 11.1775C16.8865 9.57386 15.9413 7.62371 15.5712 5.58871ZM17.2299 5.837C17.5764 7.27014 18.2623 8.63729 19.2884 9.81036C19.7465 9.02386 20.1456 8.19807 20.4796 7.32829C19.5155 6.63843 18.4163 6.12536 17.2299 5.837Z" fill="black"/>
-                            </svg>
-                        </span>
-                        Basketball</span>
-                        </div>
-                    </div>
-                    <div className='card p-3 mb-3'>
-                        <p className='heading-si'>Timing</p>
-                        <p className='desc-si mb-0'>5.30 am to 09 pm</p>
-                    </div>
                     <div className='card p-4 mb-3 px-4'>
-                        <Calendar onChange={onChange} 
+                        <Calendar onChange={(newValue)=>{onChange(newValue);setSelectedService(null);setCourtId(null)}} 
                             value={value}
                             className="common-calendor-si"
                             minDate={new Date()}
                         />
                     </div>
-                        <select className='form-input w-100' value={selectedType} onChange={(e)=>{setSelectedType(e.target.value);
-                        setError({})}}>
-                            <option value={null} hidden>Choose Type</option>
-                            <option value='sports'>Sports</option>
-                            <option value='venues'>Venues</option>
-                        </select>
-                    {error && error.typeError ? <p className='text-danger m-0'>{error.typeError}</p> : null}
+
+                    {value ? 
+                    <>
+                    <div className='card p-4 mb-3 px-4'>
+                    <p className='heading-si text-capitalize'>Choose {facility.category}</p>
+                    <div className='d-flex flex-wrap'>
+                    {facility.services.length > 0 ? <>
+                    {facility.services.map((item,ind)=>{
+                    const iconURL = item.icon ? item.icon.replace(/\\\//g, '/') : null;
+
+                    return (<button type='button' className={`btn choose-service-btn-si m-1  ${selectedService === item.id ? 'active':''}`} key={item.name + ind} onClick={()=>setSelectedService(item.id)} disabled={checkServiceDisabled(item.id)}>
+                    <span className='me-1 icon-si'>
+                    <img src={`${IMG_URL}${iconURL}`}  alt={item.name} width='16'/>
+                    </span>
+                    <span className='text-capitalize'>{item.name}</span>
+                    </button>
+                    )
+                    })}
+                    </> : 
+                    <span className='text-capitalize'>No {facility.category} Available.</span>
+                    }
+                    </div>
+                    
+                    </div>
+                    </>
+                    :
+                    null
+                    }
+
+                    {selectedService ? 
+                    <>
+                    <div className='card p-4 mb-3 px-4'>
+                    <p className='heading-si text-capitalize'>Choose court</p>
+
+                    {facility.services.find((item)=> item.id === selectedService).court.length > 0 ? 
+                    <>
+                    {facility.services.find((item)=> item.id === selectedService).court.map((items,ind)=>{
+                        return (<button type='button' className={`btn choose-courts-btn-si ${courtId === items.id ? 'active': ''} `} key={items.court_name + ind} onClick={()=>handleCourtChange(items.id)}>
+                        <p className='mb-1 text-start headingSi'>{items.court_name}</p>
+                        <p className='mb-1 text-start'>Slot time: {items.duration} min</p>
+                        <p className='mb-1 text-start'>Slot price: {items.slot_price} ₹</p>
+                        </button>)
+                    })}
+                    </>    
+                    :
+                    <p>No courts Available</p>}
+                    
+                    </div>
+                    </>
+                    :
+                    null}
+
+                    {slots && courtId ? <>
+                    <div className='card p-4 mb-3 px-4 singlePage-slots-wrapper'>
+                    <p className='heading-si text-capitalize w-100'>Choose slot</p>
+                    {slots.length > 0 ?
+                    <>
+                    {slots.map((item,ind)=>{
+                         return (<button type='button' className={`btn choose-courts-btn-si m-2`} key={item.start_time + ind}>
+                         <p className='mb-1 text-start headingSi'>{item.start_time} - {item.end_time}</p>
+                         </button>)
+                    })}
+                    </>
+                    : <p>No slots available.</p> }
+                    </div>
+                    </> : null}
+
                     {!state.userData ? 
                     <button type='button' className='btn book-now-btn-si mt-2' 
                     data-bs-toggle="modal"
@@ -449,7 +480,7 @@ const Single = () => {
                     }}
                     >Book Now</button>
                     :
-                    <button type='button' className='btn book-now-btn-si mt-2'  onClick={()=>handleClick()} >Book Now</button>
+                    <button type='button' className='btn book-now-btn-si mt-2'  onClick={()=>handleClick()} disabled={!(value && courtId && selectedService)}>Book Now</button>
                     }
                     </div>
                 </div>
