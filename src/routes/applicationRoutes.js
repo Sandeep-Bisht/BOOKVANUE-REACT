@@ -13,6 +13,7 @@ import FacilityByCategory from '../component/ui/FacilityByCategory'
 import Profile from '../component/ui/profile'
 import UserDashboard from '../component/layouts/userDashboard'
 import Bookings from '../component/ui/bookings'
+import Form from '../component/Form/Form'
 
 const ApplicationRoutes = () => {
 
@@ -42,13 +43,16 @@ const ApplicationRoutes = () => {
         <Route path="/booknow/:facilityName" element={<ProtectedRoutes role={['User']}><Booknow/></ProtectedRoutes>} />
         <Route path='/management' element={<ProtectedRoutes role={['User']}><DashboardLayout/></ProtectedRoutes>}>
           <Route path="/management/dashboard" element={<Dashboard />} />
+          
           <Route path="/management/addFacility" element={<AddFacility />} />
         </Route>
         <Route path='/user' element={<ProtectedRoutes role={['User']}><UserDashboard/></ProtectedRoutes>}>
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/user/bookings" element={<Bookings />} />
         </Route>
-        
+        <Route>
+          <Route path='/form' element={<Form/>}/>
+        </Route>
     </Routes>
   )
 }

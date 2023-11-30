@@ -93,6 +93,7 @@ const DashboardLayout = () => {
                       <Outlet/>
                   </div>
               </div>
+              
         </section>
     </>
   )
