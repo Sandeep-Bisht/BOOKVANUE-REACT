@@ -13,7 +13,11 @@ import FacilityByCategory from '../component/ui/FacilityByCategory'
 import Profile from '../component/ui/profile'
 import UserDashboard from '../component/layouts/userDashboard'
 import Bookings from '../component/ui/bookings'
+<<<<<<< HEAD
 import NewSingle from '../component/ui/newSingle'
+=======
+import AddService from '../component/ui/addService'
+>>>>>>> 723f2e2 (update responsive design)
 
 const ApplicationRoutes = () => {
 
@@ -45,6 +49,8 @@ const ApplicationRoutes = () => {
         <Route path='/management' element={<ProtectedRoutes role={['User']}><DashboardLayout/></ProtectedRoutes>}>
           <Route path="/management/dashboard" element={<Dashboard />} />
           <Route path="/management/addFacility" element={<AddFacility />} />
+          <Route path="/management/addService" element={<AddService />} />
+          
         </Route>
         <Route path='/user' element={<ProtectedRoutes role={['User']}><UserDashboard/></ProtectedRoutes>}>
           <Route path="/user/profile" element={<Profile />} />

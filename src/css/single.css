@@ -371,4 +371,125 @@ section.single-page-container .img-carousel-container-si .nav-tabs-si .tab-conte
 .singlePage-slots-wrapper{
     flex-direction: row;
     flex-wrap: wrap;
+<<<<<<< HEAD
 }
+=======
+}
+
+/* ==============responsive================================== */
+@media (min-width:1921px ) and (max-width: 2561px) { 
+
+  
+ 
+}
+
+
+@media (min-width:1536px ) and (max-width: 1920px) 
+{
+
+  
+}
+
+
+@media (max-width: 1399.98px) 
+{
+ 
+}
+
+
+@media (max-width: 1199.98px)
+{  
+
+ 
+
+}
+
+
+@media (max-width: 1024.98px) 
+{
+
+  
+}
+
+@media (max-width: 991.98px) 
+{
+    section.single-page-container .title-heading-si 
+    {
+        font-size: 20px;
+    }
+    .custom-margin
+    {
+        margin-top: 50px;
+    }
+    section.single-page-container .img-carousel-container-si .p-galleria .p-galleria-content 
+    .p-galleria-item-wrapper .p-galleria-item-container .p-galleria-item .carousel-img-wrapper-si 
+    .carousel-img-si
+    {
+        height: 300px;
+    }
+  
+}
+
+
+@media (max-width: 937.98px) 
+{
+    
+}
+@media (max-width: 890.98px) 
+{
+ 
+}
+
+@media (max-width: 800.98px) 
+{
+  
+}
+
+@media (max-width: 767.98px) 
+{
+    
+
+}
+
+@media (max-width: 630.98px) 
+{
+
+}
+@media (max-width: 575.98px) 
+{
+  
+   
+   
+}
+
+
+
+@media (max-width: 516.98px) 
+{
+
+}
+
+@media (max-width: 483.98px) 
+{
+
+}
+
+
+@media (max-width: 440.98px) 
+{
+
+}
+
+@media (max-width: 420.98px) 
+{
+
+  
+}
+
+
+
+@media (max-width: 380.98px)
+{
+  
+}
+>>>>>>> 723f2e2 (update responsive design)

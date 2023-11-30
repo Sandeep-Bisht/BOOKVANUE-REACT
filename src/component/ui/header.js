@@ -20,10 +20,12 @@ export const Header = () => {
   return (
     <header>
       <nav className="navbar navbar-expand-lg ">
-        <div className="container-fluid mx-auto mx-sm-2 mx-md-4 mx-lg-5 border-bottom">
+        <div className="container-fluid mx-auto mx-sm-2 mx-md-4 mx-lg-3 border-bottom">
           <Link to="/" className="navbar-brand">
             <img src={Logo} alt="Book Venue" loading={lazy} height="50" />
           </Link>
+          
+          <SearchLocation className="w-50"/>
           <button
             className="navbar-toggler"
             type="button"
@@ -35,7 +37,7 @@ export const Header = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <SearchLocation className="w-50"/>
+          
           <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
             <div className="d-flex justify-content-between my-2 my-lg-0">
               <div className="action-container">
