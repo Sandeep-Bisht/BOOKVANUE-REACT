@@ -13,6 +13,7 @@ import FacilityByCategory from '../component/ui/FacilityByCategory'
 import Profile from '../component/ui/profile'
 import UserDashboard from '../component/layouts/userDashboard'
 import Bookings from '../component/ui/bookings'
+import NewSingle from '../component/ui/newSingle'
 
 const ApplicationRoutes = () => {
 
@@ -36,7 +37,8 @@ const ApplicationRoutes = () => {
   return (
     <Routes>
         <Route exact path='/' element={<Homepage/>}/>
-        <Route path='/facility/:slug' element={<Single/>}/>
+        <Route path='/facility/:slug' element={<NewSingle/>}/>
+        {/* <Route path='/facility/:slug' element={<NewSingle/>}/> */}
         <Route path="/location/:locationName" element={<SearchResult/>} />
         <Route path="/:category/:service" element={<FacilityByCategory/>} />
         <Route path="/booknow/:facilityName" element={<ProtectedRoutes role={['User']}><Booknow/></ProtectedRoutes>} />
