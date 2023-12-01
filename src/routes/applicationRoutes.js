@@ -13,11 +13,8 @@ import FacilityByCategory from '../component/ui/FacilityByCategory'
 import Profile from '../component/ui/profile'
 import UserDashboard from '../component/layouts/userDashboard'
 import Bookings from '../component/ui/bookings'
-<<<<<<< HEAD
 import NewSingle from '../component/ui/newSingle'
-=======
 import AddService from '../component/ui/addService'
->>>>>>> 723f2e2 (update responsive design)
 
 const ApplicationRoutes = () => {
 
