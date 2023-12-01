@@ -185,7 +185,12 @@ font-weight: 400;
 .common-location-btn.form-input:hover{
    background: #008b83; 
 }
-
+.common-form-wrapper
+{
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
 
 /* -----------------search-location-popup------------------- */
 .common-location-btn.form-input .p-button-label
