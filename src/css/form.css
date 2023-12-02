@@ -37,3 +37,16 @@
     height: 100%;
     justify-content: space-around;
 }
+
+
+/* customize date picker */
+
+.custom-date-picker .rmdp-container{
+    width: 100%;
+    display: block;
+}
+
+.custom-date-picker .rmdp-container input{
+    padding: 17px 20px;
+    width: 100%;
+}
