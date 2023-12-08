@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Outlet, Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import Homepage from '../component/ui/homepage'
-import Single from '../component/ui/single'
 import { Context as AuthContext } from '../context/AuthContext'
 import Cookies from 'js-cookie'
 import DashboardLayout from '../component/layouts/dashboard'
@@ -15,9 +14,9 @@ import UserDashboard from '../component/layouts/userDashboard'
 import Bookings from '../component/ui/bookings'
 import NewSingle from '../component/ui/newSingle'
 import AddService from '../component/ui/addService'
+import { getHomepageData } from '../config/initialApis'
 
-const ApplicationRoutes = () => {
-
+const CheckAuth = () => {
   const {state, userLoggedIn} = useContext(AuthContext);
   
   useEffect(()=>{
@@ -35,9 +34,20 @@ const ApplicationRoutes = () => {
 
   },[state.userData])
 
-  return (
-    <Routes>
-        <Route exact path='/' element={<Homepage/>}/>
+  return <Outlet/>
+}
+
+const ProtectedRoutes = ({role , children}) =>{
+
+  const userToken = Cookies.get('USER_TOKEN');
+
+  return (userToken) ? <>{children}</> : <>Anauthenticated</>;
+}
+
+const ApplicationRoutes = createBrowserRouter(
+  createRoutesFromElements(
+    <Route element={<CheckAuth/>}>
+      <Route index path='/' element={<Homepage/>} loader={getHomepageData}/>
         <Route path='/facility/:slug' element={<NewSingle/>}/>
         {/* <Route path='/facility/:slug' element={<NewSingle/>}/> */}
         <Route path="/location/:locationName" element={<SearchResult/>} />
@@ -52,18 +62,9 @@ const ApplicationRoutes = () => {
         <Route path='/user' element={<ProtectedRoutes role={['User']}><UserDashboard/></ProtectedRoutes>}>
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/user/bookings" element={<Bookings />} />
-        </Route>
-        
-    </Routes>
-  )
-}
+        </Route>            
+    </Route>
+))
 
-
-const ProtectedRoutes = ({role , children}) =>{
-
-  const userToken = Cookies.get('USER_TOKEN');
-
-  return (userToken) ? <>{children}</> : <>Anauthenticated</>;
-}
 
 export default ApplicationRoutes

@@ -5,7 +5,7 @@ import '../../css/homepage.css'
 import { AiFillStar } from 'react-icons/ai'
 import { IoMdAddCircleOutline } from 'react-icons/io'
 import FacilityIcon from '../../assets/addFacility.svg'
-import { Link } from 'react-router-dom'
+import { Link, useLoaderData } from 'react-router-dom'
 import axios from 'axios'
 import Loader from '../common/loader'
 import truncateString from '../../utils/truncateString'
@@ -14,6 +14,9 @@ const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 const IMG_URL = process.env.REACT_APP_IMG_URL;
 
 const Homepage = () => {
+  const InitialData = useLoaderData();
+  console.log(InitialData,'initial data is this')
+
   const [isLoading,setIsLoading] = useState(true)
   const [allFacilities,setAllFacilities] = useState([])
   const [recentFacility,setRecentFacility] = useState([])
@@ -194,7 +197,7 @@ const Homepage = () => {
             <div className='row g-3'>
               {allServices.map((item)=>{
                 return (<>
-                {item.name == "sports" && item.services && item.services.length > 0 ? <>
+                {item.services && item.services.length > 0 ? <>
                 {item.services.map((items)=>{
                 const imgURL = items.featured_image ? items.featured_image.replace(/\\\//g, '/') : null;
                 return(<div className='col-2 recent-add-sport-card-wrapper-h' key={`${items.id}-${items.name}`}>

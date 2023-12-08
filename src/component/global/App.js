@@ -6,6 +6,7 @@ import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css"; 
 import 'primeicons/primeicons.css';
 import { Provider as AuthProvider } from '../../context/AuthContext';
+import { RouterProvider } from 'react-router-dom';
         
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
     <AuthProvider>
     <QueryClientProvider client={queryClient}>
     <PrimeReactProvider>
-    <ApplicationRoutes/>
+      <RouterProvider router={ApplicationRoutes}/>
     </PrimeReactProvider>
     </QueryClientProvider>
     </AuthProvider>
