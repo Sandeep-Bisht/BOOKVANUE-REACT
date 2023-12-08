@@ -15,6 +15,7 @@ import UserDashboard from '../component/layouts/userDashboard'
 import Bookings from '../component/ui/bookings'
 import CreateFacility from '../component/CreateFacility/CreateFacility'
 import NewSingle from '../component/ui/newSingle'
+import AddService from '../component/ui/addService'
 
 const ApplicationRoutes = () => {
 
@@ -46,7 +47,8 @@ const ApplicationRoutes = () => {
         <Route path='/management' element={<ProtectedRoutes role={['User']}><DashboardLayout/></ProtectedRoutes>}>
           <Route path="/management/dashboard" element={<Dashboard />} />
           <Route path='/management/createfacility' element={<CreateFacility/>}/>
-          {/* <Route path="/management/addFacility" element={<AddFacility />} /> */}
+          <Route path="/management/addService" element={<AddService />} />
+          
         </Route>
         <Route path='/user' element={<ProtectedRoutes role={['User']}><UserDashboard/></ProtectedRoutes>}>
           <Route path="/user/profile" element={<Profile />} />
