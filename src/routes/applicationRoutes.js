@@ -5,13 +5,13 @@ import { Context as AuthContext } from '../context/AuthContext'
 import Cookies from 'js-cookie'
 import DashboardLayout from '../component/layouts/dashboard'
 import Dashboard from '../component/ui/dashboard'
-import AddFacility from '../component/ui/addFacility'
 import SearchResult from '../component/ui/searchResult'
 import Booknow from '../component/ui/booknow'
 import FacilityByCategory from '../component/ui/FacilityByCategory'
 import Profile from '../component/ui/profile'
 import UserDashboard from '../component/layouts/userDashboard'
 import Bookings from '../component/ui/bookings'
+import CreateFacility from '../component/CreateFacility/CreateFacility'
 import NewSingle from '../component/ui/newSingle'
 import AddService from '../component/ui/addService'
 import { getHomepageData, getSinglePageData, getAllFacility } from '../config/initialApis'
@@ -55,7 +55,7 @@ const ApplicationRoutes = createBrowserRouter(
         <Route path="/booknow/:facilityName" element={<ProtectedRoutes role={['User']}><Booknow/></ProtectedRoutes>} />
         <Route path='/management' element={<ProtectedRoutes role={['User']}><DashboardLayout/></ProtectedRoutes>}>
           <Route path="/management/dashboard" element={<Dashboard />} />
-          <Route path="/management/addFacility" element={<AddFacility />} />
+          <Route path='/management/createfacility' element={<CreateFacility/>}/>
           <Route path="/management/addService" element={<AddService />} loader={getAllFacility}/>
           
         </Route>
