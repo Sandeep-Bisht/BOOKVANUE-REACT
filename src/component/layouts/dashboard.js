@@ -55,7 +55,7 @@ const DashboardLayout = () => {
                                     <div className={`accordion-body ${style.sidebarSubMenu} py-0`}>
                                     <ul>
                                             <li>
-                                            <Link to='/management/addFacility'><span>Add Facility</span></Link>
+                                            <Link to='/management/CreateFacility'><span>Add Facility</span></Link>
                                             </li>
                                             <li>
                                             <Link to='/management/dashboard'><span>Configurations</span></Link>

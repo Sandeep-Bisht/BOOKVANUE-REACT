@@ -58,7 +58,7 @@ export const Login = () => {
 
   const handleResendOTP = () => {
     if (mobile !== "" && /^[0-9]{10}$/.test(mobile)) {
-      sendOTP.mutate({ mobile, url: "/register" });
+      sendOTP.mutate({ mobile, url: "/login" });
     } else {
       setOtpView(false);
       toast.current.show({
@@ -172,7 +172,7 @@ export const Login = () => {
 
   const handleLogin = () => {
     if (mobile !== "" && /^[0-9]{10}$/.test(mobile)) {
-      sendOTP.mutate({ mobile, url: "/register" });
+      sendOTP.mutate({ mobile, url: "/login" });
     } else {
       toast.current.show({
         severity: "error",
@@ -188,7 +188,7 @@ export const Login = () => {
       verifyOTP.mutate({
         mobile: mobile,
         otp: OTP,
-        url: "/verify-register-user",
+        url: "/verify-otp",
       });
     } else {
       toast.current.show({

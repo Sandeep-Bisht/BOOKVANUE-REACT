@@ -13,7 +13,8 @@ import FacilityByCategory from '../component/ui/FacilityByCategory'
 import Profile from '../component/ui/profile'
 import UserDashboard from '../component/layouts/userDashboard'
 import Bookings from '../component/ui/bookings'
-import Form from '../component/Form/Form'
+import CreateFacility from '../component/CreateFacility/CreateFacility'
+import NewSingle from '../component/ui/newSingle'
 
 const ApplicationRoutes = () => {
 
@@ -37,22 +38,23 @@ const ApplicationRoutes = () => {
   return (
     <Routes>
         <Route exact path='/' element={<Homepage/>}/>
-        <Route path='/facility/:slug' element={<Single/>}/>
+        <Route path='/facility/:slug' element={<NewSingle/>}/>
+        {/* <Route path='/facility/:slug' element={<NewSingle/>}/> */}
         <Route path="/location/:locationName" element={<SearchResult/>} />
         <Route path="/:category/:service" element={<FacilityByCategory/>} />
         <Route path="/booknow/:facilityName" element={<ProtectedRoutes role={['User']}><Booknow/></ProtectedRoutes>} />
         <Route path='/management' element={<ProtectedRoutes role={['User']}><DashboardLayout/></ProtectedRoutes>}>
           <Route path="/management/dashboard" element={<Dashboard />} />
-          
-          <Route path="/management/addFacility" element={<AddFacility />} />
+          <Route path='/management/createfacility' element={<CreateFacility/>}/>
+          {/* <Route path="/management/addFacility" element={<AddFacility />} /> */}
         </Route>
         <Route path='/user' element={<ProtectedRoutes role={['User']}><UserDashboard/></ProtectedRoutes>}>
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/user/bookings" element={<Bookings />} />
         </Route>
-        <Route>
-          <Route path='/form' element={<Form/>}/>
-        </Route>
+        {/* <Route>
+          <Route path='/createfacility' element={<CreateFacility/>}/>
+        </Route> */}
     </Routes>
   )
 }
