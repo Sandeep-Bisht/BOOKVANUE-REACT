@@ -14,7 +14,7 @@ import UserDashboard from '../component/layouts/userDashboard'
 import Bookings from '../component/ui/bookings'
 import NewSingle from '../component/ui/newSingle'
 import AddService from '../component/ui/addService'
-import { getHomepageData } from '../config/initialApis'
+import { getHomepageData, getSinglePageData, getAllFacility } from '../config/initialApis'
 
 const CheckAuth = () => {
   const {state, userLoggedIn} = useContext(AuthContext);
@@ -48,7 +48,7 @@ const ApplicationRoutes = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<CheckAuth/>}>
       <Route index path='/' element={<Homepage/>} loader={getHomepageData}/>
-        <Route path='/facility/:slug' element={<NewSingle/>}/>
+        <Route path='/facility/:slug' element={<NewSingle/>} loader={({params})=>getSinglePageData({params})}/>
         {/* <Route path='/facility/:slug' element={<NewSingle/>}/> */}
         <Route path="/location/:locationName" element={<SearchResult/>} />
         <Route path="/:category/:service" element={<FacilityByCategory/>} />
@@ -56,7 +56,7 @@ const ApplicationRoutes = createBrowserRouter(
         <Route path='/management' element={<ProtectedRoutes role={['User']}><DashboardLayout/></ProtectedRoutes>}>
           <Route path="/management/dashboard" element={<Dashboard />} />
           <Route path="/management/addFacility" element={<AddFacility />} />
-          <Route path="/management/addService" element={<AddService />} />
+          <Route path="/management/addService" element={<AddService />} loader={getAllFacility}/>
           
         </Route>
         <Route path='/user' element={<ProtectedRoutes role={['User']}><UserDashboard/></ProtectedRoutes>}>

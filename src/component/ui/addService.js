@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-// import "react-datepicker/dist/react-datepicker.css";
-// import MyForm from "./customDatepicker";
 import "../../css/form.css";
 import DatePicker from "react-multi-date-picker";
 import axios from "axios";
 import { useRef } from "react";
+import { useLoaderData } from "react-router-dom";
 
 const AddService = () => {
-  // const { control, handleSubmit } = useForm();
-  // const allfacility = ['facility 1', 'facility 2', 'facility 3'];
-  // const service = ['service 1', 'service 2', 'service 3'];
+  const facility = useLoaderData()
+  console.log(facility,'facility is thi')
   const [showService, setShowService] = useState(false);
   const [showFormfield, setShowFormField] = useState(false);
-  const [facility, setFacility] = useState([]);
   const [service, setService] = useState([]);
   const [courts, setCourts] = useState([]);
   const formRef = useRef(null);
@@ -26,14 +23,9 @@ const AddService = () => {
   } = useForm();
 
   const validationRules = {
-    holidays: { required: "Holidays are required" },
     description: { required: "Description are required" },
     featuredImage: { required: "Images are required" },
   };
-
-  // const onSubmit = (data) => {
-  //   console.log(data );
-  // };
 
   
   const handleFormSubmit = (data) =>{
@@ -50,11 +42,6 @@ const AddService = () => {
     }
   }
 
-
-  useEffect(() => {
-    getFacility();
-  }, []);
-
   const handleFacilityChange = (id) => {
     getService(id);
     setShowService(true);
@@ -64,19 +51,6 @@ const AddService = () => {
 
   const showFormFields = () => {
     setShowFormField(true);
-  };
-
-  const getFacility = async () => {
-    console.log("inside get Facility");
-    let url = "http://192.168.29.98:8001/api/get-all-facility";
-    try {
-      let response = await axios.get(url);
-      if (response && response.data) {
-        setFacility(response.data.facility);
-      }
-    } catch (error) {
-      console.log("this is error", error);
-    }
   };
 
   const getService = async (id) => {
