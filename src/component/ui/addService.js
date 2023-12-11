@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-// import "react-datepicker/dist/react-datepicker.css";
-// import MyForm from "./customDatepicker";
 import "../../css/form.css";
 import DatePicker from "react-multi-date-picker";
 import axios from "axios";
 import { useRef } from "react";
+import { useLoaderData } from "react-router-dom";
+import { axiosAuth } from "../../utils/axiosInstance";
+
+
+const baseURL = process.env.REACT_APP_API_ENDPOINT;
 
 const AddService = () => {
-  // const { control, handleSubmit } = useForm();
-  // const allfacility = ['facility 1', 'facility 2', 'facility 3'];
-  // const service = ['service 1', 'service 2', 'service 3'];
+  const { facility } = useLoaderData()
+
   const [showService, setShowService] = useState(false);
   const [showFormfield, setShowFormField] = useState(false);
-  const [facility, setFacility] = useState([]);
   const [service, setService] = useState([]);
   const [courts, setCourts] = useState([]);
   const formRef = useRef(null);
-
+  const [payload,setPayload] = useState({});
   const {
     control,
     handleSubmit,
@@ -26,14 +27,9 @@ const AddService = () => {
   } = useForm();
 
   const validationRules = {
-    holidays: { required: "Holidays are required" },
     description: { required: "Description are required" },
     featuredImage: { required: "Images are required" },
   };
-
-  // const onSubmit = (data) => {
-  //   console.log(data );
-  // };
 
   
   const handleFormSubmit = (data) =>{
@@ -50,11 +46,6 @@ const AddService = () => {
     }
   }
 
-
-  useEffect(() => {
-    getFacility();
-  }, []);
-
   const handleFacilityChange = (id) => {
     getService(id);
     setShowService(true);
@@ -66,29 +57,22 @@ const AddService = () => {
     setShowFormField(true);
   };
 
-  const getFacility = async () => {
-    console.log("inside get Facility");
-    let url = "http://192.168.29.98:8001/api/get-all-facility";
-    try {
-      let response = await axios.get(url);
-      if (response && response.data) {
-        setFacility(response.data.facility);
-      }
-    } catch (error) {
-      console.log("this is error", error);
-    }
-  };
-
   const getService = async (id) => {
 
-    let url = `http://192.168.29.98:8001/api/get-service-by-id/${id}`;
+    let url = `${baseURL}/get-service-by-id/${id}`;
     try {
-      let response = await axios.get(url);
+      let response = await axiosAuth.get(url);
       if (response && response.data) {
         setService(response.data.services);
       }
     } catch (error) {
       console.log("this a error", error);
+    }
+    finally{
+      setPayload(prevUser => ({
+        ...prevUser, // Copy the existing state
+        "facility": id, // Update the key
+      }));
     }
   };
 
@@ -128,9 +112,9 @@ const AddService = () => {
                       name="facility"
                       className="form-select"
                       {...register('facility')}
-                      onChange={(e) =>
-                        handleFacilityChange(e.target.value)
-                      }
+                      onChange={(e)=>{
+                        getService(e.target.value)
+                      }}
                       required
                         >
                         <option hidden>Choose Facility</option>
@@ -147,7 +131,7 @@ const AddService = () => {
                       </select>
                     </div>
                   </div>
-                  {showService && (
+                  {payload && payload.facility && payload.facility != '' && (
                     <div className="col-lg-4">
                       <div className="mb-3">
                         <label className="form-label">Choose Service</label>
@@ -155,7 +139,13 @@ const AddService = () => {
                       name="services"
                       className="form-select"
                       {...register('services')}
-                      onChange={(e) => showFormFields(e.target.value)}
+                      onChange={(e)=>{
+                        console.log(payload,'payload is this')
+                        setPayload(prevUser => ({
+                          ...prevUser, // Copy the existing state
+                          "services": e.target.value, // Update the key
+                        }));
+                      }}
                       required
                         >
                         <option selected hidden>
@@ -174,7 +164,7 @@ const AddService = () => {
                       </div>
                     </div>
                   )}
-                  {showService && showFormfield && (
+                  {payload && (payload.facility && payload.services) && (payload.facility != '' && payload.services != '') && (
                     <>
                       <div className="col-lg-4">
                         <div className="mb-3">

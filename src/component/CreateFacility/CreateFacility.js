@@ -3,71 +3,40 @@ import { useForm } from "react-hook-form";
 import "../../css/CreateFacility.css";
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import Select from "react-select";
-import axios from "axios";
-import { useMutation } from "react-query";
 import LocationAwareMap from "../common/googlemap";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import SearchLocation from "../common/searchLocation";
+import { useLoaderData } from "react-router";
+import { axiosAuth } from "../../utils/axiosInstance";
 
 const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
-const IMG_URL = process.env.REACT_APP_IMG_URL;
-// const Dropdown = () => {
 
-
-//       console.log(selectedOption); // Log the selected option
-//     };
-// }
 const CreateFacility = () => {
+
+  const {amenities, service_category} = useLoaderData()
+
   const { register, handleSubmit } = useForm();
   const [selectOption, setSelectOption] = useState(null);
   const [multi, setMulti] = useState(null);
-  const onSubmit = (data) => console.log(data)
-  const [categories, setCategories] = useState(null);
   const [visible, setVisible] = useState(false);
   const [markerPosition, setMarkerPosition] = useState(null);
   const [coordsError, setCoordsError] = useState(false);
   const [coords, setCoords] = useState(null);
   const [error, setError] = useState(null);
-  const [aminities, setAminities] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [MultiSelect,setMultiSelect] = useState([]);
-  const [venueOptions,setVenueOptions] =useState([]);
-
-  useEffect(()=>{
-    getAmenities();
-    getFacility ();
-  },[])
-
-  const getAmenities=async()=>{
-    const response = await axios.get(`${BASE_URL}get-all-amenities`)
-    if(response)
-    {
-      setMultiSelect(response.data.amenities)
-    }
-  }
-
-  console.log(MultiSelect,"check setMultiSelect")
-
-  const getFacility =async()=>{
-    const response = await axios.get(`${BASE_URL}get-all-service-category`)
-    if(response){
-      console.log("check inside",response.data)
-      setVenueOptions(response.data.service_category)
-    }
-  }
-  // console.log("check inside",venueOptions)
-  
+  const MultiSelect = amenities;
+  const venueOptions = service_category;
 
   // Variable to store selected option
   // Function to handle option change
   const handleSelectChange = (selectOption) => {
-    console.log(selectOption,'selected option')
     setSelectOption(selectOption); // Log the selected option
   };
+
   const handleMultiChange = (multi) => {
     setMulti(multi);
   };
+
   const handleConfirmLocation = () => {
     if (markerPosition && markerPosition.lat && markerPosition.lng) {
       setCoords(markerPosition);
@@ -84,6 +53,7 @@ const CreateFacility = () => {
     const lng = latLng.lng();
     setMarkerPosition({ lat, lng });
   };
+
   const handleButtonClick = () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -111,59 +81,13 @@ const CreateFacility = () => {
     }
   };
 
-  const getInitialData = async () => {
-    const getAllServiceCategory = axios.get(`${BASE_URL}/get-all-services`);
-    const getAllAminities = axios.get(`${BASE_URL}/get-all-amenities`);
-
-    await axios
-      .all([getAllServiceCategory, getAllAminities])
-      .then(
-        axios.spread(function (res1, res2) {
-          setCategories(res1.data.services);
-          setAminities(res2.data.amenities);
-          setIsLoading(false);
-        })
-      )
-      .catch((error) => {
-        setIsLoading(false);
-        console.log("Error geting initial data:" + error);
-      });
-  };
-
-  const createFacility = useMutation(
-    (formData) =>
-      fetch(`${BASE_URL}/create-facility`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(response.statusText);
-          }
-          return response.json();
-        })
-        .catch((error) => {
-          throw error;
-        }),
-    {
-      onSuccess: (data) => {
-        console.log(data, "facility created successfully");
-      },
-      onError: (error) => {
-        console.log("error creating facility");
-      },
-    }
-  );
   const selectSearch = (event) => {
     if (event.coords) {
       setMarkerPosition(event.coords);
     }
   };
-  const handleLogin = async(data) => {
+
+  const onSubmit = async(data) => {
     if(data?.facility==undefined && selectOption && selectOption.length>0)
     {
       data.facility=selectOption;
@@ -182,7 +106,6 @@ const CreateFacility = () => {
     data['amenities'] = aminitiesCopy.map((item) => item.value);
     data['amenities'] = JSON.stringify(data['amenities']);
     delete data.facility;
-    console.log(data,'data is this')
 
     const formData = new FormData();
 
@@ -197,7 +120,7 @@ const CreateFacility = () => {
     });
 
     try{
-      const response= await axios.post(`${BASE_URL}create-facility`,formData)
+      const response= await axiosAuth.post(`${BASE_URL}/create-facility`,formData)
       if(response)
       {
        console.log("inside the response",response)
@@ -208,11 +131,10 @@ const CreateFacility = () => {
     }
   };
    
-  // console.log(coords,'coords is this')
   return (
     <div>
       <section className="actual-form">
-        <form onSubmit={handleSubmit(handleLogin)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="container">
             <div className="row form">
               <div className="col-md-6">
@@ -232,16 +154,8 @@ const CreateFacility = () => {
                       })
                     : []}
                 >
-                  {/* <option value='' hidden>Select Type</option>  */}
-                  {/* {VenueOptions.map((facility) => (
-                  
-                ))} */}
-
-                  {/* <option  value={Item}>
-            {options}
-          </option>  */}
                 </Select>
-                {/* <input className='inputField'{...register("Facility Type", { required: true, maxLength: 20 })} /> */}
+                
               </div>
               <div className="col-md-6">
                 <label>Official Name</label>
@@ -284,7 +198,7 @@ const CreateFacility = () => {
                       : []
                   }
                 />
-                {/* <input className='inputField'{...register("Facility Type", { required: true, maxLength: 20 })} /> */}
+                
               </div>
               <div className="col-md-6">
                 <label>Address</label>
@@ -337,8 +251,6 @@ const CreateFacility = () => {
                 />
               </div>
               <div className="col-md-4">
-                {/* <label>Facility Type</label>
-      <input className='inputField'{...register("Facility Type", { required: true, maxLength: 20 })} /> */}
                 <button
                   type="button"
                   onClick={() => setVisible(true)}
@@ -357,10 +269,7 @@ const CreateFacility = () => {
                   name="description"
                   placeholder="Description"
                   rows="5"
-                  {...register("description", {
-                    // required: "",
-                    
-                  })}
+                  {...register("description")}
                 ></textarea>
               </div>
               <div className="col-md-12">
@@ -368,20 +277,11 @@ const CreateFacility = () => {
                   className="formButton submit"
                   type="submit"
                   name="submit"
-                  // onClick={handleLogin}
                 >
                   Save
                 </button>
               </div>
             </div>
-            {/* <div class="row form">
-            <div class="col-md-6">
-               
-            
-            <div class="col-md-12">
-                <button type="submit" class="formButton submit" name="submit">Save</button>
-            </div>
-        </div> */}
           </div>
         </form>
         <Dialog

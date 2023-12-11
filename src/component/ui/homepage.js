@@ -5,7 +5,7 @@ import '../../css/homepage.css'
 import { AiFillStar } from 'react-icons/ai'
 import { IoMdAddCircleOutline } from 'react-icons/io'
 import FacilityIcon from '../../assets/addFacility.svg'
-import { Link } from 'react-router-dom'
+import { Link, useLoaderData } from 'react-router-dom'
 import axios from 'axios'
 import Loader from '../common/loader'
 import truncateString from '../../utils/truncateString'
@@ -14,10 +14,10 @@ const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 const IMG_URL = process.env.REACT_APP_IMG_URL;
 
 const Homepage = () => {
+  const {allServices, recentFacility} = useLoaderData();
+  var count = 0;
   const [isLoading,setIsLoading] = useState(true)
   const [allFacilities,setAllFacilities] = useState([])
-  const [recentFacility,setRecentFacility] = useState([])
-  const [allServices,setAllServices] = useState([])
   const [locationPermitted,setLocationPermitted] = useState(false)
 
   useEffect(()=>{
@@ -57,13 +57,9 @@ const Homepage = () => {
   
   const getInitialData = async(coords) =>{
     const getAllFacilities = coords ? axios.get(`${BASE_URL}/get-all-facility`,{params:coords}) : axios.get(`${BASE_URL}/get-all-facility`);
-    const recentVenues = axios.get(`${BASE_URL}/get-recent-facility/3`);
-    const getAllServices = axios.get(`${BASE_URL}/get-all-services`);
     // you could also use destructuring to have an array of responses
-    await axios.all([getAllFacilities, recentVenues,getAllServices]).then(axios.spread(function(res1, res2, res3) {
+    await axios.all([getAllFacilities]).then(axios.spread(function(res1) {
       setAllFacilities(res1.data.facility);
-      setRecentFacility(res2.data.facility);
-      setAllServices(res3.data.services)
       setIsLoading(false)
     })).catch((error)=>{
       setIsLoading(false)
@@ -192,10 +188,15 @@ const Homepage = () => {
           <div className='container'>
           <h2 className='main-heading'>~Recently Added Sports~</h2>
             <div className='row g-3'>
+              
               {allServices.map((item)=>{
                 return (<>
-                {item.name == "sports" && item.services && item.services.length > 0 ? <>
+                {item.services && item.services.length > 0 ? <>
                 {item.services.map((items)=>{
+                
+                if(count > 5) return null;
+                count ++;
+                console.log(count,'count is this')
                 const imgURL = items.featured_image ? items.featured_image.replace(/\\\//g, '/') : null;
                 return(<div className='col-2 recent-add-sport-card-wrapper-h' key={`${items.id}-${items.name}`}>
                 <div className='recent-add-sport-card-h'>

@@ -58,7 +58,7 @@ const DashboardLayout = () => {
                                             <Link to='/management/CreateFacility'><span>Add Facility</span></Link>
                                             </li>
                                             <li>
-                                            <Link to='/management/dashboard'><span>Configurations</span></Link>
+                                            <Link to='/management/addService'><span>Add Services</span></Link>
                                             </li>
                                         </ul>
                                     </div>

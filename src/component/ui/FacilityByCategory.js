@@ -1,63 +1,21 @@
-import React, { lazy, useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import Loader from '../common/loader';
+import React, { lazy } from 'react'
+import { useLoaderData, useParams } from 'react-router-dom';
 import { Default } from '../layouts/default';
 import Nodatafound from '../common/nodatafound';
 import { AiFillStar } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
-import axios from 'axios';
 import truncateString from '../../utils/truncateString';
 
-const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 const IMG_URL = process.env.REACT_APP_IMG_URL;
 
 const FacilityByCategory = () => {
 
-    const {category,service} = useParams();
-
-    const [isLoading, setIsLoading] = useState(true)
-    const [facilities,setFacilities] = useState([]);
-
-    const getFacilities = async () =>{
-        await axios.get( `${BASE_URL}/get-facility-by-category/${category}/${service}`)
-      .then((response) => {
-        setFacilities(response.data.facility)
-        setIsLoading(false)
-      })
-      .catch((err) => {
-        setIsLoading(false)
-      });
-    }
+    const {facility} = useLoaderData()
+    const facilities =  facility;
     
+    const {service} = useParams();
 
-
-    useEffect(() => {
-        // if ("geolocation" in navigator) {
-        //     navigator.geolocation.getCurrentPosition((position) => {
-        //       const { latitude, longitude } = position.coords;
-        //       getFacilities({lat:latitude,lng:longitude})
-        //     }, (error) => {
-
-        //       console.error("Error getting geolocation:", error);
-        //     });
-        //   } else {
-        //     console.error("Geolocation is not available in this browser.");
-        //   }
-
-        getFacilities()
-
-      }, []);
-    
-    return (
-        <>
-        {
-            isLoading ?
-            <>
-            <Loader/>
-            </>
-            :
-            <>
-                <Default>
+    return ( <Default>
                     {
                     facilities.length > 0 ? 
                     <>
@@ -109,9 +67,6 @@ const FacilityByCategory = () => {
                     </>
                     }
                 </Default>
-            </> 
-        }
-        </>
       )
 }
 

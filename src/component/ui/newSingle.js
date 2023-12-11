@@ -8,29 +8,19 @@ import Loader from '../common/loader';
 import Nodatafound from '../common/nodatafound';
 import { Toast } from 'primereact/toast';
 
-import { lazy, useContext, useEffect, useRef, useState } from 'react';
-import { Context as AuthContext } from '../../context/AuthContext';
-import { useNavigate, useParams } from 'react-router-dom';
+import { lazy, useEffect, useRef, useState } from 'react';
+import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 const IMG_URL = process.env.REACT_APP_IMG_URL;
 
 const NewSingle = () => {
-    const { state, resetLoginState } = useContext(AuthContext);
+    const data = useLoaderData()
+    console.log(data,'data is this')
     const { slug } = useParams();
     const [isLoading,setIsLoading] = useState(true);
     const [facility,setFacility] = useState(null);
-    const [bookingData,setBookingData] = useState({
-        service:null,
-        slot:null,
-        court:null,
-    })
-    const [selectedService,setSelectedService] = useState(null)
-    const [slots,setSlots] = useState(null);
-    const [courtId,setCourtId] = useState(null);
-
-    const navigate = useNavigate();
     const toast = useRef(null);
     const [galleryImages,setGalleryImages] = useState([])
 
@@ -40,7 +30,6 @@ const NewSingle = () => {
       .then((response) => {
         if(response.data.facility){
             let facilityResponse = response.data.facility;
-            console.log(response.data,'get facility by slug response data')
         
             if(facilityResponse.featured_image){
 
@@ -99,7 +88,6 @@ const NewSingle = () => {
     }
 
     const thumbnailTemplate = (item) => {
-        console.log(item,'thumbnail item is this')
         let imgUrl = item.replace(/[\\"]/g, '');
         return <div className='carousel-img-wrapper-si'>
         <img src={`${IMG_URL}${imgUrl}`} alt={facility.official_name} className='carousel-img-si img-fluid' loading={lazy} />
