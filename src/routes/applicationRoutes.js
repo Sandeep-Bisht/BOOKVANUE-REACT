@@ -15,6 +15,11 @@ import CreateFacility from '../component/CreateFacility/CreateFacility'
 import NewSingle from '../component/ui/newSingle'
 import AddService from '../component/ui/addService'
 import { getHomepageData, getSinglePageData, getAllFacility, getFacilityByCategory, getCreateFacilityPageData } from '../config/initialApis'
+import ProviderWrapper from '../component/Become-a-provider'
+import Landing from '../component/Become-a-provider/landing'
+import AddYourFacility from '../component/Become-a-provider/addFacility'
+import AddYourServices from '../component/Become-a-provider/addServices'
+import AddYourCourts from '../component/Become-a-provider/addCourts'
 
 const CheckAuth = () => {
   const {state, userLoggedIn} = useContext(AuthContext);
@@ -62,7 +67,13 @@ const ApplicationRoutes = createBrowserRouter(
         <Route path='/user' element={<ProtectedRoutes role={['User']}><UserDashboard/></ProtectedRoutes>}>
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/user/bookings" element={<Bookings />} />
-        </Route>            
+        </Route>      
+        <Route path="/become-a-provider" element={<ProviderWrapper/>}>
+          <Route path='/become-a-provider' element={<Landing/>}/>
+          <Route path="/become-a-provider/add-facility" element={<AddYourFacility/>}/>
+          <Route path="/become-a-provider/add-services" element={<AddYourServices/>}/>
+          <Route path="/become-a-provider/add-courts" element={<AddYourCourts/>}/>
+        </Route>      
     </Route>
 ))
 
