@@ -14,7 +14,7 @@ import Bookings from '../component/ui/bookings'
 import CreateFacility from '../component/CreateFacility/CreateFacility'
 import NewSingle from '../component/ui/newSingle'
 import AddService from '../component/ui/addService'
-import { getHomepageData, getSinglePageData, getAllFacility } from '../config/initialApis'
+import { getHomepageData, getSinglePageData, getAllFacility, getFacilityByCategory, getCreateFacilityPageData } from '../config/initialApis'
 
 const CheckAuth = () => {
   const {state, userLoggedIn} = useContext(AuthContext);
@@ -48,16 +48,16 @@ const ApplicationRoutes = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<CheckAuth/>}>
       <Route index path='/' element={<Homepage/>} loader={getHomepageData}/>
-        <Route path='/facility/:slug' element={<NewSingle/>} loader={({params})=>getSinglePageData({params})}/>
-        {/* <Route path='/facility/:slug' element={<NewSingle/>}/> */}
+        <Route path='/facility/:slug' element={<NewSingle/>} loader={({params})=>getSinglePageData({params})}/> 
+        {/* Integration pending in new singlepage */}
         <Route path="/location/:locationName" element={<SearchResult/>} />
-        <Route path="/:category/:service" element={<FacilityByCategory/>} />
+        <Route path="/:category/:service" element={<FacilityByCategory/>} loader={({params})=>getFacilityByCategory({params})}/>
         <Route path="/booknow/:facilityName" element={<ProtectedRoutes role={['User']}><Booknow/></ProtectedRoutes>} />
+        {/* Integration pending in booknow page */}
         <Route path='/management' element={<ProtectedRoutes role={['User']}><DashboardLayout/></ProtectedRoutes>}>
           <Route path="/management/dashboard" element={<Dashboard />} />
-          <Route path='/management/createfacility' element={<CreateFacility/>}/>
+          <Route path='/management/createfacility' element={<CreateFacility/>} loader={getCreateFacilityPageData}/>
           <Route path="/management/addService" element={<AddService />} loader={getAllFacility}/>
-          
         </Route>
         <Route path='/user' element={<ProtectedRoutes role={['User']}><UserDashboard/></ProtectedRoutes>}>
           <Route path="/user/profile" element={<Profile />} />

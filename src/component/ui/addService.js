@@ -5,16 +5,20 @@ import DatePicker from "react-multi-date-picker";
 import axios from "axios";
 import { useRef } from "react";
 import { useLoaderData } from "react-router-dom";
+import { axiosAuth } from "../../utils/axiosInstance";
+
+
+const baseURL = process.env.REACT_APP_API_ENDPOINT;
 
 const AddService = () => {
-  const facility = useLoaderData()
-  console.log(facility,'facility is thi')
+  const { facility } = useLoaderData()
+
   const [showService, setShowService] = useState(false);
   const [showFormfield, setShowFormField] = useState(false);
   const [service, setService] = useState([]);
   const [courts, setCourts] = useState([]);
   const formRef = useRef(null);
-
+  const [payload,setPayload] = useState({});
   const {
     control,
     handleSubmit,
@@ -55,14 +59,20 @@ const AddService = () => {
 
   const getService = async (id) => {
 
-    let url = `http://192.168.29.98:8001/api/get-service-by-id/${id}`;
+    let url = `${baseURL}/get-service-by-id/${id}`;
     try {
-      let response = await axios.get(url);
+      let response = await axiosAuth.get(url);
       if (response && response.data) {
         setService(response.data.services);
       }
     } catch (error) {
       console.log("this a error", error);
+    }
+    finally{
+      setPayload(prevUser => ({
+        ...prevUser, // Copy the existing state
+        "facility": id, // Update the key
+      }));
     }
   };
 
@@ -102,9 +112,9 @@ const AddService = () => {
                       name="facility"
                       className="form-select"
                       {...register('facility')}
-                      onChange={(e) =>
-                        handleFacilityChange(e.target.value)
-                      }
+                      onChange={(e)=>{
+                        getService(e.target.value)
+                      }}
                       required
                         >
                         <option hidden>Choose Facility</option>
@@ -121,7 +131,7 @@ const AddService = () => {
                       </select>
                     </div>
                   </div>
-                  {showService && (
+                  {payload && payload.facility && payload.facility != '' && (
                     <div className="col-lg-4">
                       <div className="mb-3">
                         <label className="form-label">Choose Service</label>
@@ -129,7 +139,13 @@ const AddService = () => {
                       name="services"
                       className="form-select"
                       {...register('services')}
-                      onChange={(e) => showFormFields(e.target.value)}
+                      onChange={(e)=>{
+                        console.log(payload,'payload is this')
+                        setPayload(prevUser => ({
+                          ...prevUser, // Copy the existing state
+                          "services": e.target.value, // Update the key
+                        }));
+                      }}
                       required
                         >
                         <option selected hidden>
@@ -148,7 +164,7 @@ const AddService = () => {
                       </div>
                     </div>
                   )}
-                  {showService && showFormfield && (
+                  {payload && (payload.facility && payload.services) && (payload.facility != '' && payload.services != '') && (
                     <>
                       <div className="col-lg-4">
                         <div className="mb-3">
