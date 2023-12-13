@@ -70,8 +70,8 @@ const ApplicationRoutes = createBrowserRouter(
         </Route>      
         <Route path="/become-a-provider" element={<ProviderWrapper/>}>
           <Route path='/become-a-provider' element={<Landing/>}/>
-          <Route path="/become-a-provider/add-facility" element={<AddYourFacility/>}/>
-          <Route path="/become-a-provider/add-services" element={<AddYourServices/>}/>
+          <Route path="/become-a-provider/add-facility" element={<AddYourFacility/>} loader={getCreateFacilityPageData}/>
+          <Route path="/become-a-provider/add-services" element={<AddYourServices/>} loader={getAllFacility}/>
           <Route path="/become-a-provider/add-courts" element={<AddYourCourts/>}/>
         </Route>      
     </Route>

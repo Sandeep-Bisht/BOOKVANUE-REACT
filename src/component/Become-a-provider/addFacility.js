@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import Select from "react-select";
 import { Dialog } from "primereact/dialog";
@@ -8,34 +9,154 @@ import { Button } from "primereact/button";
 import "../../css/BecomeProvider.css";
 import { useNavigate } from "react-router-dom";
 import FooterProvider from "./footerProvider";
-import React, { useState } from "react";
+import { useLoaderData } from "react-router";
+import { FaTrash } from "react-icons/fa6";
+
+// const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 
 const Addfacility = () => {
-  const { register, handleSubmit } = useForm();
-  const [previewImage, setPreviewImage] = useState(null);
+  const { amenities, service_category } = useLoaderData();
+  const [selectOption, setSelectOption] = useState(null);
+  const [multi, setMulti] = useState(null);
+  const [coordsError, setCoordsError] = useState(false);
+  const [coords, setCoords] = useState(null);
+  const venueOptions = service_category;
+  const MultiSelect = amenities;
+  const [error, setError] = useState(null);
+  const [visible, setVisible] = useState(false);
+  const [markerPosition, setMarkerPosition] = useState(null);
+  const [images, setImages] = useState(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImages(file);
+  };
+
+  const handleRemoveImage = (setImage) => {
+    setImage(null);
+  };
+
+  const handleSelectChange = (selectOption) => {
+    setSelectOption(selectOption);
+  };
+
+  const handleMultiChange = (multi) => {
+    setMulti(multi);
+  };
+
+  const handleMarkerDrag = (event) => {
+    const { latLng } = event;
+    const lat = latLng.lat();
+    const lng = latLng.lng();
+    setMarkerPosition({ lat, lng });
+  };
+
+  const handleConfirmLocation = () => {
+    if (markerPosition && markerPosition.lat && markerPosition.lng) {
+      setCoords(markerPosition);
+      setVisible(false);
+      setCoordsError(false);
+    } else {
+      setCoordsError(true);
+    }
+  };
 
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    console.log(data); // Handle form submission here
-  };
-  const handleImageChange = (event) => {
-    console.log('handle image change called')
-    const selectedImage = event.target.files[0];
-    if (selectedImage) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(selectedImage);
+  // const onSubmit = (data) => {
+  //   console.log(data);
+  // };
+
+  const handleButtonClick = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setMarkerPosition({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+          setError(null);
+        },
+        (error) => {
+          if (error.code === error.PERMISSION_DENIED) {
+            setError("Allow access to location.");
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            setError("Location information is unavailable.");
+          } else if (error.code === error.TIMEOUT) {
+            setError("Request to get location timed out.");
+          } else {
+            setError("An unknown error occurred.");
+          }
+        }
+      );
+    } else {
+      setError("Geolocation is not available in your browser");
     }
-    console.log(previewImage,'preview image is this')
   };
+
+  const selectSearch = (event) => {
+    if (event.coords) {
+      setMarkerPosition(event.coords);
+    }
+  };
+
+  const onSubmit = async (data) => {
+    if (
+      data?.facility == undefined &&
+      selectOption &&
+      selectOption.length > 0
+    ) {
+      data.facility = selectOption;
+    }
+    if (data?.amenities == undefined && multi && multi.length > 0) {
+      data.amenities = multi;
+    }
+
+    data["latitude"] = coords.lat;
+    data["longitude"] = coords.lng;
+
+    data["service_category_id"] = data.facility.map((item) => item.value);
+    data["service_category_id"] = JSON.stringify(data["service_category_id"]);
+    let aminitiesCopy = [...data.amenities];
+    data["amenities"] = aminitiesCopy.map((item) => item.value);
+    data["amenities"] = JSON.stringify(data["amenities"]);
+    delete data.facility;
+
+    const formData = new FormData();
+
+    // Convert object to form data
+    Object.keys(data).forEach((key) => {
+      if (key == "featured_image") {
+        formData.append(key, data.featured_image[0]);
+      } else {
+        formData.append(key, data[key]);
+      }
+    });
+
+    // try{
+    //   const response= await axiosAuth.post(`${BASE_URL}/create-facility`,formData)
+    //   if(response)
+    //   {
+    //    console.log("inside the response",response)
+    //   }
+    // }
+    // catch(error){
+    //   console.log(error,"check the error")
+    // }
+  };
+
+  console.log(images, "chekc image insidemm");
 
   return (
     <>
       <div>
-        <section className="actual-form">
+        <section className="provider-form">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="container">
               <div className="row form">
@@ -46,8 +167,17 @@ const Addfacility = () => {
                     class="inputField"
                     name="facility"
                     isMulti
+                    value={selectOption}
                     required
                     id="dropdown"
+                    onChange={handleSelectChange}
+                    options={
+                      venueOptions && venueOptions.length > 0
+                        ? venueOptions.map((item) => {
+                            return { value: `${item.id}`, label: item.name };
+                          })
+                        : []
+                    }
                   ></Select>
                 </div>
                 <div className="col-md-6">
@@ -59,6 +189,9 @@ const Addfacility = () => {
                     className="inputField"
                     {...register("officialName", { required: true })}
                   />
+                  {errors.officialName && (
+                    <p className="text-danger">Official Name is required.</p>
+                  )}
                 </div>
                 <div className="col-md-6">
                   <label>Alias</label>
@@ -67,8 +200,11 @@ const Addfacility = () => {
                     type="text"
                     placeholder="Alias"
                     className="inputField"
-                    {...register("alias")}
+                    {...register("alias", { required: true })}
                   />
+                  {errors.alias && (
+                    <p className="text-danger">Alias is required.</p>
+                  )}
                 </div>
                 <div className="col-md-6">
                   <label>Amenities</label>
@@ -76,8 +212,18 @@ const Addfacility = () => {
                     {...register("amenities")}
                     class="inputField"
                     name="amenities"
+                    isMulti
+                    value={multi}
                     id="dropdown"
                     placeholder="Amenities"
+                    onChange={handleMultiChange}
+                    options={
+                      MultiSelect && MultiSelect.length > 0
+                        ? MultiSelect.map((item) => {
+                            return { value: `${item.id}`, label: item.name };
+                          })
+                        : []
+                    }
                   />
                 </div>
                 <div className="col-md-6">
@@ -90,46 +236,75 @@ const Addfacility = () => {
                       required: true,
                     })}
                   />
+                  {errors.address && (
+                    <p className="text-danger">Address is required.</p>
+                  )}
                 </div>{" "}
                 <div className="col-md-6">
                   <label>Featured Image</label>
-                  <input
-                    className="form-control-file"
-                    name="featured_image"
-                    type="file"
-                    onChange={handleImageChange}
-                    {...register("featured_image", {
-                      required: true,
-                    })}
-                  />
-                  {previewImage && (
-                    <img
-                      src={previewImage}
-                      alt="Preview"
-                      style={{ maxWidth: "100px", marginTop: "10px" }}
+                  {images && (
+                    <div className="multipale-image-display">
+                      <div className="dynamic-img-wrapper">
+                        <img
+                          src={URL.createObjectURL(images)}
+                          alt="IMAGES"
+                          style={{ height: "100px", width: "100px" }}
+                          className="img-fluid"
+                        />
+                        <button
+                          type="button"
+                          className="btn dropshadow-gallery"
+                          onClick={() => handleRemoveImage(setImages)}
+                        >
+                          {" "}
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  <div>
+                    <input
+                      className="form-control-file"
+                      name="featured_image"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageChange(e)}
                     />
-                  )}{" "}
-                  {/* Display the image preview */}
+                    <div className="multipale-image-display">
+                      <div className="dynamic-img-wrapper"></div>
+                    </div>
+                  </div>
                 </div>
                 <div className="col-md-2">
                   <label>Latitude</label>
                   <input
                     readOnly={true}
+                    value={coords ? coords.lat : ""}
                     placeholder="Latitude"
                     className="inputField"
+                    {...register("latitude", {
+                      required: true,
+                    })}
                   />
                 </div>
                 <div className="col-md-2">
                   <label>Longitude</label>
                   <input
+                    value={coords ? coords.lng : ""}
                     readOnly={true}
                     className="inputField"
                     placeholder="Longitude"
-                    {...register("longitude", {})}
+                    {...register("longitude", {
+                      required: "",
+                    })}
                   />
                 </div>
                 <div className="col-md-4 mb-3">
-                  <button type="button" class="formButton submit w-30 mt-4">
+                  <button
+                    type="button"
+                    onClick={() => setVisible(true)}
+                    class="formButton submit w-45 mt-4"
+                  >
                     Location&nbsp;&nbsp;
                     <i>
                       <FaLocationCrosshairs />
@@ -142,9 +317,12 @@ const Addfacility = () => {
                     className="inputField"
                     name="description"
                     placeholder="Description"
-                    rows="3"
-                    {...register("description")}
+                    rows="5"
+                    {...register("description", { required: true })}
                   ></textarea>
+                  {errors.description && (
+                    <p className="text-danger">Description is required.</p>
+                  )}
                 </div>
                 <div className="col-md-12">
                   <button
@@ -161,13 +339,15 @@ const Addfacility = () => {
           <Dialog
             className=" search-location-popup"
             header="Select Location"
-            // visible={visible}
+            visible={visible}
+            maximizable
             style={{ width: "50vw" }}
+            onHide={() => setVisible(false)}
           >
             <div className="row">
               <div className="col-md-6 mb-3">
                 <div className="card flex justify-content-center h-100">
-                  <SearchLocation className="w-100 h-100" />
+                  <SearchLocation cb={selectSearch} className="w-100 h-100" />
                 </div>
               </div>
               <div className="col-md-6 mb-3">
@@ -175,6 +355,7 @@ const Addfacility = () => {
                   <Button
                     label="Use Current Location"
                     severity="secondary"
+                    onClick={handleButtonClick}
                     className="common-location-btn form-input  btn "
                   />
                   <span class="ms-2 pop-icon">
@@ -196,24 +377,26 @@ const Addfacility = () => {
               <div className="col-md-12">
                 <div className="card flex justify-content-center">
                   <LocationAwareMap
-                    //function
+                    coords={markerPosition}
+                    onMarkerDragEnd={handleMarkerDrag} //function
                     markerDraggable={true}
                     markerTitle="Your location"
                     height="60vh"
                   />
                 </div>
               </div>
-
-              <div className="col-md-12">
-                <p className="text-danger">Select location first.</p>
-              </div>
+              {coordsError ? (
+                <div className="col-md-12">
+                  <p className="text-danger">Select location first.</p>
+                </div>
+              ) : null}
 
               <div className="col-md-12 mt-lg-4">
                 <div className="select-location-btn-wrapper">
                   <div className="left">
                     <Button
                       onClick={() => {
-                        // setVisible(false);
+                        setVisible(false);
                       }}
                       label="Cancel"
                       className="common-location-btn form-input cancel "
@@ -222,7 +405,7 @@ const Addfacility = () => {
                   <div className="right">
                     <Button
                       label="Confirm"
-                      // onClick={() => handleConfirmLocation()}
+                      onClick={() => handleConfirmLocation()}
                       className="common-location-btn form-input  "
                     />
                   </div>
@@ -232,8 +415,8 @@ const Addfacility = () => {
           </Dialog>
         </section>
       </div>
+
       <FooterProvider
-      
         backClick={() => navigate("/become-a-provider")}
         nextClick={() => navigate("/become-a-provider/add-services")}
       />
