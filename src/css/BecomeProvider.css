@@ -285,5 +285,46 @@
   .custom-add-card{
     background-color: transparent!important;
     box-shadow: none!important;
-    color: #00BFB4!important;;
+    color: #00BFB4!important;
+    height: 200px;
+    width: 200px;
+  }
+
+  .provider-form-featured_image{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+  }
+
+  .provider-form-featured_image{
+    background-color: transparent!important;
+    box-shadow: none!important;
+    color: #00BFB4!important;
+    height: 100px;
+    width: 100px;
+  }
+
+
+
+.multipale-image{
+    border: 3px solid #00000030;
+    width: 16%;
+    margin: auto;
+    height: 25%;
+    height: 144px;
+    width: 179px;
+    padding: 10px 6px 7px 7px;
+}
+
+
+  .provider-form .img-feature{
+    border: 3px solid #00000030;
+    height: 144px;
+    width: 179px;
+    padding: 9px 6px 7px 7px;
+  }
+
+  .multipale-image h1{
+    padding: 30px;
+    color: #00BFB4;
   }

@@ -11,8 +11,10 @@ import { useNavigate } from "react-router-dom";
 import FooterProvider from "./footerProvider";
 import { useLoaderData } from "react-router";
 import { FaTrash } from "react-icons/fa6";
+import { axiosAuth } from "../../utils/axiosInstance";
 
-// const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
+
+const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 
 const Addfacility = () => {
   const { amenities, service_category } = useLoaderData();
@@ -107,6 +109,7 @@ const Addfacility = () => {
   };
 
   const onSubmit = async (data) => {
+    console.log(data, "data inside this ")
     if (
       data?.facility == undefined &&
       selectOption &&
@@ -139,16 +142,16 @@ const Addfacility = () => {
       }
     });
 
-    // try{
-    //   const response= await axiosAuth.post(`${BASE_URL}/create-facility`,formData)
-    //   if(response)
-    //   {
-    //    console.log("inside the response",response)
-    //   }
-    // }
-    // catch(error){
-    //   console.log(error,"check the error")
-    // }
+    try{
+      const response= await axiosAuth.post(`${BASE_URL}/create-facility`,formData)
+      if(response)
+      {
+       console.log("inside the response",response)
+      }
+    }
+    catch(error){
+      console.log(error,"check the error")
+    }
   };
 
   console.log(images, "chekc image insidemm");
@@ -227,102 +230,113 @@ const Addfacility = () => {
                   />
                 </div>
                 <div className="col-md-6">
-                  <label>Address</label>
-                  <input
-                    className="inputField"
-                    name="address"
-                    placeholder="Address"
-                    {...register("address", {
-                      required: true,
-                    })}
-                  />
-                  {errors.address && (
-                    <p className="text-danger">Address is required.</p>
-                  )}
+                  <div className="row">
+                    <label>Address</label>
+                    <input
+                      className="inputField"
+                      name="address"
+                      placeholder="Address"
+                      {...register("address", {
+                        required: true,
+                      })}
+                    />
+                    {errors.address && (
+                      <p className="text-danger">Address is required.</p>
+                    )}
+
+                    <div className="col-md-4">
+                      <label>Latitude</label>
+                      <input
+                        readOnly={true}
+                        value={coords ? coords.lat : ""}
+                        placeholder="Latitude"
+                        className="inputField"
+                        {...register("latitude", {
+                          required: true,
+                        })}
+                      />
+                    </div>
+                    <div className="col-md-4">
+                      <label>Longitude</label>
+                      <input
+                        value={coords ? coords.lng : ""}
+                        readOnly={true}
+                        className="inputField"
+                        placeholder="Longitude"
+                        {...register("longitude", {
+                          required: "",
+                        })}
+                      />
+                    </div>
+                    <div className="col-md-4 mb-3">
+                      <button
+                        type="button"
+                        onClick={() => setVisible(true)}
+                        class="formButton submit w-45 mt-4"
+                      >
+                        Location&nbsp;&nbsp;
+                        <i>
+                          <FaLocationCrosshairs />
+                        </i>
+                      </button>
+                    </div>
+                    <div className="col-md-12 mb-3">
+                      <label>Description</label>
+                      <textarea
+                        className="inputField"
+                        name="description"
+                        placeholder="Description"
+                        rows="5"
+                        {...register("description", { required: true })}
+                      ></textarea>
+                      {errors.description && (
+                        <p className="text-danger">Description is required.</p>
+                      )}
+                    </div>
+                  </div>
                 </div>{" "}
                 <div className="col-md-6">
                   <label>Featured Image</label>
                   {images && (
-                    <div className="multipale-image-display">
+                    <div className="multipale-image-display mb-4">
                       <div className="dynamic-img-wrapper">
-                        <img
-                          src={URL.createObjectURL(images)}
-                          alt="IMAGES"
-                          style={{ height: "100px", width: "100px" }}
-                          className="img-fluid"
-                        />
-                        <button
-                          type="button"
-                          className="btn dropshadow-gallery"
-                          onClick={() => handleRemoveImage(setImages)}
-                        >
-                          {" "}
-                          <FaTrash />
-                        </button>
+                        <div className="card">
+                          <img
+                            src={URL.createObjectURL(images)}
+                            alt="IMAGES"
+                            // style={{ height: "100px", width: "100px" }}
+                            className="img-feature"
+                          />
+
+                          <button
+                            type="button"
+                            className="btn dropshadow-gallery"
+                            onClick={() => handleRemoveImage(setImages)}
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
-                  <div>
-                    <input
-                      className="form-control-file"
-                      name="featured_image"
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleImageChange(e)}
-                    />
-                    <div className="multipale-image-display">
-                      <div className="dynamic-img-wrapper"></div>
+                  <div className="multipale-image">
+                    <div className="dynamic-img-wrapper">
+                      <div className="card-two">
+                        <label htmlFor="featured_image">
+                          <h1>+</h1>
+                        </label>
+                        <input
+                          hidden
+                          {...register("featured_image", {
+                            required: true,
+                          })}                         
+                           type="file"
+                          id="featured_image"
+                          onChange={handleImageChange}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-md-2">
-                  <label>Latitude</label>
-                  <input
-                    readOnly={true}
-                    value={coords ? coords.lat : ""}
-                    placeholder="Latitude"
-                    className="inputField"
-                    {...register("latitude", {
-                      required: true,
-                    })}
-                  />
-                </div>
-                <div className="col-md-2">
-                  <label>Longitude</label>
-                  <input
-                    value={coords ? coords.lng : ""}
-                    readOnly={true}
-                    className="inputField"
-                    placeholder="Longitude"
-                    {...register("longitude", {
-                      required: "",
-                    })}
-                  />
-                </div>
-                <div className="col-md-4 mb-3">
-                  <button
-                    type="button"
-                    onClick={() => setVisible(true)}
-                    class="formButton submit w-45 mt-4"
-                  >
-                    Location&nbsp;&nbsp;
-                    <i>
-                      <FaLocationCrosshairs />
-                    </i>
-                  </button>
-                </div>
-                <div className="col-md-5 mb-3">
-                  <label>Description</label>
-                  <textarea
-                    className="inputField"
-                    name="description"
-                    placeholder="Description"
-                    rows="5"
-                    {...register("description", { required: true })}
-                  ></textarea>
-                  {errors.description && (
-                    <p className="text-danger">Description is required.</p>
-                  )}
                 </div>
                 <div className="col-md-12">
                   <button
