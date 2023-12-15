@@ -14,7 +14,7 @@ import Bookings from '../component/ui/bookings'
 import CreateFacility from '../component/CreateFacility/CreateFacility'
 import NewSingle from '../component/ui/newSingle'
 import AddService from '../component/ui/addService'
-import { getHomepageData, getSinglePageData, getAllFacility, getFacilityByCategory, getCreateFacilityPageData } from '../config/initialApis'
+import { getHomepageData, getSinglePageData, getAllFacility, getFacilityByCategory, getCreateFacilityPageData, getAllService } from '../config/initialApis'
 import ProviderWrapper from '../component/Become-a-provider'
 import Landing from '../component/Become-a-provider/landing'
 import AddYourFacility from '../component/Become-a-provider/addFacility'
@@ -71,7 +71,7 @@ const ApplicationRoutes = createBrowserRouter(
         <Route path="/become-a-provider" element={<ProviderWrapper/>}>
           <Route path='/become-a-provider' element={<Landing/>}/>
           <Route path="/become-a-provider/add-facility" element={<AddYourFacility/>} loader={getCreateFacilityPageData}/>
-          <Route path="/become-a-provider/add-services" element={<AddYourServices/>} loader={getAllFacility}/>
+          <Route path="/become-a-provider/add-services" element={<AddYourServices/>}   loader={getAllFacility}/>
           <Route path="/become-a-provider/add-courts" element={<AddYourCourts/>}/>
         </Route>      
     </Route>

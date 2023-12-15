@@ -13,7 +13,6 @@ import { useLoaderData } from "react-router";
 import { FaTrash } from "react-icons/fa6";
 import { axiosAuth } from "../../utils/axiosInstance";
 
-
 const BASE_URL = process.env.REACT_APP_API_ENDPOINT;
 
 const Addfacility = () => {
@@ -109,7 +108,7 @@ const Addfacility = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data, "data inside this ")
+    console.log(data, "data inside this ");
     if (
       data?.facility == undefined &&
       selectOption &&
@@ -131,26 +130,29 @@ const Addfacility = () => {
     data["amenities"] = JSON.stringify(data["amenities"]);
     delete data.facility;
 
+    console.log(data, "data is this");
+
     const formData = new FormData();
 
     // Convert object to form data
     Object.keys(data).forEach((key) => {
       if (key == "featured_image") {
-        formData.append(key, data.featured_image[0]);
+        formData.append(key, images);
       } else {
         formData.append(key, data[key]);
       }
     });
 
-    try{
-      const response= await axiosAuth.post(`${BASE_URL}/create-facility`,formData)
-      if(response)
-      {
-       console.log("inside the response",response)
+    try {
+      const response = await axiosAuth.post(
+        `${BASE_URL}/create-facility`,
+        formData
+      );
+      if (response) {
+        console.log("inside the response", response);
       }
-    }
-    catch(error){
-      console.log(error,"check the error")
+    } catch (error) {
+      console.log(error, "check the error");
     }
   };
 
@@ -297,14 +299,13 @@ const Addfacility = () => {
                 </div>{" "}
                 <div className="col-md-6">
                   <label>Featured Image</label>
-                  {images && (
+                  {images ? (
                     <div className="multipale-image-display mb-4">
                       <div className="dynamic-img-wrapper">
                         <div className="card">
                           <img
                             src={URL.createObjectURL(images)}
                             alt="IMAGES"
-                            // style={{ height: "100px", width: "100px" }}
                             className="img-feature"
                           />
 
@@ -318,25 +319,27 @@ const Addfacility = () => {
                         </div>
                       </div>
                     </div>
-                  )}
-                  <div className="multipale-image">
-                    <div className="dynamic-img-wrapper">
-                      <div className="card-two">
-                        <label htmlFor="featured_image">
-                          <h1>+</h1>
-                        </label>
-                        <input
-                          hidden
-                          {...register("featured_image", {
-                            required: true,
-                          })}                         
-                           type="file"
-                          id="featured_image"
-                          onChange={handleImageChange}
-                        />
+                  ) : (
+                    <div className="multipale-image">
+                      <div className="dynamic-img-wrapper">
+                        <div className="card-two">
+                          <label htmlFor="featured_image">
+                            <h1>+</h1>
+                          </label>
+                          <input
+                            hidden
+                            {...register("featured_image", {
+                              required: true,
+                            })}
+                            type="file"
+                            accept="image/*"
+                            id="featured_image"
+                            onChange={handleImageChange}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
                 <div className="col-md-12">
                   <button

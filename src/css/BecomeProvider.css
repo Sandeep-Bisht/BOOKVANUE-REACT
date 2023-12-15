@@ -58,7 +58,7 @@
 
 
 
-    /* addFacility */
+                                           /* addFacility  & addservices  add court*/
 
     
 /* .actual-form{
@@ -233,6 +233,11 @@
 }
 
   /* provider-form validation */
+  .provider-form{
+    margin: auto;
+    padding-top: 40px;
+  }
+
 
 .provider-form .text-danger {
     font-size: 12px;
@@ -327,4 +332,9 @@
   .multipale-image h1{
     padding: 30px;
     color: #00BFB4;
+  }
+
+  .add-service-area{
+    margin: auto;
+    padding-top: 40px;
   }
