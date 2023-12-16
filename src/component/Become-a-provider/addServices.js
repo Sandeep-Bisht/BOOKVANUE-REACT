@@ -4,16 +4,35 @@ import { useForm ,Controller } from "react-hook-form";
 import "../../css/BecomeProvider.css";
 import DatePicker from "react-multi-date-picker";
 import FooterProvider from "./footerProvider";
+import { useLoaderData } from "react-router-dom";
 
 
 
 const AddYourServices = () => {
+  const  getAllFacility  = useLoaderData()
+  const [facility, setfacility] = useState(null);
+  
+  const handleFacilityChange = (facilityName) => {
+    console.log(facilityName, "facilityname is this")
+    setfacility(facilityName);
+  };
+
   const {
     control,
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
+
+
+  const handleFormSubmit = (data) =>{
+    let holidaysCopy = [...data.holidays];
+    data['holidays'] = holidaysCopy.map ((item) => `${item.day < 10 ? '0' :''}${item.day}-${item.month < 10 ? '0' :''}${item.month}-${item.year}`);
+
+    
+    console.log(data,'data is this of form')
+  }
+  
 
   const navigate = useNavigate();
   return (
@@ -27,7 +46,9 @@ const AddYourServices = () => {
           </div>
           <div className="row">
             <div className="col-lg-12">
-              <form onSubmit={handleSubmit}>
+              <form
+               onSubmit={handleSubmit(handleFormSubmit)}
+               >
                 <div className="row">
                   <div className="col-lg-4">
                     <div className="mb-3">
@@ -36,10 +57,23 @@ const AddYourServices = () => {
                         name="facility"
                         className="form-select"
                         {...register("facility")}
-                        onChange=""
+                        onChange={(e)=>handleFacilityChange(e.target.value)}
                         required
                       >
-                        <option hidden>Choose Facility</option>
+                         <option hidden>Choose Facility</option>
+                            {getAllFacility &&
+                              getAllFacility?.facility.length > 0 &&
+                              getAllFacility?.facility.map((facility, index) =>{
+                                return (
+                                  <option
+                                  key={index}
+                                  value={facility.id}
+                                >
+                                  {facility.official_name}
+                                </option>
+                                )
+                              } 
+                              )}
                       </select>
                     </div>
                   </div>
@@ -69,12 +103,14 @@ const AddYourServices = () => {
                           <Controller
                             name="holidays"
                             control={control}
+                            defaultValue={[]}
                             render={({ field }) => (
                               <DatePicker
                                 {...field}
                                 format="DD-MM-YYYY"
                                 placeholder="DD-MM-YYYY"
                                 clear
+                                minDate={new Date()}
                                 multiple
                                 className="form-control"
                               />
@@ -166,7 +202,15 @@ const AddYourServices = () => {
                     </div>
                   </>
                 </div>
-                <button type="submit" className="d-none"></button>
+                <div className="col-md-12">
+                  <button
+                    className="formButton submit my-5"
+                    type="submit"
+                    name="submit"
+                  >
+                    Save
+                  </button>
+                </div>
               </form>
             </div>
           </div>
@@ -175,7 +219,7 @@ const AddYourServices = () => {
 
       <FooterProvider
         backClick={() => navigate("/become-a-provider")}
-        nextClick={() => navigate("/become-a-provider/add-court")}
+        nextClick={() => navigate("/become-a-provider/add-courts")}
    />
     </>
   );
